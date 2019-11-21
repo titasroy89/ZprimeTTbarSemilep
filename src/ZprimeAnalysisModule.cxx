@@ -58,7 +58,7 @@ public:
   void fill_histograms(uhh2::Event&, string);
 
 protected:
-
+  bool debug;
   // Cleaners (to make sure the pre-selection did everything right)
   std::unique_ptr<MuonCleaner> muon_cleaner;
   std::unique_ptr<ElectronCleaner> electron_cleaner;
@@ -80,7 +80,7 @@ protected:
   unique_ptr<ZprimeCorrectMatchDiscriminator> CorrectMatchDiscriminatorZprime;
 
   // Selections
-  unique_ptr<Selection> Trigger1_selection, Trigger2_selection, NMuon1_selection, NMuon2_selection, NElectron_selection, TwoDCut_selection, Jet1_selection, Jet2_selection, Met_selection, Chi2_selection, TTbarMatchable_selection, Chi2CandidateMatched_selection, ZprimeTopTag_selection, BlindData_selection;
+  unique_ptr<Selection> Trigger1_selection, Trigger2_selection, NMuon1_selection, NMuon2_selection, NElectron_selection, TwoDCut_selection, Jet1_selection, Jet2_selection, Jet1_selection_data2018, Jet2_selection_data2018, Jet1_selection_MC, Jet2_selection_MC, Met_selection, Chi2_selection, TTbarMatchable_selection, Chi2CandidateMatched_selection, ZprimeTopTag_selection, BlindData_selection;
   std::unique_ptr<uhh2::Selection> met_sel;
   std::unique_ptr<Selection> sel_1btag, sel_2btag;
   std::unique_ptr<Selection> TopJetBtagSubjet_selection;
@@ -142,7 +142,7 @@ void ZprimeAnalysisModule::fill_histograms(uhh2::Event& event, string tag){
 */
 
 ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
-
+  debug = true;
   for(auto & kv : ctx.get_all()){
     cout << " " << kv.first << " = " << kv.second << endl;
   }
@@ -191,11 +191,15 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   double TwoD_dr = 0.4, TwoD_ptrel = 25.;
   if(islooserselection){
     jet1_pt = 100.;
-    TwoD_dr = 0.2;
-    TwoD_ptrel = 10.;
+    TwoD_dr = 0.0;
+    TwoD_ptrel = 0.;
+   // if(isElectron){
+	//	MET_cut = 50;
+//	}
     //    stlep_plus_met = 100.;
   }
   const MuonId muonID(PtEtaCut(muon_pt, 2.4));
+      
   const ElectronId electronID(PtEtaSCCut(elec_pt, 2.5));
 
   // Configuration
@@ -213,6 +217,7 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   Sys_MuonID = ctx.get("Sys_MuonID");
   Sys_MuonTrigger = ctx.get("Sys_MuonTrigger");
   Sys_PU = ctx.get("Sys_PU");
+
 
   // Modules
   printer_genparticles.reset(new GenParticlesPrinter(ctx));
@@ -239,8 +244,22 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   NMuon2_selection.reset(new NMuonSelection(nmuon_min2, nmuon_max2));
   NElectron_selection.reset(new NElectronSelection(nele_min, nele_max));
   TwoDCut_selection.reset(new TwoDCut(TwoD_dr, TwoD_ptrel));
+  Jet1_selection_data2018.reset(new NJetSelection(1, -1, JetId(RunCDetacut(jet1_pt,-1.3, 2.4,-0.87,-1.57))));
+  Jet2_selection_data2018.reset(new NJetSelection(2, -1, JetId(RunCDetacut(jet2_pt,-1.3, 2.4,-0.87,-1.57))));
+		
+  
+  //Jet1_selection_MC.reset(new NJetSelection(1, -1, JetId(PtEtaCut(jet1_pt, 2.4))));
+  //Jet2_selection_MC.reset(new NJetSelection(2, -1, JetId(PtEtaCut(jet2_pt, 2.4))));
+  Jet1_selection_MC.reset(new NJetSelection(1, -1, JetId(RunCDetacut(jet1_pt,-2.4,-1.3,-1.57,-0.87 ))));  
+  Jet2_selection_MC.reset(new NJetSelection(2, -1, JetId(RunCDetacut(jet2_pt,-2.4,-1.3,-1.57,-0.87 )))); 
+			
+			
+
   Jet1_selection.reset(new NJetSelection(1, -1, JetId(PtEtaCut(jet1_pt, 2.4))));
   Jet2_selection.reset(new NJetSelection(2, -1, JetId(PtEtaCut(jet2_pt, 2.4))));
+  
+//  Jet1_selection.reset(new NJetSelection(1, -1, JetId(RunDetacut(jet1_pt,-1.5, 2.4))));
+ // Jet2_selection.reset(new NJetSelection(2, -1, JetId(RunDetacut(jet2_pt,-1.5,2.4))));
   //  STlepPlusMet_selection.reset(new STlepPlusMetCut(stlep_plus_met, -1.));
   met_sel.reset(new METCut  (MET_cut   , uhh2::infinity));
   Chi2_selection.reset(new Chi2Cut(ctx, 0., chi2_max));
@@ -277,6 +296,8 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
 
   TopJetBtagSubjet_selection.reset(new ZprimeBTagFatSubJetSelection(ctx));
 
+
+
   // Book histograms
   vector<string> histogram_tags = {"Weights", "Muon1", "Trigger", "Muon2", "Electron1", "TwoDCut", "Jet1", "Jet2", "MET", "MatchableBeforeChi2Cut", "NotMatchableBeforeChi2Cut", "CorrectMatchBeforeChi2Cut", "NotCorrectMatchBeforeChi2Cut", "Chi2", "Matchable", "NotMatchable", "CorrectMatch", "NotCorrectMatch", "TopTagReconstruction", "NotTopTagReconstruction", "Btags2", "Btags1","TopJetBtagSubjet"};
   book_histograms(ctx, histogram_tags);
@@ -293,6 +314,10 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
 bool ZprimeAnalysisModule::process(uhh2::Event& event){
 
   //  cout << "++++++++++++ NEW EVENT ++++++++++++++" << endl;
+
+
+//  cout << "event number is:"<<event.run <<endl;
+ // if (debug)  cout<<" run.event: "<<event.run<<". "<<event.event<<endl;
 
   // Initialize reco flags with false
   event.set(h_is_zprime_reconstructed_chi2, false);
@@ -346,11 +371,47 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   if(sample.Contains("_blinded")){
     if(!BlindData_selection->passes(event)) return false;
   }
-  if(!Jet1_selection->passes(event)) return false;
-  fill_histograms(event, "Jet1");
+  
+  if (is2018){
+//		if (debug) cout << "run number is = " << event.run << endl;	
+		if (isMC){
+//			if (debug) cout << "doing MC" << endl;
+			if(Jet1_selection_MC->passes(event)) {
+//	                if (debug) cout<< "before:"<<event.weight << endl;
+			event.weight=event.weight*0.35;
+//			if (debug) cout<< "after:"<<event.weight << endl;
+			fill_histograms(event, "Jet1");
+			}else if(Jet1_selection->passes(event)){
+//			if (debug) cout<< "normal phase space"<<event.weight << endl;
+			fill_histograms(event, "Jet1");
+			}
+			
+			if(Jet2_selection->passes(event)){
+			fill_histograms(event, "Jet2");
+			}else if(Jet2_selection_MC->passes(event)) {
+			event.weight=event.weight*0.35;
+                        fill_histograms(event, "Jet2");
+             		}
+		}
+		else if (!isMC and event.run>319077){
+//                        if (debug) cout << "doing data" << endl;   
+			if(Jet1_selection_data2018->passes(event)){
+//                        if (debug) cout << "Jet1 Selection okay" << endl;
+			fill_histograms(event, "Jet1");
+			}
+			if(Jet2_selection_data2018->passes(event)){
+                        fill_histograms(event, "Jet2");
+			}
+		   }
+	
+	}
+  else{
+  	if(!Jet1_selection->passes(event)) return false;
+  	fill_histograms(event, "Jet1");
 
-  if(!Jet2_selection->passes(event)) return false;
-  fill_histograms(event, "Jet2");
+  	if(!Jet2_selection->passes(event)) return false;
+  	fill_histograms(event, "Jet2");
+  }
 
   // if(!STlepPlusMet_selection->passes(event)) return false;
   // fill_histograms(event, "STlepPlusMet");
