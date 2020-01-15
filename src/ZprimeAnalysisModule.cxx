@@ -476,16 +476,17 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
 				event.weight=event.weight*0.35;
 				fill_histograms(event, "Jet1");
                  //               if(debug) cout<<"MC jet1 in affected area;weighed down"<<endl;
-			}else if(Jet1_selection->passes(event) && event.jets->at(0).eta()<2.4 && event.jets->at(0).eta()>-1.2 && event.jets->at(0).phi()>-0.67) return false;
+			}else if(Jet1_selection->passes(event) && event.jets->at(0).eta()<2.4 && event.jets->at(0).eta()>-1.2 && event.jets->at(0).phi()>-0.67){
                    //             if(debug) cout<<"MC jet1 is not in affected area"<<endl;
 				fill_histograms(event, "Jet1");
-			
+			}
 			if(Jet2_selection_MC_weigh->passes(event)){
 				event.weight=event.weight*0.35;
                         	fill_histograms(event, "Jet2");
-             		}else if(Jet2_selection->passes(event) && event.jets->at(1).eta()<2.4 && event.jets->at(1).eta()>-1.2 && event.jets->at(1).phi()>-0.67) return false;
+             		}else if(Jet2_selection->passes(event) && event.jets->at(1).eta()<2.4 && event.jets->at(1).eta()>-1.2 && event.jets->at(1).phi()>-0.67){
 		//		if(debug) cout<<"MC jet2 is not in affected area"<<endl;
                                 fill_histograms(event, "Jet2");
+				}
 		        
 		}else if (!isMC){
                                 if(debug) cout<<"data, run: "<< event.run<<endl; 
