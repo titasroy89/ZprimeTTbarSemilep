@@ -306,11 +306,12 @@ uhh2::HTlepCut::HTlepCut(float min_htlep, float max_htlep):
 bool uhh2::HTlepCut::passes(const uhh2::Event& event){
   float lep_pt = 0;
   if(event.muons) lep_pt = event.muons->at(0).pt(); //FixMe: find leading lepton first
+ // cout << "MET pt: " << event.met->pt() << ", lepton pt: " << lep_pt <<endl;  
   float htlep =  event.met->pt() + lep_pt;
 
   return (htlep > min_htlep_) && (htlep < max_htlep_);
 }
-////////////////////////////////////////////////////////
+
 
 uhh2::METCut::METCut(float min_met, float max_met):
 min_met_(min_met), max_met_(max_met) {}
@@ -407,3 +408,68 @@ bool uhh2::GenFlavorSelection::passes(const uhh2::Event& event){
 
   return pass;
 }
+
+HEM_electronSelection::HEM_electronSelection(Context& ctx){
+}
+
+bool HEM_electronSelection::passes(const Event & event){
+   
+   bool pass=false;
+//   if (event.electrons->at(0).eta() < eta_up && event.electrons->at(0).phi() < phi_up && event.electrons->at(0).phi() > phi_down) pass=true;
+   for(const Electron & ele : *event.electrons){
+      if ( ele.eta() < eta_up && ele.phi() < phi_up && ele.phi() > phi_down) pass=true;
+   }
+
+return pass;
+}
+
+
+HEM_jetSelection::HEM_jetSelection(Context& ctx){
+}
+
+bool HEM_jetSelection::passes(const Event & event){
+
+   bool pass=false;
+//   if ((event.jets->at(0).eta() < eta_up && event.jets->at(0).phi() < phi_up && event.jets->at(0).phi() > phi_down)|| (event.jets->at(1).eta() < eta_up && event.jets->at(1).phi() < phi_up && event.jets->at(1).phi() > phi_down)) pass=true;
+   for(const auto & jet : *event.jets){
+      if ( jet.eta() < eta_up && jet.phi() < phi_up && jet.phi() > phi_down) pass=true;
+   }
+  
+return pass;
+}
+
+
+HEM_topjetSelection::HEM_topjetSelection(Context& ctx){
+}
+
+bool HEM_topjetSelection::passes(const Event & event){
+
+
+   bool pass=false;
+ //  if ((event.topjets->at(0).eta() < eta_up && event.topjets->at(0).phi() < phi_up && event.topjets->at(0).phi() > phi_down)|| (event.topjets->at(1).eta() < eta_up && event.topjets->at(1).phi() < phi_up && event.topjets->at(1).phi() > phi_down)) pass=true;
+  for(const auto & jet : *event.topjets){
+      if ( jet.eta() < eta_up && jet.phi() < phi_up && jet.phi() > phi_down) pass=true;
+   }
+
+return pass;
+}
+
+HEMSelection::HEMSelection(Context& ctx){
+}
+bool HEMSelection::passes(const Event & event){
+
+   for(const Electron & ele : *event.electrons){
+      if ( ele.eta() < eta_up && ele.phi() < phi_up && ele.phi() > phi_down) return false;
+   }
+
+   for(const auto & jet : *event.jets){
+      if ( jet.eta() < eta_up && jet.phi() < phi_up && jet.phi() > phi_down) return false;
+   }
+
+   for(const auto & jet : *event.topjets){
+      if ( jet.eta() < eta_up && jet.phi() < phi_up && jet.phi() > phi_down) return false;
+   }
+
+return true;
+}
+

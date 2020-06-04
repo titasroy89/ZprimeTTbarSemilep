@@ -555,8 +555,8 @@ ZprimePreselectionModule_DNN::ZprimePreselectionModule_DNN(uhh2::Context& ctx){
   }
   double electron_pt(50.);
   double muon_pt(55.);
-  double jet1_pt(50.);
-  double jet2_pt(20.);
+  double jet1_pt(40.);//50
+  double jet2_pt(20.);//20
   double MET(50.);
 
   // COMMON MODULES
@@ -606,9 +606,9 @@ ZprimePreselectionModule_DNN::ZprimePreselectionModule_DNN(uhh2::Context& ctx){
   jet_cleaner1.reset(new JetCleaner(ctx, 15., 3.0));
   jet_cleaner2.reset(new JetCleaner(ctx, 30., 2.4));
   topjet_IDcleaner.reset(new TopJetCleaner(ctx, jetID_CHS, "topjets"));
-  topjet_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "topjets"));
+  topjet_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(300., 2.4)), "topjets"));//400
   topjet_puppi_IDcleaner.reset(new TopJetCleaner(ctx, jetID_PUPPI, "toppuppijets"));
-  topjet_puppi_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "toppuppijets"));
+  topjet_puppi_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(300., 2.4)), "toppuppijets")); //400
 
   //set up JEC and JLC
   init_JEC_JLC(ctx);

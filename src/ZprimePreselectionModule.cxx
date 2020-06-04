@@ -44,6 +44,7 @@ public:
 
 protected:
 
+
   // Corrections
   std::unique_ptr<JetCorrector>                    jet_corrector_A,jet_corrector_B, jet_corrector_C, jet_corrector_D, jet_corrector_E, jet_corrector_F, 
     jet_corrector_G,jet_corrector_H, jet_corrector_MC;
@@ -114,6 +115,82 @@ protected:
   constexpr static int s_runnr_D_2018 =  325175; //up to this one, including this one
 
   bool is2016v2, is2016v3, is2017, is2018;
+
+
+
+  // NN vars
+
+  Event::Handle<float> h_MET;
+  Event::Handle<float> h_ST;
+  Event::Handle<float> h_STjets;
+  Event::Handle<float> h_STlep;
+  Event::Handle<float> h_NPV;
+  Event::Handle<float> h_N_jets;
+  Event::Handle<float> h_pt_jet;
+  Event::Handle<float> h_pt_jet1;
+  Event::Handle<float> h_pt_jet2;
+  Event::Handle<float> h_pt_jet3;
+  Event::Handle<float> h_eta_jet;
+  Event::Handle<float> h_eta_jet1;
+  Event::Handle<float> h_eta_jet2;
+  Event::Handle<float> h_eta_jet3;
+  Event::Handle<float> h_phi_jet;
+  Event::Handle<float> h_phi_jet1;
+  Event::Handle<float> h_phi_jet2;
+  Event::Handle<float> h_phi_jet3;
+  Event::Handle<float> h_m_jet;
+  Event::Handle<float> h_m_jet1;
+  Event::Handle<float> h_m_jet2;
+  Event::Handle<float> h_m_jet3;
+  Event::Handle<float> h_csv_jet;
+  Event::Handle<float> h_csv_jet1;
+  Event::Handle<float> h_csv_jet2;
+  Event::Handle<float> h_csv_jet3;
+  Event::Handle<float> h_S11;
+  Event::Handle<float> h_S12;
+  Event::Handle<float> h_S13;
+  Event::Handle<float> h_S22;
+  Event::Handle<float> h_S23;
+  Event::Handle<float> h_S33;
+  Event::Handle<float> h_N_mu;
+  Event::Handle<float> h_pt_mu;
+  Event::Handle<float> h_eta_mu;
+  Event::Handle<float> h_phi_mu;
+  Event::Handle<float> h_reliso_mu;
+  Event::Handle<float> h_N_ele;
+  Event::Handle<float> h_pt_ele;
+  Event::Handle<float> h_eta_ele;
+  Event::Handle<float> h_phi_ele;
+  Event::Handle<float> h_reliso_ele;
+  Event::Handle<float> h_N_Ak8Puppijets;
+  Event::Handle<float> h_pt_Ak8Puppijets;
+  Event::Handle<float> h_pt_Ak8Puppijet1;
+  Event::Handle<float> h_pt_Ak8Puppijet2;
+  Event::Handle<float> h_pt_Ak8Puppijet3;
+  Event::Handle<float> h_eta_Ak8Puppijets;
+  Event::Handle<float> h_eta_Ak8Puppijet1;
+  Event::Handle<float> h_eta_Ak8Puppijet2;
+  Event::Handle<float> h_eta_Ak8Puppijet3;
+  Event::Handle<float> h_phi_Ak8Puppijets;
+  Event::Handle<float> h_phi_Ak8Puppijet1;
+  Event::Handle<float> h_phi_Ak8Puppijet2;
+  Event::Handle<float> h_phi_Ak8Puppijet3;
+  Event::Handle<float> h_mSD_Ak8Puppijets;
+  Event::Handle<float> h_mSD_Ak8Puppijet1;
+  Event::Handle<float> h_mSD_Ak8Puppijet2;
+  Event::Handle<float> h_mSD_Ak8Puppijet3;
+  Event::Handle<float> h_dR_mu_Ak8Puppijet;
+  Event::Handle<float> h_dR_ele_Ak8Puppijet;
+  Event::Handle<float> h_dR_jet_Ak8Puppijet;
+  Event::Handle<float> h_dRmin_mu_jet;
+  Event::Handle<float> h_dRmin_ele_jet;
+  Event::Handle<float> h_ptrel_mu_jet;
+  Event::Handle<float> h_ptrel_ele_jet;
+  Event::Handle<float> h_dphi_mu_jet1;
+  Event::Handle<float> h_dphi_ele_jet1;
+  Event::Handle<float> h_dphi_mu_Ak8Puppijet1;
+  Event::Handle<float> h_dphi_ele_Ak8Puppijet1;
+
 };
 
 void ZprimePreselectionModule::book_histograms(uhh2::Context& ctx, vector<string> tags){
@@ -559,14 +636,14 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
       TopJER_smearer.reset(new GenericJetResolutionSmearer(ctx, "topjets", "gentopjets", JERSmearing::SF_13TeV_Fall17_V3, "2017/Fall17_V3_MC_PtResolution_AK8PFchs.txt"));
       TopJER_puppi_smearer.reset(new GenericJetResolutionSmearer(ctx, "toppuppijets", "gentopjets", JERSmearing::SF_13TeV_Fall17_V3, "2017/Fall17_V3_MC_PtResolution_AK8PFPuppi.txt"));
     }
-    /* Was NOT used yet, 2017 JER SFs were used in previous 2018 iteration!
+    /* Was NOT used yet, 2017 JER SFs were used in previous 2018 iteration! */
     if(is2018){
       if(!ispuppi) JER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", JERSmearing::SF_13TeV_Autumn18_RunABCD_V4, "2018/Autumn18_V4_MC_PtResolution_AK4PFchs.txt"));
       else JER_smearer.reset(new GenericJetResolutionSmearer(ctx, "jets", "genjets", JERSmearing::SF_13TeV_Autumn18_RunABCD_V4, "2018/Autumn18_V4_MC_PtResolution_AK4PFPuppi.txt"));
       TopJER_smearer.reset(new GenericJetResolutionSmearer(ctx, "topjets", "gentopjets", JERSmearing::SF_13TeV_Autumn18_RunABCD_V4, "2018/Autumn18_V4_MC_PtResolution_AK8PFchs.txt"));
       TopJER_puppi_smearer.reset(new GenericJetResolutionSmearer(ctx, "toppuppijets", "gentopjets", JERSmearing::SF_13TeV_Autumn18_RunABCD_V4, "2018/Autumn18_V4_MC_PtResolution_AK8PFPuppi.txt"));
     }
-    */
+    
   }
 
 
@@ -575,6 +652,76 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
   jet2_sel.reset(new NJetSelection(2, -1, JetId(PtEtaCut(jet2_pt, 2.4))));
   met_sel  .reset(new METCut  (MET   , uhh2::infinity));
 
+  h_MET = ctx.declare_event_output<float> ("met");
+  h_ST = ctx.declare_event_output<float> ("st");
+  h_STjets = ctx.declare_event_output<float> ("st_jets");
+  h_STlep = ctx.declare_event_output<float> ("st_lep");
+  h_NPV = ctx.declare_event_output<float> ("npv_pt");
+  h_N_jets = ctx.declare_event_output<float> ("N_jets");
+  h_pt_jet = ctx.declare_event_output<float> ("pt_jet");
+  h_pt_jet1 = ctx.declare_event_output<float> ("pt_jet1");
+  h_pt_jet2 = ctx.declare_event_output<float> ("pt_jet2");
+  h_pt_jet3 = ctx.declare_event_output<float> ("pt_jet3");
+  h_eta_jet = ctx.declare_event_output<float> ("eta_jet");
+  h_eta_jet1 = ctx.declare_event_output<float> ("eta_jet1");
+  h_eta_jet2 = ctx.declare_event_output<float> ("eta_jet2");
+  h_eta_jet3 = ctx.declare_event_output<float> ("eta_jet3");
+  h_phi_jet = ctx.declare_event_output<float> ("phi_jet");
+  h_phi_jet1 = ctx.declare_event_output<float> ("phi_jet1");
+  h_phi_jet2 = ctx.declare_event_output<float> ("phi_jet2");
+  h_phi_jet3 = ctx.declare_event_output<float> ("phi_jet3");
+  h_m_jet = ctx.declare_event_output<float> ("m_jet");
+  h_m_jet1 = ctx.declare_event_output<float> ("m_jet1");
+  h_m_jet2 = ctx.declare_event_output<float> ("m_jet2");
+  h_m_jet3 = ctx.declare_event_output<float> ("m_jet3");
+  h_csv_jet = ctx.declare_event_output<float> ("csv_jet");
+  h_csv_jet1 = ctx.declare_event_output<float> ("csv_jet1");
+  h_csv_jet2 = ctx.declare_event_output<float> ("csv_jet2");
+  h_csv_jet3 = ctx.declare_event_output<float> ("csv_jet3");
+  h_S11 = ctx.declare_event_output<float> ("s11");
+  h_S12 = ctx.declare_event_output<float> ("s12");
+  h_S13 = ctx.declare_event_output<float> ("s13");
+  h_S22 = ctx.declare_event_output<float> ("s22");
+  h_S23 = ctx.declare_event_output<float> ("s23");
+  h_S33 = ctx.declare_event_output<float> ("s33");
+  h_N_mu = ctx.declare_event_output<float> ("N_mu");
+  h_pt_mu = ctx.declare_event_output<float> ("pt_mu");
+  h_eta_mu = ctx.declare_event_output<float> ("eta_mu");
+  h_phi_mu = ctx.declare_event_output<float> ("phi_mu");
+  h_reliso_mu = ctx.declare_event_output<float> ("reliso_mu");
+  h_N_ele = ctx.declare_event_output<float> ("N_ele");
+  h_pt_ele = ctx.declare_event_output<float> ("pt_ele");
+  h_eta_ele = ctx.declare_event_output<float> ("eta_ele");
+  h_phi_ele = ctx.declare_event_output<float> ("phi_ele");
+  h_reliso_ele = ctx.declare_event_output<float> ("reliso_ele");
+  h_N_Ak8Puppijets = ctx.declare_event_output<float> ("N_Ak8Puppijets");
+  h_pt_Ak8Puppijets = ctx.declare_event_output<float> ("pt_Ak8Puppijets");
+  h_pt_Ak8Puppijet1 = ctx.declare_event_output<float> ("pt_Ak8Puppijet1");
+  h_pt_Ak8Puppijet2 = ctx.declare_event_output<float> ("pt_Ak8Puppijet2");
+  h_pt_Ak8Puppijet3 = ctx.declare_event_output<float> ("pt_Ak8Puppijet3");
+  h_eta_Ak8Puppijets = ctx.declare_event_output<float> ("eta_Ak8Puppijets");
+  h_eta_Ak8Puppijet1 = ctx.declare_event_output<float> ("eta_Ak8Puppijet1");
+  h_eta_Ak8Puppijet2 = ctx.declare_event_output<float> ("eta_Ak8Puppijet2");
+  h_eta_Ak8Puppijet3 = ctx.declare_event_output<float> ("eta_Ak8Puppijet3");
+  h_phi_Ak8Puppijets = ctx.declare_event_output<float> ("phi_Ak8Puppijets");
+  h_phi_Ak8Puppijet1 = ctx.declare_event_output<float> ("phi_Ak8Puppijet1");
+  h_phi_Ak8Puppijet2 = ctx.declare_event_output<float> ("phi_Ak8Puppijet2");
+  h_phi_Ak8Puppijet3 = ctx.declare_event_output<float> ("phi_Ak8Puppijet3");
+  h_mSD_Ak8Puppijets = ctx.declare_event_output<float> ("mSD_Ak8Puppijets");
+  h_mSD_Ak8Puppijet1 = ctx.declare_event_output<float> ("mSD_Ak8Puppijet1");
+  h_mSD_Ak8Puppijet2 = ctx.declare_event_output<float> ("mSD_Ak8Puppijet2");
+  h_mSD_Ak8Puppijet3 = ctx.declare_event_output<float> ("mSD_Ak8Puppijet3");
+  h_dR_mu_Ak8Puppijet = ctx.declare_event_output<float> ("dR_mu_Ak8Puppijet");
+  h_dR_ele_Ak8Puppijet = ctx.declare_event_output<float> ("dR_ele_Ak8Puppijet");
+  h_dR_jet_Ak8Puppijet = ctx.declare_event_output<float> ("dR_jet_Ak8Puppijet");
+  h_dRmin_mu_jet = ctx.declare_event_output<float> ("dRmin_mu_jet");
+  h_dRmin_ele_jet = ctx.declare_event_output<float> ("dRmin_ele_jet");
+  h_ptrel_mu_jet = ctx.declare_event_output<float> ("ptrel_mu_jet");
+  h_ptrel_ele_jet = ctx.declare_event_output<float> ("ptrel_ele_jet");
+  h_dphi_mu_jet1 = ctx.declare_event_output<float> ("dphi_mu_jet1");
+  h_dphi_ele_jet1 = ctx.declare_event_output<float> ("dphi_ele_jet1");
+  h_dphi_mu_Ak8Puppijet1 = ctx.declare_event_output<float> ("dphi_mu_Ak8Puppijet1");
+  h_dphi_ele_Ak8Puppijet1 = ctx.declare_event_output<float> ("dphi_ele_Ak8Puppijet1");
 
   // Book histograms
   vector<string> histogram_tags = {"Input", "Lumiselection", "Metfilters", "Lepton1", "JetID", "JetCleaner1", "JetCleaner2", "TopjetCleaner", "Jet1", "Jet2", "MET"};
@@ -586,6 +733,103 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
 
 
 bool ZprimePreselectionModule::process(uhh2::Event& event){
+////debug
+//if(event.event!=35002146) return false;
+//if(event.event!=1034569 && event.event!=35002146) return false;
+//uint jetInd = 0;
+//for (const Jet & jet: *event.jets) {
+//cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw()<< "	" << " jet pt = " << jet.pt() << "	"  << "for jet#" << jetInd << endl;
+//jetInd++;
+//}
+//uint genjetInd = 0;
+//for (const GenJet & genjet: *event.genjets) {
+//cout << " genjet pt = " << genjet.pt() << "	"  << "for jet#" << genjetInd << endl;
+//genjetInd++;
+//}
+/*cout << "start process " << endl;
+uint jetInd = 0;
+uint genjetInd = 0;
+for (const Jet & jet: *event.jets) {
+for (const GenJet & genjet: *event.genjets) {
+if(deltaR(jet,genjet)<=0.4){
+cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw()<< "       " << " jet pt = " << jet.pt() << "      " << " genjet pt = " << genjet.pt() << "     "   << "for jet#" << jetInd << endl;
+}
+jetInd++;
+genjetInd++;
+}
+}*/
+////////
+
+  event.set(h_MET,0);
+  event.set(h_ST,0);
+  event.set(h_STjets,0);
+  event.set(h_STlep,0);
+  event.set(h_NPV,0);
+  event.set(h_N_jets,0);
+  event.set(h_pt_jet,0);
+  event.set(h_pt_jet1,0);
+  event.set(h_pt_jet2,0);
+  event.set(h_pt_jet3,0);
+  event.set(h_eta_jet,0);
+  event.set(h_eta_jet1,0);
+  event.set(h_eta_jet2,0);
+  event.set(h_eta_jet3,0);
+  event.set(h_phi_jet,0);
+  event.set(h_phi_jet1,0);
+  event.set(h_phi_jet2,0);
+  event.set(h_phi_jet3,0);
+  event.set(h_m_jet,0);
+  event.set(h_m_jet1,0);
+  event.set(h_m_jet2,0);
+  event.set(h_m_jet3,0);
+  event.set(h_csv_jet,0);
+  event.set(h_csv_jet1,0);
+  event.set(h_csv_jet2,0);
+  event.set(h_csv_jet3,0);
+  event.set(h_S11,0);
+  event.set(h_S12,0);
+  event.set(h_S13,0);
+  event.set(h_S22,0);
+  event.set(h_S23,0);
+  event.set(h_S33,0);
+  event.set(h_N_mu,0);
+  event.set(h_pt_mu,0);
+  event.set(h_eta_mu,0);
+  event.set(h_phi_mu,0);
+  event.set(h_reliso_mu,0);
+  event.set(h_N_ele,0);
+  event.set(h_pt_ele,0);
+  event.set(h_eta_ele,0);
+  event.set(h_phi_ele,0);
+  event.set(h_reliso_ele,0);
+  event.set(h_N_Ak8Puppijets,0);
+  event.set(h_pt_Ak8Puppijets,0);
+  event.set(h_pt_Ak8Puppijet1,0);
+  event.set(h_pt_Ak8Puppijet2,0);
+  event.set(h_pt_Ak8Puppijet3,0);
+  event.set(h_eta_Ak8Puppijets,0);
+  event.set(h_eta_Ak8Puppijet1,0);
+  event.set(h_eta_Ak8Puppijet2,0);
+  event.set(h_eta_Ak8Puppijet3,0);
+  event.set(h_phi_Ak8Puppijets,0);
+  event.set(h_phi_Ak8Puppijet1,0);
+  event.set(h_phi_Ak8Puppijet2,0);
+  event.set(h_phi_Ak8Puppijet3,0);
+  event.set(h_mSD_Ak8Puppijets,0);
+  event.set(h_mSD_Ak8Puppijet1,0);
+  event.set(h_mSD_Ak8Puppijet2,0);
+  event.set(h_mSD_Ak8Puppijet3,0);
+  event.set(h_dR_mu_Ak8Puppijet,0);
+  event.set(h_dR_ele_Ak8Puppijet,0);
+  event.set(h_dR_jet_Ak8Puppijet,0);
+  event.set(h_dRmin_mu_jet,0);
+  event.set(h_dRmin_ele_jet,0);
+  event.set(h_ptrel_mu_jet,0);
+  event.set(h_ptrel_ele_jet,0);
+  event.set(h_dphi_mu_jet1,0);
+  event.set(h_dphi_ele_jet1,0);
+  event.set(h_dphi_mu_Ak8Puppijet1,0);
+  event.set(h_dphi_ele_Ak8Puppijet1,0);
 
   //  cout<<"Getting started... "<<event.event<<endl;
   fill_histograms(event, "Input");
@@ -758,40 +1002,81 @@ bool ZprimePreselectionModule::process(uhh2::Event& event){
     }
   }
   else{ //MC
-    //    cout<<"JLC, JEC, JER ..."<<endl;
+//        cout<<"JLC, JEC, JER ..."<<endl;
+//cout << "before JLC " << endl;
+uint jetInd6 = 0;
+for (const Jet & jet: *event.jets) {
+//cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw() << "      " << " jet pt = " << jet.pt() << "      " << "for jet#" << jetInd6 << endl;
+jetInd6++;
+}
     JLC_MC->process(event);
-    //    cout<<"  JLC_MC done!"<<endl;
+ //       cout<<"  JLC_MC done!"<<endl;
+
+//cout << "after JLC " << endl;
+uint jetInd7 = 0;
+for (const Jet & jet: *event.jets) {
+//cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw() << "      " << " jet pt = " << jet.pt() << "      " << "for jet#" << jetInd7 << endl;
+jetInd7++;
+}
+
     TopJLC_MC->process(event);
-    //    cout<<"  TopJLC_MC done!"<<endl;
+        //cout<<"  TopJLC_MC done!"<<endl;
     TopJLC_puppi_MC->process(event);
 
+//cout << "before jet corrector " << endl;
+uint jetInd4 = 0;
+for (const Jet & jet: *event.jets) {
+//cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw() << "      " << " jet pt = " << jet.pt() << "      " << "for jet#" << jetInd4 << endl;
+jetInd4++;
+}
+
     jet_corrector_MC->process(event);
-    //    cout<<" jet_corrector_MC done!"<<endl;
+  //      cout<<" jet_corrector_MC done!"<<endl;
+
+//cout << "after jet corrector " << endl;
+uint jetInd5 = 0;
+for (const Jet & jet: *event.jets) {
+//cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw() << "      " << " jet pt = " << jet.pt() << "      " << "for jet#" << jetInd5 << endl;
+jetInd5++;
+}
+
     topjet_corrector_MC->process(event);
-    //    cout<<" topjet_corrector_MC done!"<<endl;
+        //cout<<" topjet_corrector_MC done!"<<endl;
     topjet_puppi_corrector_MC->process(event);
-    //    cout<<" topjet_puppi_corrector_MC done!"<<endl;
+        //cout<<" topjet_puppi_corrector_MC done!"<<endl;
     if(JER_smearer.get()){
-      //      cout<<" Start JER_smearer "<<endl;
+ //           cout<<" Start JER_smearer "<<endl;
       JER_smearer->process(event);
     }
-    //    cout<<" JER_smearer done!"<<endl;
+   //     cout<<" JER_smearer done!"<<endl;
     if(TopJER_smearer.get()) TopJER_smearer->process(event);
-    // cout<<" TopJER_smearer done!"<<endl;
+     //cout<<" TopJER_smearer done!"<<endl;
     if(TopJER_puppi_smearer.get()) TopJER_puppi_smearer->process(event);
-    // cout<<" TopJER_puppi_smearer done!"<<endl;
+     //cout<<" TopJER_puppi_smearer done!"<<endl;
     jet_corrector_MC->correct_met(event);
-    // cout<<" jet_corrector_MC done!"<<endl;
+     //cout<<" jet_corrector_MC done!"<<endl;
     topjet_subjet_corrector_MC->process(event);
-    // cout<<" topjet_subjet_corrector_MC done!"<<endl;
+     //cout<<" topjet_subjet_corrector_MC done!"<<endl;
     topjet_puppi_subjet_corrector_MC->process(event);
-    // cout<<" topjet_puppi_subjet_corrector_MC done!"<<endl;
+     //cout<<" topjet_puppi_subjet_corrector_MC done!"<<endl;
   }
-
+/*cout << "before jet cleaner 1 " << endl;
+uint jetInd2 = 0;
+for (const Jet & jet: *event.jets) {
+cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw() << "      " << " jet pt = " << jet.pt() << "      " << "for jet#" << jetInd2 << endl;
+jetInd2++;
+}*/
   jet_cleaner1->process(event);
   sort_by_pt<Jet>(*event.jets);
   fill_histograms(event, "JetCleaner1");
   //cout<<"JetCleaner1 ... "<<event.event<<endl;
+
+/*cout << "after jet cleaner 1 " << endl;
+uint jetInd3 = 0;
+for (const Jet & jet: *event.jets) {
+cout << "--- jet pt raw = " << jet.pt()* jet.JEC_factor_raw() << "	" << " jet pt = " << jet.pt() << "	" << "for jet#" << jetInd3 << endl;
+jetInd3++;
+}*/
   // Lepton-2Dcut variables
   for(auto& muo : *event.muons){
 
@@ -842,7 +1127,212 @@ bool ZprimePreselectionModule::process(uhh2::Event& event){
   if(!pass_met) return false;
   fill_histograms(event, "MET");
 
+
+
+////////////////////////////////////////////////
+// Variables for NN
+////////////////////////////////////////////////
+
+  // General
+  event.set(h_NPV,event.pvs->size());
+
+  event.set(h_MET,event.met->pt());
+
+  double st = 0., st_jets = 0., st_lep = 0.;
+  vector<Jet>* jets = event.jets;
+  vector<Electron>* electrons = event.electrons;
+  vector<Muon>* muons = event.muons;
+  for(unsigned int i=0; i<jets->size(); i++){
+           st_jets += jets->at(i).pt();
+  }
+  for(unsigned int i=0; i<electrons->size(); i++){
+           st_lep += electrons->at(i).pt();
+  }
+  for(unsigned int i=0; i<muons->size(); i++){
+           st_lep += muons->at(i).pt();
+  }
+  st = st_jets + st_lep + event.met->pt();
+
+  event.set(h_ST,st);
+  event.set(h_STjets,st_jets);
+  event.set(h_STlep,st_lep);
+
+  // Ak4 jets
+  event.set(h_N_jets,jets->size());
+
+  for(unsigned int i=0; i<jets->size(); i++){
+    event.set(h_pt_jet,jets->at(i).pt());
+    event.set(h_eta_jet,jets->at(i).eta());
+    event.set(h_phi_jet,jets->at(i).phi());
+    event.set(h_m_jet,jets->at(i).v4().M());
+    event.set(h_csv_jet,jets->at(i).btag_combinedSecondaryVertex());
+
+
+    if(i==0){
+      event.set(h_pt_jet1,jets->at(i).pt());
+      event.set(h_eta_jet1,jets->at(i).eta());
+      event.set(h_phi_jet1,jets->at(i).phi());
+      event.set(h_m_jet1,jets->at(i).v4().M());
+      event.set(h_csv_jet1,jets->at(i).btag_combinedSecondaryVertex());
+    }
+    else if(i==1){
+      event.set(h_pt_jet2,jets->at(i).pt());
+      event.set(h_eta_jet2,jets->at(i).eta());
+      event.set(h_phi_jet2,jets->at(i).phi());
+      event.set(h_m_jet2,jets->at(i).v4().M());
+      event.set(h_csv_jet2,jets->at(i).btag_combinedSecondaryVertex());
+    }
+    else if(i==2){
+      event.set(h_pt_jet3,jets->at(i).pt());
+      event.set(h_eta_jet3,jets->at(i).eta());
+      event.set(h_phi_jet3,jets->at(i).phi());
+      event.set(h_m_jet3,jets->at(i).v4().M());
+      event.set(h_csv_jet3,jets->at(i).btag_combinedSecondaryVertex());
+    }
+  }
+
+  // Sphericity tensor
+  double s11 = -1., s12 = -1., s13 = -1., s22 = -1., s23 = -1., s33 = -1., mag = -1.;
+  for(const Jet jet : *event.jets){
+    mag += (jet.v4().Px()*jet.v4().Px()+jet.v4().Py()*jet.v4().Py()+jet.v4().Pz()*jet.v4().Pz());
+    s11 += jet.v4().Px()*jet.v4().Px();
+    s12 += jet.v4().Px()*jet.v4().Py();
+    s13 += jet.v4().Px()*jet.v4().Pz();
+    s22 += jet.v4().Py()*jet.v4().Py();
+    s23 += jet.v4().Py()*jet.v4().Pz();
+    s33 += jet.v4().Pz()*jet.v4().Pz();
+  }
+
+  s11 = s11 / mag;
+  s12 = s12 / mag;
+  s13 = s13 / mag;
+  s22 = s22 / mag;
+  s23 = s23 / mag;
+  s33 = s33 / mag;
+
+  event.set(h_S11,s11);
+  event.set(h_S12,s12);
+  event.set(h_S13,s13);
+  event.set(h_S22,s22);
+  event.set(h_S23,s23);
+  event.set(h_S33,s33);
+
+
+  // Muons
+  int Nmuons = muons->size();
+  event.set(h_N_mu,Nmuons);
+
+  for(int i=0; i<Nmuons; i++){
+
+    event.set(h_pt_mu,muons->at(i).pt());
+    event.set(h_eta_mu,muons->at(i).eta());
+    event.set(h_phi_mu,muons->at(i).phi());
+    event.set(h_reliso_mu,muons->at(i).relIso());
+    if(muons->at(i).has_tag(Muon::twodcut_dRmin) && muons->at(i).has_tag(Muon::twodcut_pTrel)){
+      event.set(h_dRmin_mu_jet,muons->at(i).get_tag(Muon::twodcut_dRmin));
+      event.set(h_ptrel_mu_jet,muons->at(i).get_tag(Muon::twodcut_pTrel));
+    }
+      for(unsigned int j=0; j<jets->size(); j++){
+       if(j==0){
+       event.set(h_dphi_mu_jet1,deltaPhi(muons->at(i),jets->at(j)));
+       }
+      }
+      for(unsigned int k=0; k<event.toppuppijets->size(); k++){
+       if(k==0){
+       event.set(h_dphi_mu_Ak8Puppijet1,deltaPhi(muons->at(i),event.toppuppijets->at(k)));
+       }
+      }
+  }
+
+
+  // Electrons
+  int Nelectrons = electrons->size();
+  event.set(h_N_ele,Nelectrons);
+
+  for(int i=0; i<Nelectrons; i++){
+
+    event.set(h_pt_ele,electrons->at(i).pt());
+    event.set(h_eta_ele,electrons->at(i).eta());
+    event.set(h_phi_ele,electrons->at(i).phi());
+    event.set(h_reliso_ele,electrons->at(i).relIso());
+    if(electrons->at(i).has_tag(Electron::twodcut_dRmin) && electrons->at(i).has_tag(Electron::twodcut_pTrel)){
+      event.set(h_dRmin_ele_jet,electrons->at(i).get_tag(Electron::twodcut_dRmin));
+      event.set(h_ptrel_ele_jet,electrons->at(i).get_tag(Electron::twodcut_pTrel));
+    }
+      for(unsigned int j=0; j<jets->size(); j++){
+       if(j==0){
+       event.set(h_dphi_ele_jet1,deltaPhi(electrons->at(i),jets->at(j)));
+       }
+      }
+      for(unsigned int k=0; k<event.toppuppijets->size(); k++){
+       if(k==0){
+       event.set(h_dphi_ele_Ak8Puppijet1,deltaPhi(electrons->at(i),event.toppuppijets->at(k)));
+       }
+      }
+  }
+
+
+  // Ak8 Puppi jets
+  vector<TopJet>* AK8Puppijets = event.toppuppijets;
+  unsigned int NAK8Puppijets = 0;
+  for(unsigned int i=0; i<AK8Puppijets->size(); i++){
+//    if(AK8Puppijets->at(i).numberOfDaughters()<2) continue;
+    NAK8Puppijets++;
+  
+    event.set(h_pt_Ak8Puppijets,AK8Puppijets->at(i).pt());
+    event.set(h_eta_Ak8Puppijets,AK8Puppijets->at(i).eta());
+    event.set(h_phi_Ak8Puppijets,AK8Puppijets->at(i).phi());
+    event.set(h_mSD_Ak8Puppijets,AK8Puppijets->at(i).softdropmass());
+
+    double dRmin_muon = 99999;
+    for(unsigned int j=0; j<event.muons->size(); j++){
+      double dR_mu = deltaR(AK8Puppijets->at(i), event.muons->at(j));
+      if(dR_mu < dRmin_muon) dRmin_muon = dR_mu;
+      event.set(h_dR_mu_Ak8Puppijet,dR_mu);
+    }
+
+    double dRmin_ele = 99999;
+    for(unsigned int j=0; j<event.electrons->size(); j++){
+      double dR_ele = deltaR(AK8Puppijets->at(i), event.electrons->at(j));
+      if(dR_ele < dRmin_ele) dRmin_ele = dR_ele;
+      event.set(h_dR_ele_Ak8Puppijet,dR_ele);
+    }
+
+    double dRmin_jet = 99999;
+    for(unsigned int j=0; j<event.jets->size(); j++){
+      double dR_jet = deltaR(AK8Puppijets->at(i), event.jets->at(j));
+      if(dR_jet < dRmin_jet) dRmin_jet = dR_jet;
+      event.set(h_dR_jet_Ak8Puppijet,dR_jet);
+    }
+
+
+    if(i==0){
+      event.set(h_pt_Ak8Puppijet1,AK8Puppijets->at(i).pt());
+      event.set(h_eta_Ak8Puppijet1,AK8Puppijets->at(i).eta());
+      event.set(h_phi_Ak8Puppijet1,AK8Puppijets->at(i).phi());
+      event.set(h_mSD_Ak8Puppijet1,AK8Puppijets->at(i).softdropmass());
+    }
+
+    if(i==1){
+      event.set(h_pt_Ak8Puppijet2,AK8Puppijets->at(i).pt());
+      event.set(h_eta_Ak8Puppijet2,AK8Puppijets->at(i).eta());
+      event.set(h_phi_Ak8Puppijet2,AK8Puppijets->at(i).phi());
+      event.set(h_mSD_Ak8Puppijet2,AK8Puppijets->at(i).softdropmass());
+    }
+
+    if(i==2){
+      event.set(h_pt_Ak8Puppijet3,AK8Puppijets->at(i).pt());
+      event.set(h_eta_Ak8Puppijet3,AK8Puppijets->at(i).eta());
+      event.set(h_phi_Ak8Puppijet3,AK8Puppijets->at(i).phi());
+      event.set(h_mSD_Ak8Puppijet3,AK8Puppijets->at(i).softdropmass());
+    }
+
+    event.set(h_N_Ak8Puppijets,NAK8Puppijets);
+  }
+
+
   return true;
+
 }
 
 UHH2_REGISTER_ANALYSIS_MODULE(ZprimePreselectionModule)

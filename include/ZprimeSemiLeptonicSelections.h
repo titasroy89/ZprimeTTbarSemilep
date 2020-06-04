@@ -58,8 +58,12 @@ namespace uhh2 {
     TTbarSemiLepMatchableSelection();
     ~TTbarSemiLepMatchableSelection(){};
     virtual bool passes(const uhh2::Event & event);
+    std::pair<bool,double> check_reco(const ReconstructionHypothesis hyp);//compares match between reconstructed hypothesis vs gen tops and products of their decays filled in passes()
   private:
+    GenParticle Wlep, Whad, blep, bhad, thad, tlep, lepton, neutrino, Whadd1,Whadd2;
   };
+
+
 
   class Chi2Cut : public Selection{
   public:
@@ -283,5 +287,49 @@ namespace uhh2 {
     std::unordered_map<unsigned long int, std::unordered_map<unsigned long int, std::vector<unsigned long int> > > rle_map_;
   };
   ////
+
+  class HEM_topjetSelection: public Selection{
+  public:
+	explicit HEM_topjetSelection(uhh2::Context&);
+        virtual bool passes(const Event&) override;
+  private:
+  double eta_up = -1.3; 
+  double phi_up = -0.87;
+  double phi_down = -1.57;
+  };
+
+
+  class HEM_jetSelection: public Selection{
+  public:
+        explicit HEM_jetSelection(uhh2::Context&);
+        virtual bool passes(const Event&) override;
+  private:
+  double eta_up = -1.3;
+  double phi_up = -0.87;
+  double phi_down = -1.57;
+  };
+ 
+  class HEM_electronSelection: public Selection{
+  public:
+        explicit HEM_electronSelection(uhh2::Context&);
+        virtual bool passes(const Event&) override;
+  private:
+  double eta_up = -1.3;
+  double phi_up = -0.87;
+  double phi_down = -1.57;
+  };
+
+
+  class HEMSelection : public Selection{
+  public:
+    explicit HEMSelection(uhh2::Context&);
+    virtual bool passes(const Event&) override;
+
+  private:
+  double eta_up = -1.3;
+  double phi_up = -0.87;
+  double phi_down = -1.57;
+  };
+
 
 }
