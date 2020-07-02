@@ -415,7 +415,6 @@ HEM_electronSelection::HEM_electronSelection(Context& ctx){
 bool HEM_electronSelection::passes(const Event & event){
    
    bool pass=false;
-//   if (event.electrons->at(0).eta() < eta_up && event.electrons->at(0).phi() < phi_up && event.electrons->at(0).phi() > phi_down) pass=true;
    for(const Electron & ele : *event.electrons){
       if ( ele.eta() < eta_up && ele.phi() < phi_up && ele.phi() > phi_down) pass=true;
    }
@@ -424,18 +423,22 @@ return pass;
 }
 
 
-HEM_jetSelection::HEM_jetSelection(Context& ctx){
+//HEM_jetSelection::HEM_jetSelection(Context& ctx){
+//}
+uhh2::HEM_jetSelection::HEM_jetSelection(Context& ctx){
 }
-
-bool HEM_jetSelection::passes(const Event & event){
-
+bool uhh2::HEM_jetSelection::passes(const uhh2::Event& event){
+//bool HEM_jetSelection::passes(const Event & event){
+   assert(event.jets);
    bool pass=false;
-//   if ((event.jets->at(0).eta() < eta_up && event.jets->at(0).phi() < phi_up && event.jets->at(0).phi() > phi_down)|| (event.jets->at(1).eta() < eta_up && event.jets->at(1).phi() < phi_up && event.jets->at(1).phi() > phi_down)) pass=true;
    for(const auto & jet : *event.jets){
+      std::cout << "initial pass: " << pass <<endl;
+      std::cout<< " if jet eta: "<< jet.eta() << " < " << eta_up << " & if jet phi:  " << phi_down << " > " << jet.phi() << " > " << phi_up << endl;
       if ( jet.eta() < eta_up && jet.phi() < phi_up && jet.phi() > phi_down) pass=true;
+      std::cout << "pass after if statement: " <<pass << endl;
    }
-  
-return pass;
+   std::cout << "output pass" << pass <<endl;  
+   return pass;
 }
 
 
@@ -446,8 +449,7 @@ bool HEM_topjetSelection::passes(const Event & event){
 
 
    bool pass=false;
- //  if ((event.topjets->at(0).eta() < eta_up && event.topjets->at(0).phi() < phi_up && event.topjets->at(0).phi() > phi_down)|| (event.topjets->at(1).eta() < eta_up && event.topjets->at(1).phi() < phi_up && event.topjets->at(1).phi() > phi_down)) pass=true;
-  for(const auto & jet : *event.topjets){
+   for(const auto & jet : *event.topjets){
       if ( jet.eta() < eta_up && jet.phi() < phi_up && jet.phi() > phi_down) pass=true;
    }
 
