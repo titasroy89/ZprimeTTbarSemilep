@@ -96,6 +96,10 @@ namespace uhh2 {
     float min_htlep_, max_htlep_;
   };
   ////
+  //class invTriangCut : public Selection {
+
+  //blic:
+  //explicit invTriangCut(
 
   class METCut : public Selection {
 
@@ -141,10 +145,10 @@ namespace uhh2 {
   };
   ////
 
-  class TriangularCuts : public Selection {
+  class InvTriangularCuts : public Selection {
 
   public:
-    explicit TriangularCuts(const float a, const float b): a_(a), b_(b) {}
+    explicit InvTriangularCuts(const float a, const float b): a_(a), b_(b) {}
     virtual bool passes(const Event&) override;
 
   private:

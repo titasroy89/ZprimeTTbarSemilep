@@ -313,6 +313,25 @@ bool uhh2::HTlepCut::passes(const uhh2::Event& event){
 }
 
 
+
+
+//////Inverse Triangular Cuts for electron QCD //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+bool uhh2::InvTriangularCuts::passes(const uhh2::Event& event){ 
+
+  float dphi_jet_MET= deltaPhiMET(event.jets->at(0),event.met);
+  float dphi_ele_MET= deltaPhiMET(event.electrons->at(0),event.met);
+
+  return (dphi_ele_MET >a_*event.met->pt()+b_) && (dphi_ele_MET < - a_*event.met->pt()+b_) && (dphi_jet_MET > a_*event.met->pt()+b_) && (dphi_jet_MET < - a_*event.met->pt()+b_);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 uhh2::METCut::METCut(float min_met, float max_met):
 min_met_(min_met), max_met_(max_met) {}
 
@@ -432,12 +451,12 @@ bool uhh2::HEM_jetSelection::passes(const uhh2::Event& event){
    assert(event.jets);
    bool pass=false;
    for(const auto & jet : *event.jets){
-      std::cout << "initial pass: " << pass <<endl;
-      std::cout<< " if jet eta: "<< jet.eta() << " < " << eta_up << " & if jet phi:  " << phi_down << " > " << jet.phi() << " > " << phi_up << endl;
+     // std::cout << "initial pass: " << pass <<endl;
+      //std::cout<< " if jet eta: "<< jet.eta() << " < " << eta_up << " & if jet phi:  " << phi_down << " > " << jet.phi() << " > " << phi_up << endl;
       if ( jet.eta() < eta_up && jet.phi() < phi_up && jet.phi() > phi_down) pass=true;
-      std::cout << "pass after if statement: " <<pass << endl;
+      //std::cout << "pass after if statement: " <<pass << endl;
    }
-   std::cout << "output pass" << pass <<endl;  
+   //std::cout << "output pass" << pass <<endl;  
    return pass;
 }
 

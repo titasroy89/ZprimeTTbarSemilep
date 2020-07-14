@@ -83,7 +83,7 @@ protected:
   // Selections
   unique_ptr<Selection> Trigger1_selection, Trigger2_selection, NMuon1_selection, NMuon2_selection, NElectron_selection, TwoDCut_selection, Jet1_selection, Jet2_selection, Met_selection, Chi2_selection, TTbarMatchable_selection, Chi2CandidateMatched_selection, ZprimeTopTag_selection, BlindData_selection;
 
-
+  std::unique_ptr<uhh2::Selection> InvTriangular_selection;
   std::unique_ptr<uhh2::Selection> met_sel;
   std::unique_ptr<uhh2::Selection> htlep_sel;
   std::unique_ptr<Selection> sel_1btag, sel_2btag;
@@ -258,7 +258,6 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   if(isMuon){//semileptonic muon channel
 	trigger1 = "HLT_Mu50_v*";
     if(is2016v2 || is2016v3)
-      //trigger2 = "HLT_TkMu50_v*";
             trigger2 = "HLT_Mu50_v*"; //TkMu path does not exist in 2017/2018 and RunB 201
     else
             trigger2 = "HLT_Mu50_v*"; //TkMu path does not exist in 2017/2018
@@ -267,7 +266,6 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     nmuon_min2 = 1, nmuon_max2 = 1;
     nele_min = 0; nele_max = 0;
     MET_cut = 50;
-    jet1_pt = 100.;
     HT_lep_cut = 150;
 
 
@@ -279,8 +277,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     nele_min = 1; nele_max = 1;
     trigger1 = "HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165_v*";
     trigger2 = "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*";
-    MET_cut = 120;
-    jet1_pt = 185.;
+    MET_cut = 0;
     HT_lep_cut = 0;
   }
 
@@ -290,10 +287,8 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     jet1_pt = 100.;
     TwoD_dr = 0.2;
     TwoD_ptrel = 10.;
-    if(isElectron){
-	MET_cut = 50;
-	}
-        //stlep_plus_met = 100.;
+    
+    //stlep_plus_met = 100.;
   }
   const MuonId muonID(PtEtaCut(muon_pt, 2.4));
       
@@ -352,6 +347,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   NMuon2_selection.reset(new NMuonSelection(nmuon_min2, nmuon_max2));
   NElectron_selection.reset(new NElectronSelection(nele_min, nele_max));
   TwoDCut_selection.reset(new TwoDCut(TwoD_dr, TwoD_ptrel));
+  InvTriangular_selection.reset(new InvTriangularCuts(0.02, 1.5));
    
   
 			
@@ -650,7 +646,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   
   
   if(isElectron){
-	
+	if (!InvTriangular_selection->passes(event)) return false;
   	if(!NElectron_selection->passes(event)) return false;
         if (debug) cout << "should not be here" << endl;
         fill_histograms(event, "Electron1");
