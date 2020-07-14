@@ -555,9 +555,9 @@ ZprimePreselectionModule_DNN::ZprimePreselectionModule_DNN(uhh2::Context& ctx){
   }
   double electron_pt(50.);
   double muon_pt(55.);
-  double jet1_pt(40.);//50
-  double jet2_pt(20.);//20
-  double MET(50.);
+  double jet1_pt(50.);
+  double jet2_pt(20.);
+  double MET(0.);
 
   // COMMON MODULES
 
@@ -606,9 +606,9 @@ ZprimePreselectionModule_DNN::ZprimePreselectionModule_DNN(uhh2::Context& ctx){
   jet_cleaner1.reset(new JetCleaner(ctx, 15., 3.0));
   jet_cleaner2.reset(new JetCleaner(ctx, 30., 2.4));
   topjet_IDcleaner.reset(new TopJetCleaner(ctx, jetID_CHS, "topjets"));
-  topjet_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(300., 2.4)), "topjets"));//400
+  topjet_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "topjets"));//400
   topjet_puppi_IDcleaner.reset(new TopJetCleaner(ctx, jetID_PUPPI, "toppuppijets"));
-  topjet_puppi_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(300., 2.4)), "toppuppijets")); //400
+  topjet_puppi_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "toppuppijets")); //400
 
   //set up JEC and JLC
   init_JEC_JLC(ctx);
@@ -666,10 +666,6 @@ ZprimePreselectionModule_DNN::ZprimePreselectionModule_DNN(uhh2::Context& ctx){
   h_mass_jet1 = ctx.declare_event_output<float> ("mass_jet1");
   h_mass_jet2 = ctx.declare_event_output<float> ("mass_jet2");
   h_mass_jet3 = ctx.declare_event_output<float> ("mass_jet3");
-  h_csv_jet = ctx.declare_event_output<float> ("csv_jet");
-  h_csv_jet1 = ctx.declare_event_output<float> ("csv_jet1");
-  h_csv_jet2 = ctx.declare_event_output<float> ("csv_jet2");
-  h_csv_jet3 = ctx.declare_event_output<float> ("csv_jet3");
   h_S11 = ctx.declare_event_output<float> ("s11");
   h_S12 = ctx.declare_event_output<float> ("s12");
   h_S13 = ctx.declare_event_output<float> ("s13");
@@ -748,10 +744,6 @@ bool ZprimePreselectionModule_DNN::process(uhh2::Event& event){
   event.set(h_mass_jet1,0);
   event.set(h_mass_jet2,0);
   event.set(h_mass_jet3,0);
-  event.set(h_csv_jet,0);
-  event.set(h_csv_jet1,0);
-  event.set(h_csv_jet2,0);
-  event.set(h_csv_jet3,0);
   event.set(h_S11,0);
   event.set(h_S12,0);
   event.set(h_S13,0);
