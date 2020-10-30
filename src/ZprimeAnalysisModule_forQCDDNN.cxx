@@ -66,7 +66,7 @@ protected:
 
   // Scale Factors -- Systematics
   unique_ptr<MCMuonScaleFactor> MuonID_module, MuonTrigger_module;
-  unique_ptr<MCElecScaleFactor> ElectronID_module;
+  unique_ptr<MCElecScaleFactor> ElectronID_module, ElectronTrigger_module;
 
   // AnalysisModules
   unique_ptr<AnalysisModule> LumiWeight_module, PUWeight_module, BTagWeight_module, printer_genparticles;
@@ -166,29 +166,31 @@ protected:
   // Configuration
   bool isMC, ispuppi, islooserselection, isdataQCD;
   string Sys_MuonTrigger, Sys_PU, Sys_btag;
-  string Sys_MuonID, Sys_ElectronID;
+  string Sys_MuonID, Sys_ElectronID, Sys_ElectronTrigger;
   TString sample;
   int runnr_oldtriggers = 299368;
 
   bool is2016v2, is2016v3, is2017, is2017v2, is2018;
   bool isMuon, isElectron;
 };
+/*
+void ZprimeAnalysisModule_forQCDDNN::book_histograms(uhh2::Context& ctx, vector<string> tags){
+  for(const auto & tag : tags){
+    string mytag = tag + "_Skimming";
+    book_HFolder(mytag, new TTbarLJHistsSkimming(ctx,mytag));
+    mytag = tag+"_General";
+    book_HFolder(mytag, new ZprimeSemiLeptonicHists(ctx,mytag));
+  }
+}
 
-//void ZprimeAnalysisModule_forQCDDNN::book_histograms(uhh2::Context& ctx, vector<string> tags){
-  //for(const auto & tag : tags){
-   // string mytag = tag + "_Skimming";
-    //book_HFolder(mytag, new TTbarLJHistsSkimming(ctx,mytag));
-   // mytag = tag+"_General";
-   // book_HFolder(mytag, new ZprimeSemiLeptonicHists(ctx,mytag));
- // }
-//}
+void ZprimeAnalysisModule_forQCDDNN::fill_histograms(uhh2::Event& event, string tag){
+  string mytag = tag + "_Skimming";
+  HFolder(mytag)->fill(event);
+  mytag = tag+"_General";
+  HFolder(mytag)->fill(event);
+}
+*/
 
-//void ZprimeAnalysisModule_forQCDDNN::fill_histograms(uhh2::Event& event, string tag){
-  //string mytag = tag + "_Skimming";
-  //HFolder(mytag)->fill(event);
-  //mytag = tag+"_General";
-//  HFolder(mytag)->fill(event);
-//}
 
 /*
 █  ██████  ██████  ███    ██ ███████ ████████ ██████  ██    ██  ██████ ████████  ██████  ██████
@@ -245,7 +247,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     nele_min = 1; nele_max = 1;
     trigger1 = "HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165_v*";
     trigger2 = "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*";
-    MET_cut = 50;
+    MET_cut = 0;
     HT_lep_cut = 0;
   }
 
@@ -283,6 +285,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   }
   if (isElectron){
 	Sys_ElectronID = ctx.get("Sys_ElectronID");
+        Sys_ElectronTrigger = ctx.get("Sys_ElectronTrigger");
   }
   Sys_PU = ctx.get("Sys_PU");
   Sys_btag = ctx.get("Sys_BTagSF");
@@ -308,7 +311,9 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
    }
   if(is2018 and isElectron){
     ElectronID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/2018_ElectronTight.root", 0., "TightID", Sys_ElectronID));
-  }
+    ElectronTrigger_module.reset(new MCElecScaleFactor(ctx,"/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/SF_2018.root", 0.5,"Trigger", Sys_ElectronTrigger));  
+
+}
 
   // Selection modules
   Trigger1_selection.reset(new TriggerSelection(trigger1));
@@ -523,7 +528,6 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   if (debug)  cout<<" after cleaning "<<endl;
  
   if (debug)  cout<<" about to do trigger"<<endl;
-  if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
 
  
   LumiWeight_module->process(event);
@@ -552,9 +556,13 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   
 
   TopTaggerPuppi->process(event);
+
+  if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
+
   
   if(isMuon){
     if(!NMuon1_selection->passes(event)) return false;
+    MuonTrigger_module->process_onemuon(event,0);
     if(!NMuon2_selection->passes(event)) return false;
   
   }
@@ -564,29 +572,13 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
     
   if(isElectron){
         if(!NElectron_selection->passes(event)) return false;
+        ElectronTrigger_module->process(event);
        
         }     
-  if (debug)  cout<<"done with electron selection" << endl;
 
     
-  if(isMuon && is2018 && !isMC && event.run>319077){
-       if (HEMjetSelection->passes(event)) return false;
-       if (HEMtopjetSelection->passes(event)) return false;
-  }
 
 
-  if (debug)  cout<<"done with 2018 data muons"<<endl;
-  
-
-
-  if(isElectron && is2018 && !isMC && event.run>319077){
-       if (HEMjetSelection->passes(event)) return false;
-       if (HEMelectronSelection->passes(event)) return false;
-       if (HEMtopjetSelection->passes(event)) return false;
-  }
-  
-
-  if (debug)  cout<<"done with 2018 data electrons"<<endl;
  
    
   if((event.muons->size()+event.electrons->size()) != 1) return false; //veto events without leptons or with too many 
@@ -602,11 +594,43 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   
   if(!Jet1_selection->passes(event)) return false;
 
- // cout<< "Jet 1 selection done" << endl; 
 
   if(!Jet2_selection->passes(event)) return false;
  
-  //cout<< "Jet 2 selection done " << endl;
+
+  if (debug) cout<<"about to do 2018 veto"<<endl;
+
+ if(isMuon && is2018 && !isMC && event.run>319077){
+       if (HEMjetSelection->passes(event)) return false;
+       if (HEMtopjetSelection->passes(event)) return false;
+  }
+
+
+
+
+
+  if(isElectron && is2018 && !isMC && event.run>319077){
+       if (HEMjetSelection->passes(event)) return false;
+       if (HEMelectronSelection->passes(event)) return false;
+       if (HEMtopjetSelection->passes(event)) return false;
+  }
+ 
+
+ if(isElectron && is2018 && isMC){
+       if (debug)  cout<<"check electrons MC"<<endl;
+       if (HEMjetSelection->passes(event) || HEMelectronSelection->passes(event)|| HEMtopjetSelection->passes(event)){
+       if (debug) cout <<"event weight is : "<< event.weight <<endl;
+              event.weight=event.weight*0.35;
+    }
+  }
+ 
+ 
+  if(isMuon && is2018 && isMC){
+       if (debug)  cout<<"check muons MC"<<endl;
+       if (HEMjetSelection->passes(event) || HEMtopjetSelection->passes(event)){
+              event.weight=event.weight*0.35;
+   }
+  }
 
   // MET selection
   if(!met_sel->passes(event)) return false;
@@ -616,35 +640,10 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
     if (debug) cout<<"passes HTlep"<<endl;
   }
 
-  if (debug) cout<< "MET selection done, about to do B-tagging selection" << endl;
   
-  //BTagging
-  
-//  if(!sel_2btag->passes(event)) return false; //fill_histograms(event, "Btags2");
-//  cout<< "done with 2 btag" << endl;
- // if(!sel_1btag->passes(event))  return false; //fill_histograms(event, "Btags1");
-  
- //  cout<< "done with 1 btag" << endl;
 
 
-  if (debug) cout << " about to do reweighting for 2018 veto" <<endl;  
 
-  if(isElectron && is2018 && isMC){
-       if (debug)  cout<<"check electrons MC"<<endl;
-       if (HEMjetSelection->passes(event) || HEMelectronSelection->passes(event)|| HEMtopjetSelection->passes(event)){
-       if (debug) cout <<"event weight is : "<< event.weight <<endl;
-              event.weight=event.weight*0.35;
-    }
-  }
-  
-  if (debug)  cout<<"done with 2018 MC electrons"<<endl;
-  
-  if(isMuon && is2018 && isMC){
-       if (debug)  cout<<"check muons MC"<<endl;
-       if (HEMjetSelection->passes(event) || HEMtopjetSelection->passes(event)){
-              event.weight=event.weight*0.35;
-   }
-  }
 
   //Inverted Triangle Cuts
 
