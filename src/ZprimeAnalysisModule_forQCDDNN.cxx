@@ -214,7 +214,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   isdataQCD = (ctx.get("is_data_QCD") == "true");
   if (debug) cout <<"after booleans"<<endl;
   double muon_pt(55.);
-  double elec_pt(80.);
+  double elec_pt(55.);
   double jet1_pt(100.);
   double jet2_pt(50.);
   //  double stlep_plus_met(150.);
