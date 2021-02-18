@@ -52,16 +52,16 @@ public:
 protected:
 
 uhh2::Event::Handle<float> h_dR_jet_Ak8Puppijet;
-uhh2::Event::Handle<float> h_dR_mu_Ak8Puppijet;
-uhh2::Event::Handle<float> h_dR_mu_jet;
+uhh2::Event::Handle<float> h_dR_ele_Ak8Puppijet;
+uhh2::Event::Handle<float> h_dR_ele_jet;
 uhh2::Event::Handle<float> h_deepjetbscore_jet;
 uhh2::Event::Handle<float> h_deepjetbscore_jet1;
 uhh2::Event::Handle<float> h_deepjetbscore_jet2;
 uhh2::Event::Handle<float> h_deepjetbscore_jet3;
 uhh2::Event::Handle<float> h_dphi_jet1_MET;
-uhh2::Event::Handle<float> h_dphi_mu_Ak8Puppijet1;
-uhh2::Event::Handle<float> h_dphi_mu_MET;
-uhh2::Event::Handle<float> h_dphi_mu_jet1;
+uhh2::Event::Handle<float> h_dphi_ele_Ak8Puppijet1;
+uhh2::Event::Handle<float> h_dphi_ele_MET;
+uhh2::Event::Handle<float> h_dphi_ele_jet1;
 uhh2::Event::Handle<float> h_eta_Ak8Puppijet1;
 uhh2::Event::Handle<float> h_eta_Ak8Puppijet2;
 uhh2::Event::Handle<float> h_eta_Ak8Puppijet3;
@@ -70,13 +70,13 @@ uhh2::Event::Handle<float> h_eta_jet;
 uhh2::Event::Handle<float> h_eta_jet1;
 uhh2::Event::Handle<float> h_eta_jet2;
 uhh2::Event::Handle<float> h_eta_jet3;;
-uhh2::Event::Handle<float> h_eta_mu;
-/*
+uhh2::Event::Handle<float> h_eta_ele;
+
 uhh2::Event::Handle<float> h_mass_jet;
 uhh2::Event::Handle<float> h_mass_jet1;
 uhh2::Event::Handle<float> h_mass_jet2;
 uhh2::Event::Handle<float> h_mass_jet3;
-*/
+
 uhh2::Event::Handle<float> h_met_pt;
 uhh2::Event::Handle<float> h_npv_pt;
 uhh2::Event::Handle<float> h_phi_Ak8Puppijet1;
@@ -87,7 +87,7 @@ uhh2::Event::Handle<float> h_phi_jet;
 uhh2::Event::Handle<float> h_phi_jet1;
 uhh2::Event::Handle<float> h_phi_jet2;
 uhh2::Event::Handle<float> h_phi_jet3;
-uhh2::Event::Handle<float> h_phi_mu;
+uhh2::Event::Handle<float> h_phi_ele;
 uhh2::Event::Handle<float> h_pt_Ak8Puppijet1;
 uhh2::Event::Handle<float> h_pt_Ak8Puppijet2;
 uhh2::Event::Handle<float> h_pt_Ak8Puppijet3;
@@ -96,9 +96,9 @@ uhh2::Event::Handle<float> h_pt_jet;
 uhh2::Event::Handle<float> h_pt_jet1;
 uhh2::Event::Handle<float> h_pt_jet2;
 uhh2::Event::Handle<float> h_pt_jet3;
-uhh2::Event::Handle<float> h_pt_mu;
-uhh2::Event::Handle<float> h_ptrel_mu_jet;
-uhh2::Event::Handle<float> h_reliso_mu;
+uhh2::Event::Handle<float> h_pt_ele;
+uhh2::Event::Handle<float> h_ptrel_ele_jet;
+uhh2::Event::Handle<float> h_reliso_ele;
 uhh2::Event::Handle<float> h_s11;
 uhh2::Event::Handle<float> h_s12;
 uhh2::Event::Handle<float> h_s13;
@@ -117,16 +117,16 @@ NeuralNetworkModule::NeuralNetworkModule(Context& ctx, const std::string & Model
 
 
   h_dR_jet_Ak8Puppijet = ctx.get_handle<float> ("dR_jet_Ak8Puppijet");
-  h_dR_mu_Ak8Puppijet = ctx.get_handle<float> ("dR_mu_Ak8Puppijet");
-  h_dR_mu_jet = ctx.get_handle<float> ("dR_mu_jet");
+  h_dR_ele_Ak8Puppijet = ctx.get_handle<float> ("dR_ele_Ak8Puppijet");
+  h_dR_ele_jet = ctx.get_handle<float> ("dR_ele_jet");
   h_deepjetbscore_jet = ctx.get_handle<float> ("deepjetbscore_jet");
   h_deepjetbscore_jet1 = ctx.get_handle<float> ("deepjetbscore_jet1");
   h_deepjetbscore_jet2 = ctx.get_handle<float> ("deepjetbscore_jet2");
   h_deepjetbscore_jet3 = ctx.get_handle<float> ("deepjetbscore_jet3");
   h_dphi_jet1_MET = ctx.get_handle<float> ("dphi_jet1_MET");
-  h_dphi_mu_Ak8Puppijet1 = ctx.get_handle<float> ("dphi_mu_Ak8Puppijet1");
-  h_dphi_mu_MET = ctx.get_handle<float> ("dphi_mu_MET");
-  h_dphi_mu_jet1 = ctx.get_handle<float> ("dphi_mu_jet1");
+  h_dphi_ele_Ak8Puppijet1 = ctx.get_handle<float> ("dphi_ele_Ak8Puppijet1");
+  h_dphi_ele_MET = ctx.get_handle<float> ("dphi_ele_MET");
+  h_dphi_ele_jet1 = ctx.get_handle<float> ("dphi_ele_jet1");
   h_eta_Ak8Puppijet1 = ctx.get_handle<float> ("eta_Ak8Puppijet1");
   h_eta_Ak8Puppijet2 = ctx.get_handle<float> ("eta_Ak8Puppijet2");
   h_eta_Ak8Puppijet3 = ctx.get_handle<float> ("eta_Ak8Puppijet3");
@@ -135,13 +135,13 @@ NeuralNetworkModule::NeuralNetworkModule(Context& ctx, const std::string & Model
   h_eta_jet1 = ctx.get_handle<float> ("eta_jet1");
   h_eta_jet2 = ctx.get_handle<float> ("eta_jet2");
   h_eta_jet3 = ctx.get_handle<float> ("eta_jet3");
-  h_eta_mu = ctx.get_handle<float> ("eta_mu");
-/*
+  h_eta_ele = ctx.get_handle<float> ("eta_ele");
+
   h_mass_jet = ctx.get_handle<float> ("mass_jet");
   h_mass_jet1 = ctx.get_handle<float> ("mass_jet1");
   h_mass_jet2 = ctx.get_handle<float> ("mass_jet2");
   h_mass_jet3 = ctx.get_handle<float> ("mass_jet3");
-*/
+
   h_met_pt = ctx.get_handle<float> ("met_pt");
   h_npv_pt = ctx.get_handle<float> ("npv_pt");
   h_phi_Ak8Puppijet1 = ctx.get_handle<float> ("phi_Ak8Puppijet1");
@@ -152,7 +152,7 @@ NeuralNetworkModule::NeuralNetworkModule(Context& ctx, const std::string & Model
   h_phi_jet1 = ctx.get_handle<float> ("phi_jet1");
   h_phi_jet2 = ctx.get_handle<float> ("phi_jet2");
   h_phi_jet3 = ctx.get_handle<float> ("phi_jet3");
-  h_phi_mu = ctx.get_handle<float> ("phi_mu");
+  h_phi_ele = ctx.get_handle<float> ("phi_ele");
   h_pt_Ak8Puppijet1 = ctx.get_handle<float> ("pt_Ak8Puppijet1");
   h_pt_Ak8Puppijet2 = ctx.get_handle<float> ("pt_Ak8Puppijet2");
   h_pt_Ak8Puppijet3 = ctx.get_handle<float> ("pt_Ak8Puppijet3");
@@ -161,9 +161,9 @@ NeuralNetworkModule::NeuralNetworkModule(Context& ctx, const std::string & Model
   h_pt_jet1 = ctx.get_handle<float> ("pt_jet1");
   h_pt_jet2 = ctx.get_handle<float> ("pt_jet2");
   h_pt_jet3 = ctx.get_handle<float> ("pt_jet3");
-  h_pt_mu = ctx.get_handle<float> ("pt_mu");
-  h_ptrel_mu_jet = ctx.get_handle<float> ("ptrel_mu_jet");
-  h_reliso_mu = ctx.get_handle<float> ("reliso_mu");
+  h_pt_ele = ctx.get_handle<float> ("pt_ele");
+  h_ptrel_ele_jet = ctx.get_handle<float> ("ptrel_ele_jet");
+  h_reliso_ele = ctx.get_handle<float> ("reliso_ele");
   h_s11 = ctx.get_handle<float> ("s11");
   h_s12 = ctx.get_handle<float> ("s12");
   h_s13 = ctx.get_handle<float> ("s13");
@@ -184,18 +184,18 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.clear();
   NNoutputs.clear();
   if (debug) cout << "cleared NN inputs and outputs" << endl;
-  string varname[52];
-  string scal[52];
-  string min[52];
-  string max[52];
-  double min_val[52];
-  double max_val[52];
+  string varname[56];
+  string scal[56];
+  string min[56];
+  string max[56];
+  double min_val[56];
+  double max_val[56];
    
   if (debug) cout << "about to get info from norm.txt" << endl;
-  ifstream normfile ("/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/NormInfo_2.txt", ios::in);
+  ifstream normfile ("/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/NormInfo_eletron.txt", ios::in);
   if (normfile.is_open()){
 
-        for(int i = 0; i < 52; ++i)
+        for(int i = 0; i < 56; ++i)
         {       
             normfile >> varname[i] >> scal[i] >> min[i] >>max[i]; 
             min_val[i] = std::stod(min[i]);
@@ -205,20 +205,20 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   }
   if (debug) cout << "about to get tensor flow values" << endl;
 
-  NNInputs.push_back( tensorflow::Tensor(tensorflow::DT_FLOAT, {1, 52}));
+  NNInputs.push_back( tensorflow::Tensor(tensorflow::DT_FLOAT, {1, 56}));
   
   NNInputs.at(0).tensor<float, 2>()(0,0)  = (event.get(h_dR_jet_Ak8Puppijet)   - min_val[0]) / (max_val[0]-min_val[0]);
-  NNInputs.at(0).tensor<float, 2>()(0,1)  = (event.get(h_dR_mu_Ak8Puppijet)   - min_val[1]) / (max_val[1]- min_val[1]);
-  NNInputs.at(0).tensor<float, 2>()(0,2)  = (event.get(h_dR_mu_jet) - min_val[2]) / (max_val[2])- min_val[2];
+  NNInputs.at(0).tensor<float, 2>()(0,1)  = (event.get(h_dR_ele_Ak8Puppijet)   - min_val[1]) / (max_val[1]- min_val[1]);
+  NNInputs.at(0).tensor<float, 2>()(0,2)  = (event.get(h_dR_ele_jet) - min_val[2]) / (max_val[2])- min_val[2];
   NNInputs.at(0).tensor<float, 2>()(0,3)  = (event.get(h_deepjetbscore_jet)   - min_val[3]) / (max_val[3]- min_val[3]);
   NNInputs.at(0).tensor<float, 2>()(0,4)  = (event.get(h_deepjetbscore_jet1) - min_val[4]) / (max_val[4]- min_val[4]);
   NNInputs.at(0).tensor<float, 2>()(0,5)  = (event.get(h_deepjetbscore_jet2)  - min_val[5]) / (max_val[5]- min_val[5]);
 
   NNInputs.at(0).tensor<float, 2>()(0,6)  = (event.get(h_deepjetbscore_jet3)   - min_val[6]) / (max_val[6]- min_val[6]);
   NNInputs.at(0).tensor<float, 2>()(0,7)  = (event.get(h_dphi_jet1_MET)   - min_val[7]) / (max_val[7]- min_val[7]);
-  NNInputs.at(0).tensor<float, 2>()(0,8)  = (event.get(h_dphi_mu_Ak8Puppijet1) - min_val[8]) / (max_val[8]- min_val[8]);
-  NNInputs.at(0).tensor<float, 2>()(0,9)  = (event.get(h_dphi_mu_MET)   - min_val[9]) / (max_val[9]- min_val[9]);
-  NNInputs.at(0).tensor<float, 2>()(0,10)  = (event.get(h_dphi_mu_jet1) - min_val[10]) / (max_val[10]- min_val[10]);
+  NNInputs.at(0).tensor<float, 2>()(0,8)  = (event.get(h_dphi_ele_Ak8Puppijet1) - min_val[8]) / (max_val[8]- min_val[8]);
+  NNInputs.at(0).tensor<float, 2>()(0,9)  = (event.get(h_dphi_ele_MET)   - min_val[9]) / (max_val[9]- min_val[9]);
+  NNInputs.at(0).tensor<float, 2>()(0,10)  = (event.get(h_dphi_ele_jet1) - min_val[10]) / (max_val[10]- min_val[10]);
   NNInputs.at(0).tensor<float, 2>()(0,11)  = (event.get(h_eta_Ak8Puppijet1)  - min_val[11]) / (max_val[11]- min_val[11]);
 
   NNInputs.at(0).tensor<float, 2>()(0,12)  = (event.get(h_eta_Ak8Puppijet2)   - min_val[12]) / (max_val[12]- min_val[12]);
@@ -229,8 +229,8 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.at(0).tensor<float, 2>()(0,17)  = (event.get(h_eta_jet2)  - min_val[17]) / (max_val[17]- min_val[17]);
 
   NNInputs.at(0).tensor<float, 2>()(0,18)  = (event.get(h_eta_jet3)   - min_val[18]) / (max_val[18]- min_val[18]);
-  NNInputs.at(0).tensor<float, 2>()(0,19)  = (event.get(h_eta_mu)   - min_val[19]) / (max_val[19]- min_val[19]);
-/*
+  NNInputs.at(0).tensor<float, 2>()(0,19)  = (event.get(h_eta_ele)   - min_val[19]) / (max_val[19]- min_val[19]);
+
   NNInputs.at(0).tensor<float, 2>()(0,20)  = (event.get(h_mass_jet) - min_val[20]) / (max_val[20]- min_val[20]);
   NNInputs.at(0).tensor<float, 2>()(0,21)  = (event.get(h_mass_jet1)   - min_val[21]) / (max_val[21]- min_val[21]);
   NNInputs.at(0).tensor<float, 2>()(0,22)  = (event.get(h_mass_jet2) - min_val[22]) / (max_val[22]- min_val[22]);
@@ -247,7 +247,7 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.at(0).tensor<float, 2>()(0,31)  = (event.get(h_phi_jet1)   - min_val[31]) / (max_val[31]- min_val[31]);
   NNInputs.at(0).tensor<float, 2>()(0,32)  = (event.get(h_phi_jet2) - min_val[32]) / (max_val[32]- min_val[32]);
   NNInputs.at(0).tensor<float, 2>()(0,33)  = (event.get(h_phi_jet3)   - min_val[33]) / (max_val[33]- min_val[33]);
-  NNInputs.at(0).tensor<float, 2>()(0,34)  = (event.get(h_phi_mu) - min_val[34]) / (max_val[34]- min_val[34]);
+  NNInputs.at(0).tensor<float, 2>()(0,34)  = (event.get(h_phi_ele) - min_val[34]) / (max_val[34]- min_val[34]);
   NNInputs.at(0).tensor<float, 2>()(0,35)  = (event.get(h_pt_Ak8Puppijet1)  - min_val[35]) / (max_val[35]- min_val[35]);
 
   NNInputs.at(0).tensor<float, 2>()(0,36)  = (event.get(h_pt_Ak8Puppijet2)     - min_val[36]) / (max_val[36]- min_val[36]);
@@ -258,9 +258,9 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.at(0).tensor<float, 2>()(0,41)  = (event.get(h_pt_jet2) - min_val[41]) / (max_val[41]- min_val[41]);
   NNInputs.at(0).tensor<float, 2>()(0,42)  = (event.get(h_pt_jet3) - min_val[42]) / (max_val[42]- min_val[42]);
 
-  NNInputs.at(0).tensor<float, 2>()(0,43)  = (event.get(h_pt_mu)     - min_val[43]) / (max_val[43]- min_val[43]);
-  NNInputs.at(0).tensor<float, 2>()(0,44)  = (event.get(h_ptrel_mu_jet)   - min_val[44]) / (max_val[44]- min_val[44]);
-  NNInputs.at(0).tensor<float, 2>()(0,45)  = (event.get(h_reliso_mu)   - min_val[45]) / (max_val[45]- min_val[45]);
+  NNInputs.at(0).tensor<float, 2>()(0,43)  = (event.get(h_pt_ele)     - min_val[43]) / (max_val[43]- min_val[43]);
+  NNInputs.at(0).tensor<float, 2>()(0,44)  = (event.get(h_ptrel_ele_jet)   - min_val[44]) / (max_val[44]- min_val[44]);
+  NNInputs.at(0).tensor<float, 2>()(0,45)  = (event.get(h_reliso_ele)   - min_val[45]) / (max_val[45]- min_val[45]);
   NNInputs.at(0).tensor<float, 2>()(0,46)  = (event.get(h_s11)   - min_val[46]) / (max_val[46]- min_val[46]);
   NNInputs.at(0).tensor<float, 2>()(0,47)  = (event.get(h_s12)    - min_val[47]) / (max_val[47]- min_val[47]);
   NNInputs.at(0).tensor<float, 2>()(0,48)  = (event.get(h_s13) - min_val[48]) / (max_val[48]- min_val[48]);
@@ -272,7 +272,7 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.at(0).tensor<float, 2>()(0,53)  = (event.get(h_st_jets)   - min_val[53]) / (max_val[53]- min_val[53]);
   NNInputs.at(0).tensor<float, 2>()(0,54)  = (event.get(h_st_lep)    - min_val[54]) / (max_val[54]-min_val[54]);
   NNInputs.at(0).tensor<float, 2>()(0,55)  = (event.get(h_weight)    - min_val[55]) / (max_val[55]- min_val[55]);
- */
+ /*
 
   NNInputs.at(0).tensor<float, 2>()(0,20)  = (event.get(h_met_pt)   - min_val[20]) / (max_val[20]- min_val[20]);
   NNInputs.at(0).tensor<float, 2>()(0,21)  = (event.get(h_npv_pt)   - min_val[21]) / (max_val[21]- min_val[21]);
@@ -285,7 +285,7 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.at(0).tensor<float, 2>()(0,27)  = (event.get(h_phi_jet1)   - min_val[27]) / (max_val[27]- min_val[27]);
   NNInputs.at(0).tensor<float, 2>()(0,28)  = (event.get(h_phi_jet2) - min_val[28]) / (max_val[28]- min_val[28]);
   NNInputs.at(0).tensor<float, 2>()(0,29)  = (event.get(h_phi_jet3)   - min_val[29]) / (max_val[29]- min_val[29]);
-  NNInputs.at(0).tensor<float, 2>()(0,30)  = (event.get(h_phi_mu) - min_val[30]) / (max_val[30]- min_val[30]);
+  NNInputs.at(0).tensor<float, 2>()(0,30)  = (event.get(h_phi_ele) - min_val[30]) / (max_val[30]- min_val[30]);
   NNInputs.at(0).tensor<float, 2>()(0,31)  = (event.get(h_pt_Ak8Puppijet1)  - min_val[31]) / (max_val[31]- min_val[31]);
 
   NNInputs.at(0).tensor<float, 2>()(0,32)  = (event.get(h_pt_Ak8Puppijet2)     - min_val[32]) / (max_val[32]- min_val[32]);
@@ -296,9 +296,9 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.at(0).tensor<float, 2>()(0,37)  = (event.get(h_pt_jet2) - min_val[37]) / (max_val[37]- min_val[37]);
   NNInputs.at(0).tensor<float, 2>()(0,38)  = (event.get(h_pt_jet3) - min_val[38]) / (max_val[38]- min_val[38]);
 
-  NNInputs.at(0).tensor<float, 2>()(0,39)  = (event.get(h_pt_mu)     - min_val[39]) / (max_val[39]- min_val[39]);
-  NNInputs.at(0).tensor<float, 2>()(0,40)  = (event.get(h_ptrel_mu_jet)   - min_val[40]) / (max_val[40]- min_val[40]);
-  NNInputs.at(0).tensor<float, 2>()(0,41)  = (event.get(h_reliso_mu)   - min_val[41]) / (max_val[41]- min_val[41]);
+  NNInputs.at(0).tensor<float, 2>()(0,39)  = (event.get(h_pt_ele)     - min_val[39]) / (max_val[39]- min_val[39]);
+  NNInputs.at(0).tensor<float, 2>()(0,40)  = (event.get(h_ptrel_ele_jet)   - min_val[40]) / (max_val[40]- min_val[40]);
+  NNInputs.at(0).tensor<float, 2>()(0,41)  = (event.get(h_reliso_ele)   - min_val[41]) / (max_val[41]- min_val[41]);
   NNInputs.at(0).tensor<float, 2>()(0,42)  = (event.get(h_s11)   - min_val[42]) / (max_val[42]- min_val[42]);
   NNInputs.at(0).tensor<float, 2>()(0,43)  = (event.get(h_s12)    - min_val[43]) / (max_val[43]- min_val[43]);
   NNInputs.at(0).tensor<float, 2>()(0,44)  = (event.get(h_s13) - min_val[44]) / (max_val[44]- min_val[44]);
@@ -311,7 +311,7 @@ void NeuralNetworkModule::CreateInputs(Event & event){
   NNInputs.at(0).tensor<float, 2>()(0,50)  = (event.get(h_st_lep)    - min_val[50]) / (max_val[50]-min_val[50]);
   NNInputs.at(0).tensor<float, 2>()(0,51)  = (event.get(h_weight)    - min_val[51]) / (max_val[51]- min_val[51]);
 
-
+*/
 
 
 
@@ -379,16 +379,16 @@ protected:
   
   //cout << "setting variables" << endl;
   Event::Handle<float> h_dR_jet_Ak8Puppijet;
-  Event::Handle<float> h_dR_mu_Ak8Puppijet;
-  Event::Handle<float> h_dR_mu_jet;
+  Event::Handle<float> h_dR_ele_Ak8Puppijet;
+  Event::Handle<float> h_dR_ele_jet;
   Event::Handle<float> h_deepjetbscore_jet;
   Event::Handle<float> h_deepjetbscore_jet1;
   Event::Handle<float> h_deepjetbscore_jet2;
   Event::Handle<float> h_deepjetbscore_jet3;
   Event::Handle<float> h_dphi_jet1_MET;
-  Event::Handle<float> h_dphi_mu_Ak8Puppijet1;
-  Event::Handle<float> h_dphi_mu_MET;
-  Event::Handle<float> h_dphi_mu_jet1;
+  Event::Handle<float> h_dphi_ele_Ak8Puppijet1;
+  Event::Handle<float> h_dphi_ele_MET;
+  Event::Handle<float> h_dphi_ele_jet1;
   Event::Handle<float> h_eta_Ak8Puppijet1;
   Event::Handle<float> h_eta_Ak8Puppijet2;
   Event::Handle<float> h_eta_Ak8Puppijet3;
@@ -397,13 +397,13 @@ protected:
   Event::Handle<float> h_eta_jet1;
   Event::Handle<float> h_eta_jet2;
   Event::Handle<float> h_eta_jet3;;
-  Event::Handle<float> h_eta_mu;
-/*
+  Event::Handle<float> h_eta_ele;
+
   Event::Handle<float> h_mass_jet;
   Event::Handle<float> h_mass_jet1;
   Event::Handle<float> h_mass_jet2;
   Event::Handle<float> h_mass_jet3;
-  */
+  
   Event::Handle<float> h_met_pt;
   Event::Handle<float> h_npv_pt;
   Event::Handle<float> h_phi_Ak8Puppijet1;
@@ -414,7 +414,7 @@ protected:
   Event::Handle<float> h_phi_jet1;
   Event::Handle<float> h_phi_jet2;
   Event::Handle<float> h_phi_jet3;
-  Event::Handle<float> h_phi_mu;
+  Event::Handle<float> h_phi_ele;
   Event::Handle<float> h_pt_Ak8Puppijet1;
   Event::Handle<float> h_pt_Ak8Puppijet2;
   Event::Handle<float> h_pt_Ak8Puppijet3;
@@ -423,9 +423,9 @@ protected:
   Event::Handle<float> h_pt_jet1;
   Event::Handle<float> h_pt_jet2;
   Event::Handle<float> h_pt_jet3;
-  Event::Handle<float> h_pt_mu;
-  Event::Handle<float> h_ptrel_mu_jet;
-  Event::Handle<float> h_reliso_mu;
+  Event::Handle<float> h_pt_ele;
+  Event::Handle<float> h_ptrel_ele_jet;
+  Event::Handle<float> h_reliso_ele;
   Event::Handle<float> h_s11;
   Event::Handle<float> h_s12;
   Event::Handle<float> h_s13;
@@ -486,8 +486,8 @@ ZprimeAnalysisModule_NNimplement::ZprimeAnalysisModule_NNimplement(uhh2::Context
   // Important selection values
   islooserselection = (ctx.get("is_looser_selection") == "true");
   double muon_pt(55.);
-  double elec_pt(80.);
-  double jet1_pt(100.);
+  double elec_pt(55.);
+  double jet1_pt(150.);
   
   double jet2_pt(50.);
   //  double stlep_plus_met(150.);
@@ -683,16 +683,16 @@ ZprimeAnalysisModule_NNimplement::ZprimeAnalysisModule_NNimplement(uhh2::Context
 
    
   h_dR_jet_Ak8Puppijet = ctx.get_handle<float> ("dR_jet_Ak8Puppijet");
-  h_dR_mu_Ak8Puppijet = ctx.get_handle<float> ("dR_mu_Ak8Puppijet");
-  h_dR_mu_jet = ctx.get_handle<float> ("dR_mu_jet");
+  h_dR_ele_Ak8Puppijet = ctx.get_handle<float> ("dR_ele_Ak8Puppijet");
+  h_dR_ele_jet = ctx.get_handle<float> ("dR_ele_jet");
   h_deepjetbscore_jet = ctx.get_handle<float> ("deepjetbscore_jet");
   h_deepjetbscore_jet1 = ctx.get_handle<float> ("deepjetbscore_jet1");
   h_deepjetbscore_jet2 = ctx.get_handle<float> ("deepjetbscore_jet2");
   h_deepjetbscore_jet3 = ctx.get_handle<float> ("deepjetbscore_jet3");
   h_dphi_jet1_MET = ctx.get_handle<float> ("dphi_jet1_MET");
-  h_dphi_mu_Ak8Puppijet1 = ctx.get_handle<float> ("dphi_mu_Ak8Puppijet1");
-  h_dphi_mu_MET = ctx.get_handle<float> ("dphi_mu_MET");
-  h_dphi_mu_jet1 = ctx.get_handle<float> ("dphi_mu_jet1");
+  h_dphi_ele_Ak8Puppijet1 = ctx.get_handle<float> ("dphi_ele_Ak8Puppijet1");
+  h_dphi_ele_MET = ctx.get_handle<float> ("dphi_ele_MET");
+  h_dphi_ele_jet1 = ctx.get_handle<float> ("dphi_ele_jet1");
   h_eta_Ak8Puppijet1 = ctx.get_handle<float> ("eta_Ak8Puppijet1");
   h_eta_Ak8Puppijet2 = ctx.get_handle<float> ("eta_Ak8Puppijet2");
   h_eta_Ak8Puppijet3 = ctx.get_handle<float> ("eta_Ak8Puppijet3");
@@ -701,13 +701,13 @@ ZprimeAnalysisModule_NNimplement::ZprimeAnalysisModule_NNimplement(uhh2::Context
   h_eta_jet1 = ctx.get_handle<float> ("eta_jet1");
   h_eta_jet2 = ctx.get_handle<float> ("eta_jet2");
   h_eta_jet3 = ctx.get_handle<float> ("eta_jet3");
-  h_eta_mu = ctx.get_handle<float> ("eta_mu");
-/*
+  h_eta_ele = ctx.get_handle<float> ("eta_ele");
+
   h_mass_jet = ctx.get_handle<float> ("mass_jet");
   h_mass_jet1 = ctx.get_handle<float> ("mass_jet1");
   h_mass_jet2 = ctx.get_handle<float> ("mass_jet2");
   h_mass_jet3 = ctx.get_handle<float> ("mass_jet3");
-*/
+
   
   h_met_pt = ctx.get_handle<float> ("met_pt");
   h_npv_pt = ctx.get_handle<float> ("npv_pt");
@@ -719,7 +719,7 @@ ZprimeAnalysisModule_NNimplement::ZprimeAnalysisModule_NNimplement(uhh2::Context
   h_phi_jet1 = ctx.get_handle<float> ("phi_jet1");
   h_phi_jet2 = ctx.get_handle<float> ("phi_jet2");
   h_phi_jet3 = ctx.get_handle<float> ("phi_jet3");
-  h_phi_mu = ctx.get_handle<float> ("phi_mu");
+  h_phi_ele = ctx.get_handle<float> ("phi_ele");
   h_pt_Ak8Puppijet1 = ctx.get_handle<float> ("pt_Ak8Puppijet1");
   h_pt_Ak8Puppijet2 = ctx.get_handle<float> ("pt_Ak8Puppijet2");
   h_pt_Ak8Puppijet3 = ctx.get_handle<float> ("pt_Ak8Puppijet3");
@@ -728,9 +728,9 @@ ZprimeAnalysisModule_NNimplement::ZprimeAnalysisModule_NNimplement(uhh2::Context
   h_pt_jet1 = ctx.get_handle<float> ("pt_jet1");
   h_pt_jet2 = ctx.get_handle<float> ("pt_jet2");
   h_pt_jet3 = ctx.get_handle<float> ("pt_jet3");
-  h_pt_mu = ctx.get_handle<float> ("pt_mu");
-  h_ptrel_mu_jet = ctx.get_handle<float> ("ptrel_mu_jet");
-  h_reliso_mu = ctx.get_handle<float> ("reliso_mu");
+  h_pt_ele = ctx.get_handle<float> ("pt_ele");
+  h_ptrel_ele_jet = ctx.get_handle<float> ("ptrel_ele_jet");
+  h_reliso_ele = ctx.get_handle<float> ("reliso_ele");
   h_s11 = ctx.get_handle<float> ("s11");
   h_s12 = ctx.get_handle<float> ("s12");
   h_s13 = ctx.get_handle<float> ("s13");
@@ -749,7 +749,7 @@ ZprimeAnalysisModule_NNimplement::ZprimeAnalysisModule_NNimplement(uhh2::Context
   h_NNoutput0 = ctx.declare_event_output<double>("NNoutput0");
   h_NNoutput1 = ctx.declare_event_output<double>("NNoutput1");
   if (debug) cout << "declared  NN"<<endl;
-  NNModule.reset( new NeuralNetworkModule(ctx, "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/model_2.pb", "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/model_2.config.pbtxt"));
+  NNModule.reset( new NeuralNetworkModule(ctx, "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/model_muDec.pb", "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/model_muDec.config.pbtxt"));
   if (debug) cout << "loaded  NN model"<<endl;
 
 }
@@ -804,6 +804,13 @@ bool ZprimeAnalysisModule_NNimplement::process(uhh2::Event& event){
     if(debug)  cout<<"MuonID ok"<<endl;
   }
   
+
+  if (isElectron){
+        if(debug)  cout<<"about to check ElectronID "<<endl;
+        ElectronID_module->process(event);
+        if(debug)  cout<<"Electron ID ok"<<endl;
+  }
+ 
 
   TopTaggerPuppi->process(event);
   fill_histograms(event, "Weights");
@@ -965,7 +972,7 @@ bool ZprimeAnalysisModule_NNimplement::process(uhh2::Event& event){
    //Neural network outputs
   if (debug) cout << "starting NN getoutputs" << endl;
   NNModule->process(event);
-  if (debug) cout << "done with NNmodule processing events" <<endl;
+  //cout << "done with NNmodule processing events" <<endl;
   std::vector<tensorflow::Tensor> NNoutputs = NNModule->GetOutputs();
 
   event.set(h_NNoutput0, (double)(NNoutputs[0].tensor<float, 2>()(0,0)));
