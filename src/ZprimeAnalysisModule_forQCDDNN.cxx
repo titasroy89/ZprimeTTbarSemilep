@@ -237,7 +237,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     	nmuon_min2 = 1, nmuon_max2 = 1;
     	nele_min = 0; nele_max = 0;
     	MET_cut = 50;
-    	HT_lep_cut = 150;
+    	HT_lep_cut = 0;
 
   }
   
@@ -247,7 +247,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     nele_min = 1; nele_max = 1;
     trigger1 = "HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165_v*";
     trigger2 = "HLT_Ele115_CaloIdVT_GsfTrkIdT_v*";
-    MET_cut = 0;
+    MET_cut = 50;
     HT_lep_cut = 0;
   }
 
@@ -647,13 +647,13 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
 
   //Inverted Triangle Cuts
 
-  if(isElectron && isdataQCD){
+ // if(isElectron && isdataQCD){
         
-       if (debug) cout << "doing data driven QCD inverted cut" << endl;
-       if (!InvTriangular_selection->passes(event)) return false;
-       if (debug) cout << "done with driven QCD inverted cut" << endl;   
+   //    if (debug) cout << "doing data driven QCD inverted cut" << endl;
+     //  if (!InvTriangular_selection->passes(event)) return false;
+      // if (debug) cout << "done with driven QCD inverted cut" << endl;   
 
-    }
+   // }
 
 
   if (debug) cout << " Now will fill histograms defined for AnalysisTree" <<endl;  
