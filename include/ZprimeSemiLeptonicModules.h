@@ -21,6 +21,8 @@ private:
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates_;
   uhh2::Event::Handle< std::vector<TopJet> > h_AK8TopTags;
   uhh2::Event::Handle< std::vector<const TopJet*> > h_AK8TopTagsPtr;
+  uhh2::Event::Handle< std::vector<TopJet> > h_AK8WTags;
+  uhh2::Event::Handle< std::vector<const TopJet*> > h_AK8WTagsPtr;
 
   float minDR_;
   TString mode_;
@@ -37,12 +39,14 @@ private:
   uhh2::Event::Handle< std::vector<ZprimeCandidate> > h_ZprimeCandidates_;
   uhh2::Event::Handle<ZprimeCandidate*> h_BestCandidate_;
   uhh2::Event::Handle<bool> h_is_zprime_reconstructed_;
+  uhh2::Event::Handle<std::vector<TopJet>> h_AK8WTags; // = ctx.get_handle<std::vector<TopJet>>("AK8PuppiWTags");
   float mtoplep_, mtoplep_ttag_;
   float sigmatoplep_, sigmatoplep_ttag_;
   float mtophad_, mtophad_ttag_;
   float sigmatophad_, sigmatophad_ttag_;
 
 };
+
 
 class ZprimeCorrectMatchDiscriminator : uhh2::AnalysisModule{
 
@@ -77,7 +81,21 @@ private:
   uhh2::Event::Handle< std::vector<const TopJet*> > h_AK8PuppiTopTagsPtr_;
 };
 
+class AK8PuppiWTagger : public uhh2::AnalysisModule {
 
+public:
+  explicit AK8PuppiWTagger(uhh2::Context&, int min_num_daughters = 2, float max_dR = 1.2, float min_mass = 65., float max_mass = 105., float max_tau21 = 0.45);
+  virtual bool process(uhh2::Event&) override;
+
+private:
+  int min_num_daughters_ = 2;
+  float max_dR_;
+  float min_mass_;
+  float max_mass_;
+  float max_tau21_;
+  uhh2::Event::Handle< std::vector<TopJet> > h_AK8PuppiWTags_;
+  uhh2::Event::Handle< std::vector<const TopJet*> > h_AK8PuppiWTagsPtr_;
+};
 
 
 class JetLeptonDeltaRCleaner : public uhh2::AnalysisModule {
@@ -150,6 +168,7 @@ public:
 private:
   uhh2::Event::Handle<bool> h_is_zprime_reconstructed_chi2;
   uhh2::Event::Handle<ZprimeCandidate*> h_BestZprimeCandidateChi2;
+  uhh2::Event::Handle<std::vector<TopJet>> h_AK8WTags;
   uhh2::Event::Handle< float > h_eventweight;
   uhh2::Event::Handle< float > h_Mu_pt, h_Mu_eta, h_Mu_phi, h_Mu_E;
   uhh2::Event::Handle< float > h_Ele_pt, h_Ele_eta, h_Ele_phi, h_Ele_E;
@@ -166,6 +185,9 @@ private:
   uhh2::Event::Handle< float > h_Ak4_j5_pt, h_Ak4_j5_eta, h_Ak4_j5_phi, h_Ak4_j5_E, h_Ak4_j5_m, h_Ak4_j5_deepjetbscore;
   uhh2::Event::Handle< float > h_Ak4_j6_pt, h_Ak4_j6_eta, h_Ak4_j6_phi, h_Ak4_j6_E, h_Ak4_j6_m, h_Ak4_j6_deepjetbscore;
   uhh2::Event::Handle< float > h_M_tt;
+  uhh2::Event::Handle< float > h_Wtag_mass;
+  uhh2::Event::Handle< float > h_Wtag_eta;
+  uhh2::Event::Handle< float > h_Wtag_phi;
 
 };
 
