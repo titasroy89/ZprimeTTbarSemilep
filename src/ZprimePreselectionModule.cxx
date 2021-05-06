@@ -78,11 +78,15 @@ void ZprimePreselectionModule::book_histograms(uhh2::Context& ctx, vector<string
   for(const auto & tag : tags){
     string mytag = tag+"_General";
     book_HFolder(mytag, new ZprimeSemiLeptonicPreselectionHists(ctx,mytag));
+    mytag = tag+"_Generator";
+    book_HFolder(mytag, new ZprimeSemiLeptonicGeneratorHists(ctx,mytag));
   }
 }
 
 void ZprimePreselectionModule::fill_histograms(uhh2::Event& event, string tag){
     string mytag = tag+"_General";
+    HFolder(mytag)->fill(event);
+    mytag = tag+"_Generator";
     HFolder(mytag)->fill(event);
 }
 

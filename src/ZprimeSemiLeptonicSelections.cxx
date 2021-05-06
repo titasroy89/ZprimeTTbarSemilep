@@ -289,6 +289,7 @@ std::pair<bool,double> TTbarSemiLepMatchableSelection::check_reco(const Reconstr
   double dR_Wd1_min = 1e6;
   double dR_Wd2_min = 1e6;
   double dR_bhad_min = 1e6;
+  cout << "Check" << endl;
   if(!hyp.tophad_topjet_ptr()){//hadronic top reconstructed as set of AK4 jets
     //    cout<<"Check AK4 jets for hadronic top"<<endl;
     for (uint i = 0; i < hyp.tophad_jets().size(); i++){

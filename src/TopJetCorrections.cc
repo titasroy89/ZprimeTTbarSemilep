@@ -67,8 +67,11 @@ void TopJetCorrections::init(Context & ctx){
   } else if (userTopJetColl.find("chs") == std::string::npos) {
     std::cout << "Cannot determine pileup subtraction (neither CHS nor PUPPI) - going to assume it is CHS for JECs" << std::endl;
   }
+  
   tjec_tjet_coll = algo + pus;
   tjec_subjet_coll = "AK4PFchs";
+
+  std::cout << tjec_tjet_coll << endl;
 
   if(is_mc){
     tjet_corrector_MC.reset(new YearSwitcher(ctx));

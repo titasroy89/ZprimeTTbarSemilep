@@ -42,7 +42,7 @@ void ZprimeSemiLeptonicGeneratorHists::init(){
   Pt_Zprime                = book<TH1F>("Pt_Zprime", "p_{T}^{Z', gen} [GeV]", 100, 0, 1000);
   Pt_top                   = book<TH1F>("Pt_top", "p_{T}^{t, gen} [GeV]", 300, 0, 3000);
   Pt_antitop               = book<TH1F>("Pt_antitop", "p_{T}^{#bar{t}, gen} [GeV]", 300, 0, 3000);
-
+  DeltaY                   = book<TH1F>("DeltaY", "#Delta y",8,-2.,2.);
 }
 
 
@@ -92,7 +92,7 @@ void ZprimeSemiLeptonicGeneratorHists::fill(const Event & event){
   Pt_ttbar->Fill((top.v4() + antitop.v4()).Pt());
   Pt_top->Fill(top.pt(), weight);
   Pt_antitop->Fill(antitop.pt(), weight);
-
+  DeltaY->Fill(TMath::Abs(top.v4().Rapidity()) - TMath::Abs(antitop.v4().Rapidity()),weight);
 
 }
 

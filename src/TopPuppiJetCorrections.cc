@@ -70,6 +70,8 @@ void TopPuppiJetCorrections::init(Context & ctx){
   tpuppijec_tjet_coll = algo + pus;
   tpuppijec_subjet_coll = "AK4PFPuppi";
 
+  std::cout << tpuppijec_tjet_coll << endl;
+
   if(is_mc){
     tpuppijet_corrector_MC.reset(new YearSwitcher(ctx));
     tpuppijet_corrector_MC->setup2016(std::make_shared<GenericTopJetCorrector>(ctx, JERFiles::JECFilesMC(tpuppijec_tag_2016, tpuppijec_ver_2016, tpuppijec_tjet_coll),"toppuppijets"));
