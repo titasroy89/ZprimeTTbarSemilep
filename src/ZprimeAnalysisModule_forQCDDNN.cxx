@@ -66,7 +66,7 @@ protected:
 
   // Scale Factors -- Systematics
   unique_ptr<MCMuonScaleFactor> MuonID_module, MuonTrigger_module;
-  unique_ptr<MCElecScaleFactor> ElectronID_module, ElectronTrigger_module;
+  unique_ptr<MCElecScaleFactor> ElectronID_module, ElectronTrigger_module, EleRec_module;
 
   // AnalysisModules
   unique_ptr<AnalysisModule> LumiWeight_module, PUWeight_module, BTagWeight_module, printer_genparticles;
@@ -96,6 +96,7 @@ protected:
   Event::Handle<float> h_ST;
   Event::Handle<float> h_STjets;
   Event::Handle<float> h_STlep;
+  Event::Handle<float> h_HTlep;
   Event::Handle<float> h_NPV;
   Event::Handle<float> h_pt_jet;
   Event::Handle<float> h_pt_jet1;
@@ -310,9 +311,11 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     MuonTrigger_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/Muon_Trigger_Eff_SF_AfterMuonHLTUpdate.root", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/pt_abseta_ratio", 0.5, "Trigger", true, Sys_MuonTrigger));
    }
   if(is2018 and isElectron){
-    ElectronID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/2018_ElectronTight.root", 0., "TightID", Sys_ElectronID));
-    ElectronTrigger_module.reset(new MCElecScaleFactor(ctx,"/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/SF_2018.root", 0.5,"Trigger", Sys_ElectronTrigger));  
-
+    //ElectronID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/2018_ElectronTight.root", 0., "TightID", Sys_ElectronID));
+     // ElectronTrigger_module.reset(new MCElecScaleFactor(ctx,"/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/SF_2018.root", 0.5,"Trigger", Sys_ElectronTrigger));  
+    ElectronID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/2018_ElectronTight.root", 1.0, "TightID", Sys_ElectronID));
+    ElectronTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/SF_Ele50_Ele115_2018.root", 0.5, "Trigger", Sys_ElectronTrigger));
+    EleRec_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/egammaEffi.txt_EGM2D_updatedAll.root", 1.0, "Rec", Sys_ElectronID));
 }
 
   // Selection modules
@@ -352,6 +355,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   h_ST = ctx.declare_event_output<float> ("st");
   h_STjets = ctx.declare_event_output<float> ("st_jets");
   h_STlep = ctx.declare_event_output<float> ("st_lep");
+  h_HTlep = ctx.declare_event_output<float> ("ht");
   h_NPV = ctx.declare_event_output<float> ("npv_pt");
   h_pt_jet = ctx.declare_event_output<float> ("pt_jet");
   h_pt_jet1 = ctx.declare_event_output<float> ("pt_jet1");
@@ -453,6 +457,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   event.set(h_ST,0);
   event.set(h_STjets,0);
   event.set(h_STlep,0);
+  event.set(h_HTlep,0);
   event.set(h_NPV,0);
   event.set(h_pt_jet,0);
   event.set(h_pt_jet1,0);
@@ -550,6 +555,8 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
 	if(debug)  cout<<"about to check ElectronID "<<endl;
         ElectronID_module->process(event);
     	if(debug)  cout<<"Electron ID ok"<<endl;
+        EleRec_module->process(event);
+        if(debug)  cout<<"Electron Rec ok"<<endl;
   }
 
   if(debug)  cout<<"done with electron ID ok"<<endl; 
@@ -665,7 +672,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   if(debug) cout<<" done with MET, weight, NPV"<<endl; 
 
   double st = 0., st_jets = 0., st_lep = 0.;
-  
+  double ht=  0., ht_lep = 0.;
   vector<Jet>* jets = event.jets;
   vector<Electron>* electrons = event.electrons;
   vector<Muon>* muons = event.muons;
@@ -675,15 +682,19 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   }
   for(unsigned int i=0; i<electrons->size(); i++){
            st_lep += electrons->at(i).pt();
+           ht_lep += electrons->at(i).pt();
   }
   for(unsigned int i=0; i<muons->size(); i++){
            st_lep += muons->at(i).pt();
+	   ht_lep += muons->at(i).pt();
   }
   st = st_jets + st_lep + event.met->pt();
-
+  ht = ht_lep + event.met->pt();
   event.set(h_ST,st);
   event.set(h_STjets,st_jets);
   event.set(h_STlep,st_lep);
+  event.set(h_HTlep,ht);
+  
   
   if(debug) cout<<" done with ST"<<endl;
   
@@ -718,7 +729,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       event.set(h_phi_jet1,jets->at(i).phi());
       event.set(h_mass_jet1,jets->at(i).v4().M());
       event.set(h_deepjetbscore_jet1,jets->at(i).btag_DeepJet());
-      event.set(h_dphi_jet1_MET,deltaPhiMET(jets->at(i),event.met));
+      event.set(h_dphi_jet1_MET, deltaPhiMET(jets->at(i),event.met));
     }
     else if(i==1){
       event.set(h_pt_jet2,jets->at(i).pt());
