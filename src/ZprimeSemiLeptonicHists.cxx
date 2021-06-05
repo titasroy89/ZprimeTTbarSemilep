@@ -62,6 +62,9 @@ void ZprimeSemiLeptonicHists::init(){
   deepjetbscore_jet2          = book<TH1F>("deepjetbscore_jet2", "DeepJet b-tag score AK4 jet 2}", 20, 0, 1);
   deepjetbscore_jet3          = book<TH1F>("deepjetbscore_jet3", "DeepJet b-tag score AK4 jet 3}", 20, 0, 1);
 
+
+  
+
   N_bJets_loose     = book<TH1F>("N_bJets_loose", "N_{jets}^{CSV loose}", 11, -0.5, 10.5);
   N_bJets_med       = book<TH1F>("N_bJets_med", "N_{jets}^{CSV medium}", 11, -0.5, 10.5);
   N_bJets_tight     = book<TH1F>("N_bJets_tight", "N_{jets}^{CSV tight}", 11, -0.5, 10.5);
@@ -336,6 +339,13 @@ void ZprimeSemiLeptonicHists::init(){
   STlep_rebin       = book<TH1F>("STlep_rebin", "S_{T}^{lep} [GeV]", 45, 0, 900);
   STlep_rebin2      = book<TH1F>("STlep_rebin2", "S_{T}^{lep} [GeV]", 30, 0, 1500);
   STlep_rebin3      = book<TH1F>("STlep_rebin3", "S_{T}^{lep} [GeV]", 15, 0, 1500);
+  HTlep             = book<TH1F>("HTlep", "H_{T}^{lep} [GeV]", 50, 0, 7000);
+  HTlep_rebin       = book<TH1F>("HTlep_rebin", "H_{T}^{lep} [GeV]", 45, 0, 900); 
+  HTlep_rebin2      = book<TH1F>("HTlep_rebin2", "H_{T}^{lep} [GeV]", 30, 0, 1500); 
+  HTlep_rebin3      = book<TH1F>("HTlep_rebin3", "H_{T}^{lep} [GeV]", 15, 0, 1500);  
+
+
+
 
   // Zprime reconstruction
   vector<float> bins_Zprime4 = {0,400,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000,4400,4800,5200,5600,6000,6100};
@@ -929,11 +939,19 @@ void ZprimeSemiLeptonicHists::fill(const Event & event){
   NPV->Fill(Npvs, weight);
 
   double met = event.met->pt();
-  double st = 0., st_jets = 0., st_lep = 0.;
+  double st = 0., st_jets = 0., st_lep = 0., ht=0., ht_lep=0;
   for(const auto & jet : *jets)           st_jets += jet.pt();
-  for(const auto & electron : *electrons) st_lep += electron.pt();
-  for(const auto & muon : *muons)         st_lep += muon.pt();
+  for(const auto & electron : *electrons) {
+	st_lep += electron.pt(); 
+	ht_lep+=electron.pt();
+  }
+  for(const auto & muon : *muons) {
+        st_lep += muon.pt(); 
+	ht_lep += muon.pt();
+  }
   st = st_jets + st_lep + met;
+  ht = ht_lep+met;
+  
 
   MET->Fill(met, weight);
   MET_rebin->Fill(met, weight);
@@ -951,6 +969,10 @@ void ZprimeSemiLeptonicHists::fill(const Event & event){
   STlep_rebin->Fill(st_lep, weight);
   STlep_rebin2->Fill(st_lep, weight);
   STlep_rebin3->Fill(st_lep, weight);
+  HTlep->Fill(ht, weight);
+  HTlep_rebin->Fill(ht, weight);
+  HTlep_rebin2->Fill(ht, weight);
+  HTlep_rebin3->Fill(ht, weight);
 
   // Zprime reco
   bool is_zprime_reconstructed_chi2 = event.get(h_is_zprime_reconstructed_chi2);
