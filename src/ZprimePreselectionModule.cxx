@@ -122,8 +122,8 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
     eleID = ElectronID_Summer16_medium_noIso;
     muID  = MuonID(Muon::CutBasedIdTight); // see more muonIDs https://github.com/cms-sw/cmssw/blob/master/DataFormats/MuonReco/interface/Muon.h#L201
   }
-  double electron_pt(50.);
-  double muon_pt(55.);
+  double electron_pt(25.);
+  double muon_pt(25.);
   double jet1_pt(50.);
   double jet2_pt(20.);
   double MET(50.);
