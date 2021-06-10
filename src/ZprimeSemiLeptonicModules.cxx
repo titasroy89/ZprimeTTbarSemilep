@@ -327,7 +327,7 @@ bool ZprimeCandidateBuilder::process(uhh2::Event& event){
       }
     }
     else { //WTag reconstruction
-      std::cout  << "Es una reconstruccion con W" << std::endl;  
+//      std::cout  << "Es una reconstruccion con W" << std::endl;  
       for(const auto & neutrino_v4 : neutrinos) {
         for (unsigned int j=0; j < WTags.size(); j++) {
           if(mode_ == "chs"){
