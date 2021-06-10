@@ -69,8 +69,10 @@ protected:
 
   // Scale Factors -- Systematics
   unique_ptr<MCMuonScaleFactor> MuonID_module, MuonTrigger_module;
-  //unique_ptr<MCElecScaleFactor> EleID_module, EleTrigger_module;
-
+  unique_ptr<MCElecScaleFactor> EleID_module, EleTrigger_module, EleRec_module;
+  unique_ptr<MCToptaggSF> ToptagSF_module;
+  unique_ptr<MCNjetsHTScaleFactor> HT_module; 
+   
   // AnalysisModules
   unique_ptr<AnalysisModule> LumiWeight_module, PUWeight_module, printer_genparticles, BTagWeight_module, TopPtReweight_module, MCScale_module;
 
@@ -104,6 +106,10 @@ protected:
   Event::Handle<float> h_ak4jet1_pt; Event::Handle<float> h_ak4jet1_eta; 
   Event::Handle<float> h_ak8jet1_pt; Event::Handle<float> h_ak8jet1_eta; 
   Event::Handle<float> h_Mttbar;
+  Event::Handle<float> h_ptrel_mu_jet;
+  Event::Handle<float> h_dRmin_mu_jet;
+  Event::Handle<float> h_dRmin_ele_jet;
+  Event::Handle<float> h_ptrel_ele_jet;
   Event::Handle<float> h_TH_M;
   Event::Handle<float> h_TL_M; 
   Event::Handle<int> h_ttagN;
@@ -121,6 +127,10 @@ protected:
   Event::Handle<float> h_Cos_theta_thad_tlep;
   Event::Handle<float> h_tlead_pT;
   Event::Handle<float> h_tsublead_pT;
+  Event::Handle<float> h_muonrecSF_nominal;
+  Event::Handle<float> h_muonrecSF_up;
+  Event::Handle<float> h_muonrecSF_down;
+  Event::Handle<std::vector<float> > h_wgtMC__PDF;
 
   uhh2::Event::Handle<ZprimeCandidate*> h_BestZprimeCandidateChi2;
   uhh2::Event::Handle<std::vector<TopJet>> h_AK8TopTags;
@@ -128,7 +138,7 @@ protected:
  
   // Configuration
   bool isMC, ispuppi, islooserselection;
-  string Sys_MuonID, Sys_MuonTrigger, Sys_PU, Sys_btag; //Sys_EleID, Sys_EleTrigger
+  string Sys_MuonID, Sys_MuonTrigger, Sys_PU, Sys_btag, Sys_EleID, Sys_EleTrigger;
   TString sample;
   int runnr_oldtriggers = 299368;
 
@@ -182,8 +192,8 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
 
   // Important selection values
   islooserselection = (ctx.get("is_looser_selection") == "true");
-  double muon_pt(55.);
-  double elec_pt(80.);
+  double muon_pt(30.);
+  double elec_pt(30.);
   double jet1_pt(150.);
   double jet2_pt(50.);
   double chi2_max(300.);
@@ -236,8 +246,8 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
 
   Sys_MuonID = ctx.get("Sys_MuonID");
   Sys_MuonTrigger = ctx.get("Sys_MuonTrigger");
-//  Sys_EleID = ctx.get("Sys_EleID");
-//  Sys_EleTrigger = ctx.get("Sys_EleTrigger");
+  Sys_EleID = ctx.get("Sys_EleID");
+  Sys_EleTrigger = ctx.get("Sys_EleTrigger");
   Sys_PU = ctx.get("Sys_PU");
   Sys_btag = ctx.get("Sys_BTagSF");
 
@@ -254,7 +264,7 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   electron_cleaner.reset(new ElectronCleaner(electronID));
   LumiWeight_module.reset(new MCLumiWeight(ctx));
   PUWeight_module.reset(new MCPileupReweight(ctx, Sys_PU));
-//  BTagWeight_module.reset(new MCBTagDiscriminantReweighting(ctx, btag_algo, "jets", Sys_btag));
+  BTagWeight_module.reset(new MCBTagDiscriminantReweighting(ctx, btag_algo, "jets", Sys_btag));
   TopPtReweight_module.reset(new TopPtReweight(ctx, a_toppt, b_toppt));
   MCScale_module.reset(new MCScaleVariation(ctx));
 
@@ -270,9 +280,20 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   }
   if(is2018 && isMuon){
     MuonID_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/Muon_ID_SF_RunABCD.root", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta", 0., "HighPtID", true, Sys_MuonID));
-    MuonTrigger_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/Muon_Trigger_Eff_SF_AfterMuonHLTUpdate.root", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/pt_abseta_ratio", 0.5, "Trigger", true, Sys_MuonTrigger));
-//    EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/2018/2018_ElectronTight.root", 0., "TightID", Sys_EleID));
-//    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_16/src/UHH2/common/data/2018/SF_2018.root", 0.5, "Trigger", Sys_EleTrigger));
+    MuonTrigger_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/Muon_Trigger_Eff_SF_AfterMuonHLTUpdate.root", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/pt_abseta_ratio", 0.5, "Trigger", true, Sys_MuonTrigger)); 
+    HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/HT_SF.root", 1.0, "HT", Sys_EleID));
+  }
+
+  if(is2018 && isElectron){
+    cout << "is electron" << endl;
+    EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/2018_ElectronTight.root", 1.0, "TightID", Sys_EleID));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/SF_Ele50_Ele115_2018.root", 0.5, "Trigger", Sys_EleTrigger, "electrons", "abseta_pt_ratio"));
+    EleRec_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/egammaEffi.txt_EGM2D_updatedAll.root", 1.0, "Rec", Sys_EleID));
+    HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/HT_SF.root", 1.0, "HT", Sys_EleID));
+  }
+
+  if(is2018){
+      ToptagSF_module.reset(new MCToptaggSF(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/2018TopTaggingScaleFactors.root", "PUPPI_wp4"));   
   }
 
   // Selection modules
@@ -339,9 +360,17 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   h_ak4jet1_eta = ctx.declare_event_output<float> ("ak4jet1_eta");
   h_ak8jet1_pt = ctx.declare_event_output<float> ("ak8jet1_pt");
   h_ak8jet1_eta = ctx.declare_event_output<float> ("ak8jet1_eta");
-
+  h_dRmin_mu_jet = ctx.declare_event_output<float> ("dRmin_mu_jet");
+  h_dRmin_ele_jet = ctx.declare_event_output<float> ("dRmin_ele_jet");
+  h_ptrel_ele_jet = ctx.declare_event_output<float> ("ptrel_ele_jet");
+  h_ptrel_mu_jet = ctx.declare_event_output<float> ("ptrel_mu_jet");
   h_NPV = ctx.declare_event_output<int> ("NPV");
   h_weight = ctx.declare_event_output<float> ("weight");
+  h_muonrecSF_nominal = ctx.declare_event_output<float> ("muonrecSF_nominal");
+  h_muonrecSF_up = ctx.declare_event_output<float> ("muonrecSF_up");
+  h_muonrecSF_down = ctx.declare_event_output<float> ("muonrecSF_down");
+  h_wgtMC__PDF = ctx.declare_event_output<std::vector<float> >("wgtMC__PDF");
+
 
   sel_1btag.reset(new NJetSelection(1, 1, id_btag));
   sel_2btag.reset(new NJetSelection(2,-1, id_btag));
@@ -370,6 +399,10 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   event.set(h_is_zprime_reconstructed_correctmatch, false);
   event.set(h_chi2,-100);
   event.set(h_MET,-100);
+  event.set(h_ptrel_ele_jet,-100);
+  event.set(h_dRmin_ele_jet,-100);
+  event.set(h_ptrel_mu_jet,-100);
+  event.set(h_dRmin_mu_jet,-100);
   event.set(h_Mttbar,-100);
   event.set(h_TH_M,-100);
   event.set(h_TL_M,-100);
@@ -396,13 +429,44 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   event.set(h_ak8jet1_eta,-100);
   event.set(h_NPV,-100);
   event.set(h_weight,-100);
+  event.set(h_muonrecSF_nominal,-100);  
+  event.set(h_muonrecSF_up,-100);
+  event.set(h_muonrecSF_down,-100);
+
+  std::vector<float> w_PDF;
+  w_PDF.clear();
+
   // Printing
   // if(!event.isRealData) printer_genparticles->process(event);
 
   // TODO Apply things that should've been done in the pre-selection already... Fix pre-selection and then remove these steps
+
+
   if(isMuon) muon_cleaner->process(event);
   if(isElectron) electron_cleaner->process(event);
-  if(debug)  cout<<"Muon and Electron cleaner ok"<<endl;
+
+
+  if(isMuon){
+    if(!NMuon1_selection->passes(event)) return false;
+    if(!NMuon2_selection->passes(event)) return false;
+  }
+
+ 
+  if(isElectron){
+    if(!NElectron_selection->passes(event)) return false;
+  }
+
+  if(isMuon){
+  if(event.muons->at(0).pt() < 55) return false;
+  }
+
+  if(isElectron){
+  if(event.electrons->at(0).pt() < 80) return false;
+  }
+
+
+
+//  if(debug)  cout<<"Muon and Electron cleaner ok"<<endl;
 
 
   if(!HEM_selection->passes(event)){
@@ -425,10 +489,19 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
     if(debug)  cout<<"MuonID ok"<<endl;
   }
   fill_histograms(event, "Weights_MuonID");
- // if(isElectron){
- //   EleID_module->process(event);
- //   if(debug)  cout<<"EleID ok"<<endl;
- // }
+  if(isElectron){
+    EleID_module->process(event);
+    if(debug)  cout<<"EleID ok"<<endl;
+  }
+
+  if(isElectron){
+    EleRec_module->process(event);
+    if(debug)  cout<<"EleID ok"<<endl;
+  }
+
+  HT_module->process(event);
+  ToptagSF_module->process(event);     
+
   PUWeight_module->process(event);
   if(debug)  cout<<"PUWeight ok"<<endl;
   fill_histograms(event, "Weights_PU");
@@ -437,14 +510,18 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   if(debug)  cout<<"LumiWeight ok"<<endl;
   fill_histograms(event, "Weights_Lumi");
 
+//  if(isMC){
   TopPtReweight_module->process(event);
+  if(debug)  cout<<"TopPt ok"<<endl;
   fill_histograms(event, "Weights_TopPt");
+//  }
 
   MCScale_module->process(event);
+    if(debug)  cout<<"MCsCWeight ok"<<endl;
   fill_histograms(event, "Weights_MCScale");
  
-//  BTagWeight_module->process(event);
- 
+  BTagWeight_module->process(event);
+
   if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
   if(isMuon){
     if(!NMuon1_selection->passes(event)) return false;
@@ -457,13 +534,24 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   if(isElectron){
     if(!NElectron_selection->passes(event)) return false;
     fill_histograms(event, "Electron1");
-    //EleTrigger_module->process(event);
-    //fill_histograms(event, "TriggerEle");
+    EleTrigger_module->process(event);
+    fill_histograms(event, "TriggerEle");
   }
+
+  if(isMuon){
+  if(event.muons->at(0).pt() < 55) return false;
+  }
+
+  if(isElectron){
+  if(event.electrons->at(0).pt() < 80) return false;
+  }
+
   if((event.muons->size()+event.electrons->size()) != 1) return false; //veto events without leptons or with too many 
   if(debug) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
-  if(!TwoDCut_selection->passes(event)) return false;
-  fill_histograms(event, "TwoDCut");
+
+
+ // if(!TwoDCut_selection->passes(event)) return false;
+ // fill_histograms(event, "TwoDCut");
 
   // Here, the Zprime must be reconstructed (we ensured to have >= 2 AK4 jets, >= 1 muon)
   // Only consider well-separated AK4 jets
@@ -594,12 +682,43 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
 
         event.set(h_DeltaPhi_thad_lepton,deltaPhi(event.muons->at(0),BestZprimeCandidate->top_hadronic_v4()));
     }
+
+    if (isElectron){
+        if(event.electrons->at(0).charge() == 1){
+                event.set(h_DeltaY,TMath::Abs(BestZprimeCandidate->top_leptonic_v4().Rapidity()) - TMath::Abs(BestZprimeCandidate->top_hadronic_v4().Rapidity()));
+        }
+        if(event.electrons->at(0).charge() == -1){
+                event.set(h_DeltaY,TMath::Abs(BestZprimeCandidate->top_hadronic_v4().Rapidity()) - TMath::Abs(BestZprimeCandidate->top_leptonic_v4().Rapidity()));
+        }
+
+        event.set(h_DeltaPhi_thad_lepton,deltaPhi(event.electrons->at(0),BestZprimeCandidate->top_hadronic_v4()));
+    }
+
+
     event.set(h_pTttbar,BestZprimeCandidate->Zprime_v4().Pt());
     event.set(h_Rapidityttbar,BestZprimeCandidate->Zprime_v4().Rapidity());
     event.set(h_pThad,BestZprimeCandidate->top_hadronic_v4().Pt());
     event.set(h_pTlep,BestZprimeCandidate->top_leptonic_v4().Pt());
     event.set(h_Rapidityhad,BestZprimeCandidate->top_hadronic_v4().Rapidity());
     event.set(h_Rapiditylep,BestZprimeCandidate->top_leptonic_v4().Rapidity());
+    vector<Electron>* electrons = event.electrons;
+    vector<Muon>* muons = event.muons; 
+    int Nmuons = muons->size();
+    for(int i=0; i<Nmuons; i++){
+	if(muons->at(i).has_tag(Muon::twodcut_dRmin) && muons->at(i).has_tag(Muon::twodcut_pTrel)){
+        	event.set(h_ptrel_mu,muons->at(i).get_tag(Muon::twodcut_pTrel));
+                event.set(h_dRmin_mu_jet,muons->at(i).get_tag(Muon::twodcut_dRmin));
+        }
+    int Nelectrons = electrons->size();
+    for(int i=0; i<Nelectrons; i++){
+        if(electrons->at(i).has_tag(Electron::twodcut_dRmin) && electrons->at(i).has_tag(Electron::twodcut_pTrel)){
+                event.set(h_ptrel_ele,electrons->at(i).get_tag(Electron::twodcut_pTrel));
+                event.set(h_dRmin_ele_jet,electrons->at(i).get_tag(Electron::twodcut_dRmin));
+        }
+
+
+   
+
 
     double mag_lep = TMath::Sqrt(BestZprimeCandidate->top_leptonic_v4().Px()*BestZprimeCandidate->top_leptonic_v4().Px() + BestZprimeCandidate->top_leptonic_v4().Py()*BestZprimeCandidate->top_leptonic_v4().Py() + BestZprimeCandidate->top_leptonic_v4().Pz()*BestZprimeCandidate->top_leptonic_v4().Pz());
     double mag_had = TMath::Sqrt(BestZprimeCandidate->top_hadronic_v4().Px()*BestZprimeCandidate->top_hadronic_v4().Px() + BestZprimeCandidate->top_hadronic_v4().Py()*BestZprimeCandidate->top_hadronic_v4().Py() + BestZprimeCandidate->top_hadronic_v4().Pz()*BestZprimeCandidate->top_hadronic_v4().Pz());
@@ -639,6 +758,103 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   }
   event.set(h_NPV,event.pvs->size());
   if(debug) cout<<"Set some vars for monitoring"<<endl;
+
+  const auto & sys_weights = event.genInfo->systweights();
+//  cout << sys_weights.empty() << endl;
+
+
+  if(isMC){
+      if(!sys_weights.empty()){ 
+          float orig_weight = event.genInfo->pdf_scalePDF();
+          int MY_FIRST_INDEX = 9;
+          for (unsigned i=0; i < 100; ++i) {
+                const float pdf_w(sys_weights[i+MY_FIRST_INDEX]/orig_weight);
+                w_PDF.push_back(pdf_w);
+          }
+       }
+       event.set(h_wgtMC__PDF, std::move(w_PDF));
+   }
+   if(!isMC){
+          w_PDF.push_back(1.);
+          event.set(h_wgtMC__PDF, std::move(w_PDF));
+   }
+  
+
+  if(isMC){
+      if(isMuon){ 
+         float Tot_P = event.muons->at(0).pt()*cosh(event.muons->at(0).eta());
+         if(is2018){
+             if(-1.6 < event.muons->at(0).eta() && event.muons->at(0).eta() < 1.6){ 
+                 if( 50 < Tot_P && Tot_P <= 100){ event.set(h_muonrecSF_nominal, 0.9943); event.set(h_muonrecSF_up, 0.995); event.set(h_muonrecSF_down, 0.9936); }
+                 if( 100 < Tot_P && Tot_P <= 150){ event.set(h_muonrecSF_nominal, 0.9948); event.set(h_muonrecSF_up, 0.9955); event.set(h_muonrecSF_down, 0.9941); }
+                 if( 150 < Tot_P && Tot_P <= 200){ event.set(h_muonrecSF_nominal, 0.9950); event.set(h_muonrecSF_up, 0.9959); event.set(h_muonrecSF_down, 0.9941); }
+                 if( 200 < Tot_P && Tot_P <= 300){ event.set(h_muonrecSF_nominal, 0.994); event.set(h_muonrecSF_up, 0.9941); event.set(h_muonrecSF_down, 0.9939); }
+                 if( 300 < Tot_P && Tot_P <= 400){ event.set(h_muonrecSF_nominal, 0.9914); event.set(h_muonrecSF_up, 0.9923); event.set(h_muonrecSF_down, 0.9905); }
+                 if( 400 < Tot_P && Tot_P <= 600){ event.set(h_muonrecSF_nominal, 0.993); event.set(h_muonrecSF_up, 0.9932); event.set(h_muonrecSF_down, 0.9928); }
+                 if( 600 < Tot_P && Tot_P <= 1500){ event.set(h_muonrecSF_nominal, 0.9914); event.set(h_muonrecSF_up, 0.9914); event.set(h_muonrecSF_down, 0.9906); }
+                 if( 1500 < Tot_P && Tot_P <= 3500){ event.set(h_muonrecSF_nominal, 1.0); event.set(h_muonrecSF_up, 1.1); event.set(h_muonrecSF_down, 0.9); }
+             }
+
+             if( (-1.6 > event.muons->at(0).eta() && event.muons->at(0).eta() > -2.4) || (1.6 < event.muons->at(0).eta() && event.muons->at(0).eta() < 2.4) ){
+                 if( 100 < Tot_P && Tot_P <= 150){ event.set(h_muonrecSF_nominal, 0.993); event.set(h_muonrecSF_up, 0.995); event.set(h_muonrecSF_down, 0.994); }
+                 if( 150 < Tot_P && Tot_P <= 200){ event.set(h_muonrecSF_nominal, 0.990); event.set(h_muonrecSF_up, 0.991); event.set(h_muonrecSF_down, 0.989); }
+                 if( 200 < Tot_P && Tot_P <= 300){ event.set(h_muonrecSF_nominal, 0.988); event.set(h_muonrecSF_up, 0.989); event.set(h_muonrecSF_down, 0.987); }
+                 if( 300 < Tot_P && Tot_P <= 400){ event.set(h_muonrecSF_nominal, 0.981); event.set(h_muonrecSF_up, 0.983); event.set(h_muonrecSF_down, 0.979); }
+                 if( 400 < Tot_P && Tot_P <= 600){ event.set(h_muonrecSF_nominal, 0.983); event.set(h_muonrecSF_up, 0.986); event.set(h_muonrecSF_down, 0.980); }
+                 if( 600 < Tot_P && Tot_P <= 1500){ event.set(h_muonrecSF_nominal, 0.978); event.set(h_muonrecSF_up, 0.984); event.set(h_muonrecSF_down, 0.972);}
+                 if( 1500 < Tot_P && Tot_P <= 3500){ event.set(h_muonrecSF_nominal, 0.98); event.set(h_muonrecSF_up, 1.01); event.set(h_muonrecSF_down, 0.95);  }
+             }
+         }
+         if(is2017v2){
+             if(-1.6 < event.muons->at(0).eta() && event.muons->at(0).eta() < 1.6){
+                 if( 50 < Tot_P && Tot_P <= 100){ event.set(h_muonrecSF_nominal, 0.9938); event.set(h_muonrecSF_up, 0.9944); event.set(h_muonrecSF_down, 0.9932); }
+                 if( 100 < Tot_P && Tot_P <= 150){ event.set(h_muonrecSF_nominal, 0.995); event.set(h_muonrecSF_up, 0.9957); event.set(h_muonrecSF_down, 0.9943); }
+                 if( 150 < Tot_P && Tot_P <= 200){ event.set(h_muonrecSF_nominal, 0.996); event.set(h_muonrecSF_up, 0.997); event.set(h_muonrecSF_down, 0.995); }
+                 if( 200 < Tot_P && Tot_P <= 300){ event.set(h_muonrecSF_nominal, 0.996); event.set(h_muonrecSF_up, 0.997); event.set(h_muonrecSF_down, 0.995); }
+                 if( 300 < Tot_P && Tot_P <= 400){ event.set(h_muonrecSF_nominal, 0.994); event.set(h_muonrecSF_up, 0.995); event.set(h_muonrecSF_down, 0.993); }
+                 if( 400 < Tot_P && Tot_P <= 600){ event.set(h_muonrecSF_nominal, 1.003); event.set(h_muonrecSF_up, 1.009); event.set(h_muonrecSF_down, 0.997); }
+                 if( 600 < Tot_P && Tot_P <= 1500){ event.set(h_muonrecSF_nominal, 0.987); event.set(h_muonrecSF_up, 0.984); event.set(h_muonrecSF_down, 0.99); }
+                 if( 1500 < Tot_P && Tot_P <= 3500){ event.set(h_muonrecSF_nominal, 0.9); event.set(h_muonrecSF_up, 1.); event.set(h_muonrecSF_down, 0.8); }
+             }
+
+             if( (-1.6 > event.muons->at(0).eta() && event.muons->at(0).eta() > -2.4) || (1.6 < event.muons->at(0).eta() && event.muons->at(0).eta() < 2.4) ){
+                 if( 100 < Tot_P && Tot_P <= 150){ event.set(h_muonrecSF_nominal, 0.993); event.set(h_muonrecSF_up, 0.994); event.set(h_muonrecSF_down, 0.992); }
+                 if( 150 < Tot_P && Tot_P <= 200){ event.set(h_muonrecSF_nominal, 0.989); event.set(h_muonrecSF_up, 0.990); event.set(h_muonrecSF_down, 0.991); }
+                 if( 200 < Tot_P && Tot_P <= 300){ event.set(h_muonrecSF_nominal, 0.986); event.set(h_muonrecSF_up, 0.987); event.set(h_muonrecSF_down, 0.985); }
+                 if( 300 < Tot_P && Tot_P <= 400){ event.set(h_muonrecSF_nominal, 0.989); event.set(h_muonrecSF_up, 0.990); event.set(h_muonrecSF_down, 0.988); }
+                 if( 400 < Tot_P && Tot_P <= 600){ event.set(h_muonrecSF_nominal, 0.983); event.set(h_muonrecSF_up, 0.986); event.set(h_muonrecSF_down, 0.980); }
+                 if( 600 < Tot_P && Tot_P <= 1500){ event.set(h_muonrecSF_nominal, 0.986); event.set(h_muonrecSF_up, 0.992); event.set(h_muonrecSF_down, 0.980);}
+                 if( 1500 < Tot_P && Tot_P <= 3500){ event.set(h_muonrecSF_nominal, 1.01); event.set(h_muonrecSF_up, 1.02); event.set(h_muonrecSF_down, 1.00);  }
+             }
+         }
+         if(is2016v3 || is2016v2){
+             if(-1.6 < event.muons->at(0).eta() && event.muons->at(0).eta() < 1.6){
+                 if( 50 < Tot_P && Tot_P <= 100){ event.set(h_muonrecSF_nominal, 0.9914); event.set(h_muonrecSF_up, 0.9922); event.set(h_muonrecSF_down, 0.9906); }
+                 if( 100 < Tot_P && Tot_P <= 150){ event.set(h_muonrecSF_nominal, 0.9936); event.set(h_muonrecSF_up, 0.9945); event.set(h_muonrecSF_down, 0.9927); }
+                 if( 150 < Tot_P && Tot_P <= 200){ event.set(h_muonrecSF_nominal, 0.993); event.set(h_muonrecSF_up, 0.994); event.set(h_muonrecSF_down, 0.992); }
+                 if( 200 < Tot_P && Tot_P <= 300){ event.set(h_muonrecSF_nominal, 0.993); event.set(h_muonrecSF_up, 0.995); event.set(h_muonrecSF_down, 0.991); }
+                 if( 300 < Tot_P && Tot_P <= 400){ event.set(h_muonrecSF_nominal, 0.990); event.set(h_muonrecSF_up, 0.994); event.set(h_muonrecSF_down, 0.986); }
+                 if( 400 < Tot_P && Tot_P <= 600){ event.set(h_muonrecSF_nominal, 0.990); event.set(h_muonrecSF_up, 0.993); event.set(h_muonrecSF_down, 0.987); }
+                 if( 600 < Tot_P && Tot_P <= 1500){ event.set(h_muonrecSF_nominal, 0.989); event.set(h_muonrecSF_up, 0.985); event.set(h_muonrecSF_down, 0.993); }
+                 if( 1500 < Tot_P && Tot_P <= 3500){ event.set(h_muonrecSF_nominal, 0.8); event.set(h_muonrecSF_up, 0.83); event.set(h_muonrecSF_down, 0.77); }
+             }
+
+             if( (-1.6 > event.muons->at(0).eta() && event.muons->at(0).eta() > -2.4) || (1.6 < event.muons->at(0).eta() && event.muons->at(0).eta() < 2.4) ){
+                 if( 100 < Tot_P && Tot_P <= 150){ event.set(h_muonrecSF_nominal, 0.993); event.set(h_muonrecSF_up, 0.994); event.set(h_muonrecSF_down, 0.992); }
+                 if( 150 < Tot_P && Tot_P <= 200){ event.set(h_muonrecSF_nominal, 0.991); event.set(h_muonrecSF_up, 0.992); event.set(h_muonrecSF_down, 0.990); }
+                 if( 200 < Tot_P && Tot_P <= 300){ event.set(h_muonrecSF_nominal, 0.985); event.set(h_muonrecSF_up, 0.986); event.set(h_muonrecSF_down, 0.984); }
+                 if( 300 < Tot_P && Tot_P <= 400){ event.set(h_muonrecSF_nominal, 0.981); event.set(h_muonrecSF_up, 0.983); event.set(h_muonrecSF_down, 0.979); }
+                 if( 400 < Tot_P && Tot_P <= 600){ event.set(h_muonrecSF_nominal, 0.979); event.set(h_muonrecSF_up, 0.983); event.set(h_muonrecSF_down, 0.975); }
+                 if( 600 < Tot_P && Tot_P <= 1500){ event.set(h_muonrecSF_nominal, 0.978); event.set(h_muonrecSF_up, 0.983); event.set(h_muonrecSF_down, 0.973);}
+                 if( 1500 < Tot_P && Tot_P <= 3500){ event.set(h_muonrecSF_nominal, 0.9); event.set(h_muonrecSF_up, 0.7); event.set(h_muonrecSF_down, 1.1);  }
+             }
+           
+
+         }
+      }
+  }
+
+ 
   return true;
 }
 
