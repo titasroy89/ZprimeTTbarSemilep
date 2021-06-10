@@ -616,7 +616,7 @@
 	    <InputTree Name="AnalysisTree" />
 	    <OutputTree Name="AnalysisTree" />
 	  </InputData>
-<!--
+
           <InputData Lumi="110354799.3" NEventsMax="&NEVT;" Type="MC" Version="TTToHadronic_2018" Cacheable="&b_Cacheable;">
             &TTToHadronic_2018;
             <InputTree Name="AnalysisTree" />
@@ -628,7 +628,7 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
--->
+
 <!--
           <InputData Lumi="10.9363931" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-15to20_EMEnriched_2018" Cacheable="&b_Cacheable;">
             &QCD_Pt-15to20_EMEnriched;
@@ -872,6 +872,8 @@
       <Item Name="Sys_MuonTrigger"    Value="nominal"/>
       <Item Name="Sys_PU"             Value="central"/>
       <Item Name="Sys_BTagSF"         Value="nominal"/>
+      <Item Name="Sys_EleID"         Value="nominal"/>
+      <Item Name="Sys_EleTrigger"    Value="nominal"/>
       <Item Name="channel"            Value="&CHANNEL;"/>
 
 
