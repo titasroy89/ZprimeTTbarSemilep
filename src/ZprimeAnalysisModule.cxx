@@ -266,19 +266,35 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
 
 
   if((is2016v3 || is2016v2) && isMuon){
-    cout << "I am here" << endl;
     MuonID_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/MuonID_EfficienciesAndSF_average_RunBtoH.root", "NUM_HighPtID_DEN_genTracks_eta_pair_newTuneP_probe_pt", 0., "HighPtID", false, Sys_MuonID));
     MuonTrigger_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/MuonTrigger_EfficienciesAndSF_average_RunBtoH.root", "IsoMu50_OR_IsoTkMu50_PtEtaBins", 0.5, "MuonTrigger", false, Sys_MuonTrigger));
+    HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/HT_SF_muon.root", 1.0, "HT", Sys_EleID));
   }
   if(is2017v2 && isMuon){
     MuonID_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/RunBCDEF_SF_ID.root", "NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta", 0., "HighPtID", true, Sys_MuonID));
     MuonTrigger_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/MuonTrigger_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root", "Mu50_PtEtaBins/pt_abseta_ratio", 0.5, "Trigger", true, Sys_MuonTrigger));
+    HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/HT_SF.root", 1.0, "HT", Sys_EleID));
   }
   if(is2018 && isMuon){
     MuonID_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/Muon_ID_SF_RunABCD.root", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta", 0., "HighPtID", true, Sys_MuonID));
     MuonTrigger_module.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/Muon_Trigger_Eff_SF_AfterMuonHLTUpdate.root", "Mu50_OR_OldMu100_OR_TkMu100_PtEtaBins/pt_abseta_ratio", 0.5, "Trigger", true, Sys_MuonTrigger)); 
     HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/HT_SF.root", 1.0, "HT", Sys_EleID));
   }
+
+  if((is2016v3 || is2016v2) && isElectron){
+    EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/egammaEffi.txt_EGM2D_CutBased_Tight_ID.root", 1.0, "TightID", Sys_EleID));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/SF_Ele50_Ele115_2016.root", 0.5, "Trigger", Sys_EleTrigger, "electrons", "abseta_pt_ratio"));
+    EleRec_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/egammaEffi.txt_EGM2D_RecEff_Moriond17.root", 1.0, "Rec", Sys_EleID));
+    HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/HT_SF_electron.root", 1.0, "HT", Sys_EleID));
+  }
+
+  if(is2017v2 && isElectron){
+    EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/2017_ElectronTight.root", 1.0, "TightID", Sys_EleID));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/SF_Ele50_Ele115_2017.root", 0.5, "Trigger", Sys_EleTrigger, "electrons", "abseta_pt_ratio"));
+    EleRec_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root", 1.0, "Rec", Sys_EleID));
+    HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/HT_SF.root", 1.0, "HT", Sys_EleID));
+  }
+
 
   if(is2018 && isElectron){
     cout << "is electron" << endl;
@@ -288,7 +304,8 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
     HT_module.reset(new MCNjetsHTScaleFactor(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/HT_SF.root", 1.0, "HT", Sys_EleID));
   }
 
-  if(is2018){
+
+  if(is2018 || is2017v2 || is2016v3){
       ToptagSF_module.reset(new MCToptaggSF(ctx, "/nfs/dust/cms/user/hugobg/UHH2_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/2018TopTaggingScaleFactors.root", "PUPPI_wp4"));   
   }
 

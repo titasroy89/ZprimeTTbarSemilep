@@ -69,7 +69,7 @@
 ]>
 
 <!--
-<ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="50" AutoResubmit="0"/>
+<ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="5" AutoResubmit="0"/>
 <ConfigSGE RAM="2" DISK="2" Mail="condor.desy@gmail.com" Notification="as" Workdir="workdir_Zprime_Analysis_2017v2_CHS"/>
 -->
 
@@ -83,51 +83,6 @@
 			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_10.root" Lumi="0.0"/>
 			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_100.root" Lumi="0.0"/>
 			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_101.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_102.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_103.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_104.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_105.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_106.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_107.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_108.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_109.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_11.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_110.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_111.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_112.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_113.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_114.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_115.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_116.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_117.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_118.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_119.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_12.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_120.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_121.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_122.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_123.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_124.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_125.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_126.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_127.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_128.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_129.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_13.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_130.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_131.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_132.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_133.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_14.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_15.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_16.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_17.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_18.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_19.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_2.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_20.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_21.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.DATA.DATA_SingleMuon_Run2017v2E_22.root" Lumi="0.0"/>
 			<OutputTree Name="AnalysisTree"/>
 			<InputTree Name="AnalysisTree"/>
 		</InputData>

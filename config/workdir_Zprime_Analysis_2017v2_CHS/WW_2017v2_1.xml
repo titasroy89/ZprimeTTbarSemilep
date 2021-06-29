@@ -69,7 +69,7 @@
 ]>
 
 <!--
-<ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="50" AutoResubmit="0"/>
+<ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="5" AutoResubmit="0"/>
 <ConfigSGE RAM="2" DISK="2" Mail="condor.desy@gmail.com" Notification="as" Workdir="workdir_Zprime_Analysis_2017v2_CHS"/>
 -->
 
@@ -83,8 +83,6 @@
 			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.MC.WW_2017v2_2.root" Lumi="0.0"/>
 			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.MC.WW_2017v2_3.root" Lumi="0.0"/>
 			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.MC.WW_2017v2_4.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.MC.WW_2017v2_5.root" Lumi="0.0"/>
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2017_CHS/workdir_Zprime_PreSelec_2017/uhh2.AnalysisModuleRunner.MC.WW_2017v2_6.root" Lumi="0.0"/>
 			<OutputTree Name="AnalysisTree"/>
 			<InputTree Name="AnalysisTree"/>
 		</InputData>
@@ -117,7 +115,7 @@
 			<Item Name="Sys_MuonID" Value="nominal"/>
 			<Item Name="Sys_MuonTrigger" Value="nominal"/>
 			<Item Name="Sys_PU" Value="central"/>
-			<Item Name="Sys_BTagSF" Value="central"/>
+			<Item Name="Sys_BTagSF" Value="nominal"/>
 			<Item Name="Sys_EleID" Value="nominal"/>
 			<Item Name="Sys_EleTrigger" Value="nominal"/>
 			<Item Name="channel" Value="muon"/>

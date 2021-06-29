@@ -73,9 +73,15 @@
 <JobConfiguration JobName="ZprimePreselectionJob" OutputLevel="INFO">
 	<Library Name="libSUHH2ZprimeSemiLeptonic"/>
 	<Package Name="libSUHH2ZprimeSemiLeptonic"/>
-	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/hugobg/ZPrime_102X/analysis_output/2018_CHS/electron///workdir_Zprime_Analysis_2018_electron_CHS//workdir_Zprime_Analysis_2018_electron_CHS/" PostFix="_1_0" TargetLumi="59970">
+	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/hugobg/ZPrime_102X/analysis_output/2018_CHS/electron///workdir_Zprime_Analysis_2018_electron_CHS/" PostFix="_0" TargetLumi="59970">
 		<InputData Cacheable="False" Lumi="5270638.333" Type="MC" Version="DYJetsToLL_M-50_HT-600to800_2018">
-			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_7.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_0.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_1.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_2.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_3.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_4.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_5.root" Lumi="0.0"/>
+			<In FileName="/nfs/dust/cms/group/zprime-uhh/Presel_2018_CHS/workdir_Zprime_PreSelec_2018/uhh2.AnalysisModuleRunner.MC.DYJetsToLL_M-50_HT-600to800_2018_6.root" Lumi="0.0"/>
 			<OutputTree Name="AnalysisTree"/>
 			<InputTree Name="AnalysisTree"/>
 		</InputData>
