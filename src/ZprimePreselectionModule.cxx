@@ -260,7 +260,7 @@ chsjetInd++;
 
     //cout<<"GEN ME quark-flavor selection ... "<<event.event<<endl;
 
-  const bool pass_lep1 = ((event.muons->size() >= 1) || (event.electrons->size() >= 1));
+  const bool pass_lep1 = ((event.muons->size() >= 1 || event.electrons->size() >= 1));
   if(!pass_lep1) return false;
 
   fill_histograms(event, "Lepton1");

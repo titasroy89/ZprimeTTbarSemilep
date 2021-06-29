@@ -536,7 +536,9 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
     fill_histograms(event, "Electron1");
     EleTrigger_module->process(event);
     fill_histograms(event, "TriggerEle");
+
   }
+
 
   if(isMuon){
   if(event.muons->at(0).pt() < 55) return false;
@@ -706,16 +708,17 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
     int Nmuons = muons->size();
     for(int i=0; i<Nmuons; i++){
 	if(muons->at(i).has_tag(Muon::twodcut_dRmin) && muons->at(i).has_tag(Muon::twodcut_pTrel)){
-        	event.set(h_ptrel_mu,muons->at(i).get_tag(Muon::twodcut_pTrel));
+        	event.set(h_ptrel_mu_jet,muons->at(i).get_tag(Muon::twodcut_pTrel));
                 event.set(h_dRmin_mu_jet,muons->at(i).get_tag(Muon::twodcut_dRmin));
         }
+    }
     int Nelectrons = electrons->size();
     for(int i=0; i<Nelectrons; i++){
         if(electrons->at(i).has_tag(Electron::twodcut_dRmin) && electrons->at(i).has_tag(Electron::twodcut_pTrel)){
-                event.set(h_ptrel_ele,electrons->at(i).get_tag(Electron::twodcut_pTrel));
+                event.set(h_ptrel_ele_jet,electrons->at(i).get_tag(Electron::twodcut_pTrel));
                 event.set(h_dRmin_ele_jet,electrons->at(i).get_tag(Electron::twodcut_dRmin));
         }
-
+     }
 
    
 

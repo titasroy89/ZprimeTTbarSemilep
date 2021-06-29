@@ -105,6 +105,11 @@ protected:
   Event::Handle<int> h_ttagN;
   Event::Handle<int> h_wtagN;
   Event::Handle<int> h_match;
+  Event::Handle<float> h_M_lep;
+  Event::Handle<float> h_M_had;
+  Event::Handle<float> h_M_had_ttag;
+  Event::Handle<float> h_M_had_wtag;
+  Event::Handle<float> h_M_had_else;
 
   uhh2::Event::Handle<ZprimeCandidate*> h_BestZprimeCandidateChi2;
   uhh2::Event::Handle<std::vector<TopJet>> h_AK8TopTags;
@@ -305,6 +310,11 @@ ZprimeAnalysisModule_matching::ZprimeAnalysisModule_matching(uhh2::Context& ctx)
   h_ttagN = ctx.declare_event_output<int>("ttagN");
   h_wtagN = ctx.declare_event_output<int>("wtagN");
   h_weight = ctx.declare_event_output<float> ("weight");
+  h_M_lep = ctx.declare_event_output<float> ("M_lep");
+  h_M_had = ctx.declare_event_output<float> ("M_had");
+  h_M_had_ttag = ctx.declare_event_output<float> ("M_had_ttag");
+  h_M_had_wtag = ctx.declare_event_output<float> ("M_had_wtag");
+  h_M_had_else = ctx.declare_event_output<float> ("M_had_else");
 
   sel_1btag.reset(new NJetSelection(1, 1, id_btag));
   sel_2btag.reset(new NJetSelection(2,-1, id_btag));
@@ -339,6 +349,11 @@ bool ZprimeAnalysisModule_matching::process(uhh2::Event& event){
   event.set(h_wtagN,-100);
   event.set(h_weight,-100);
   event.set(h_match,-100);
+  event.set(h_M_had, -100);
+  event.set(h_M_had_ttag, -100);
+  event.set(h_M_had_wtag, -100);
+  event.set(h_M_had_else, -100);
+  event.set(h_M_lep, -100);
 
   // TODO Apply things that should've been done in the pre-selection already... Fix pre-selection and then remove these steps
   if(isMuon) muon_cleaner->process(event);
@@ -444,7 +459,6 @@ bool ZprimeAnalysisModule_matching::process(uhh2::Event& event){
   if (bestCand_chi2 == bestCand_correctmatch) event.set(h_match,1);
   if (bestCand_chi2 != bestCand_correctmatch) event.set(h_match,-1);
 
-
   vector<TopJet> WTags = event.get(h_AK8WTags); 
   event.set(h_wtagN,WTags.size());
 
@@ -453,6 +467,12 @@ bool ZprimeAnalysisModule_matching::process(uhh2::Event& event){
 
   event.set(h_weight,event.weight);
   event.set(h_MET,event.met->pt());
+
+
+  event.set(h_M_lep,bestCand_correctmatch->top_leptonic_v4().M());
+  if(TopTags.size()==1 && WTags.size()==0)  event.set(h_M_had_ttag,bestCand_correctmatch->top_hadronic_v4().M());
+  if(TopTags.size()==0 && WTags.size()==1)  event.set(h_M_had_wtag,bestCand_correctmatch->top_hadronic_v4().M());
+  if(TopTags.size()==0 && WTags.size()==0)  event.set(h_M_had_else,bestCand_correctmatch->top_hadronic_v4().M());
 
 
 
