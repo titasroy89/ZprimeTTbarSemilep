@@ -9,7 +9,11 @@
 <!ENTITY IS_PUPPI            "true">
 <!ENTITY IS_LOOSER_SELECTION "false">
 <!ENTITY CHANNEL             "electron">
+<<<<<<< HEAD
 <!ENTITY OUTPUTdir           "/nfs/dust/cms/user/titasroy/Run2_2D/2018_CHS/&CHANNEL;/">
+=======
+<!ENTITY OUTPUTdir           "/nfs/dust/cms/user/hugobg/ZPrime_102X/analysis_output/2018_CHS/&CHANNEL;/">
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
 
 <!ENTITY DATA_EGamma_Run2018A       SYSTEM  "../data/Skimming_datasets_2018_common_CHS/DATA_DATA_EGamma_Run2018A.xml">
 <!ENTITY DATA_SingleMuon_Run2018A   SYSTEM  "../data/Skimming_datasets_2018_common_CHS/DATA_DATA_SingleMuon_Run2018A.xml">
@@ -76,7 +80,10 @@
 
         <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTPUTdir;/" PostFix="" TargetLumi="&TargetLumi;">
 
+<<<<<<< HEAD
 <!--
+=======
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
 	  <InputData Lumi="7432926.584" NEventsMax="&NEVT;" Type="MC" Version="ST_tW_antitop_5f_inclusiveDecays_2018" Cacheable="&b_Cacheable;">
 	    &ST_tW_antitop_5f_inclusiveDecays;
 	    <InputTree Name="AnalysisTree" />
@@ -131,7 +138,11 @@
 	    <OutputTree Name="AnalysisTree" />
 	  </InputData>
 
+<<<<<<< HEAD
 
+=======
+<!--
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
 	  <InputData Lumi="198000" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTTJet_M500_2018" Cacheable="&b_Cacheable;">
 	    &ZprimeToTTJet_M500_2018;
 	    <InputTree Name="AnalysisTree" />
@@ -209,9 +220,15 @@
 	    <InputTree Name="AnalysisTree" />
 	    <OutputTree Name="AnalysisTree" />
 	  </InputData>
+<<<<<<< HEAD
 
 
 
+=======
+-->
+
+<!--
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
           <InputData Lumi="184369" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M1000_W300_2018" Cacheable="&b_Cacheable;">
             &ZprimeToTT_M1000_W300_2018;
             <InputTree Name="AnalysisTree" />
@@ -379,8 +396,13 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
+<<<<<<< HEAD
 
 
+=======
+-->
+<!--
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
           <InputData Lumi="180809" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M1000_W10_2018" Cacheable="&b_Cacheable;">
             &ZprimeToTT_M1000_W10_2018;
             <InputTree Name="AnalysisTree" />
@@ -458,7 +480,11 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
+<<<<<<< HEAD
 
+=======
+-->
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
 
 	  <InputData Lumi="21906.58658" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-70To100_2018" Cacheable="&b_Cacheable;">
 	    &WJetsToLNu_HT-70To100_2018;
@@ -548,8 +574,11 @@
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
+<<<<<<< HEAD
 
 -->
+=======
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
           <InputData Lumi="53077886.4677" NEventsMax="&NEVT;" Type="MC" Version="TTTo2L2Nu_2018" Cacheable="&b_Cacheable;">
             &TTTo2L2Nu_2018;
             <InputTree Name="AnalysisTree" />
@@ -676,7 +705,11 @@
             <InputTree Name="AnalysisTree"/>
             <OutputTree Name="AnalysisTree"/>
           </InputData>
+<<<<<<< HEAD
 
+=======
+-->
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
 
 
           <InputData Lumi="0.2291325801" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT50to100_2018" Cacheable="&b_Cacheable;">
@@ -733,8 +766,11 @@
             <OutputTree Name="AnalysisTree"/>
           </InputData>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
           <InputData Lumi="63598.36075" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-100to200_2018" Cacheable="&b_Cacheable;">
             &DYJetsToLL_M-50_HT-100to200_2018;
             <InputTree Name="AnalysisTree"/>
@@ -778,7 +814,11 @@
           </InputData>
 
 
+<<<<<<< HEAD
 -->
+=======
+
+>>>>>>> 24fad3182173b295d6f95b87e68790f4ec4a31cb
 
     <UserConfig>
       <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
