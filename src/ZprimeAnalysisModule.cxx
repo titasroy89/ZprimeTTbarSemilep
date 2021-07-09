@@ -113,6 +113,10 @@ protected:
   Event::Handle<int> h_wtagN;
   Event::Handle<float> h_matched_ttbar; 
   Event::Handle<float> h_DeltaY;
+  Event::Handle<float> h_ISRup;
+  Event::Handle<float> h_ISRdown;
+  Event::Handle<float> h_FSRup;
+  Event::Handle<float> h_FSRdown;
   Event::Handle<float> h_pTttbar;
   Event::Handle<float> h_Rapidityttbar;
   Event::Handle<float> h_pThad;
@@ -357,6 +361,10 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   h_wtagN = ctx.declare_event_output<int>("wtagN");
   h_matched_ttbar = ctx.declare_event_output<float>("matched_ttbar");
   h_DeltaY = ctx.declare_event_output<float> ("DeltaY");
+  h_ISRup = ctx.declare_event_output<float> ("ISRup");
+  h_ISRdown = ctx.declare_event_output<float> ("ISRdown");
+  h_FSRup = ctx.declare_event_output<float> ("FSRup");
+  h_FSRdown = ctx.declare_event_output<float> ("FSRdown");
   h_pTttbar = ctx.declare_event_output<float> ("pT_ttbar");
   h_Rapidityttbar= ctx.declare_event_output<float> ("Rapidity_ttbar");
   h_pThad= ctx.declare_event_output<float> ("pT_had");
@@ -417,6 +425,10 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   event.set(h_btagN,-100);
   event.set(h_matched_ttbar,-100);
   event.set(h_DeltaY,-100);
+  event.set(h_FSRup,-100);
+  event.set(h_FSRdown,-100);
+  event.set(h_ISRup,-100);
+  event.set(h_ISRdown,-100);
   event.set(h_pTttbar,-100);
   event.set(h_Rapidityttbar,-100);
   event.set(h_pThad,-100);
@@ -748,12 +760,20 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   if(debug) cout<<"Set some vars for monitoring"<<endl;
 
   const auto & sys_weights = event.genInfo->systweights();
-//  cout << sys_weights.empty() << endl;
+  const auto & weights = event.genInfo->weights();
 
+  if(isMC){
+      if(!sys_weights.empty()){
+             event.set(h_ISRup, weights[6]/event.genInfo->originalXWGTUP() );
+             event.set(h_FSRup, weights[7]/event.genInfo->originalXWGTUP() );
+             event.set(h_ISRdown, weights[8]/event.genInfo->originalXWGTUP() );
+             event.set(h_FSRdown, weights[9]/event.genInfo->originalXWGTUP() );
+      }
+  }
 
   if(isMC){
       if(!sys_weights.empty()){ 
-          float orig_weight = event.genInfo->pdf_scalePDF();
+          float orig_weight = event.genInfo->originalXWGTUP();
           int MY_FIRST_INDEX = 9;
           for (unsigned i=0; i < 100; ++i) {
                 const float pdf_w(sys_weights[i+MY_FIRST_INDEX]/orig_weight);
@@ -765,6 +785,10 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
    if(!isMC){
           w_PDF.push_back(1.);
           event.set(h_wgtMC__PDF, std::move(w_PDF));
+          event.set(h_ISRup, 1.);
+          event.set(h_FSRup, 1.);
+          event.set(h_ISRdown, 1.);
+          event.set(h_FSRdown, 1.); 
    }
   
 
