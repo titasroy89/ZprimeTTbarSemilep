@@ -112,16 +112,16 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
 
 
   ElectronId eleID;  MuonId muID;
-  if(is2017v2 || is2018){
+  if(is2017v2 || is2018 || is2016v3 || is2016v2){
     eleID = ElectronID_Fall17_tight_noIso;//ToDo: compare cutBased without iso and MVA-based via wp in UHH2
     muID  = MuonID(Muon::CutBasedIdGlobalHighPt);
   }
-  if(is2016v2 || is2016v3){
+//  if(is2016v2 || is2016v3){
     //eleID = ElectronID_Summer16_tight_noIso;//ToDo: compare cutBased without iso and MVA-based via wp in UHH2
     //muID      = MuonID(Muon::Highpt);
-    eleID = ElectronID_Summer16_medium_noIso;
-    muID  = MuonID(Muon::CutBasedIdTight); // see more muonIDs https://github.com/cms-sw/cmssw/blob/master/DataFormats/MuonReco/interface/Muon.h#L201
-  }
+//    eleID = ElectronID_Summer16_medium_noIso;
+//    muID  = MuonID(Muon::CutBasedIdTight); // see more muonIDs https://github.com/cms-sw/cmssw/blob/master/DataFormats/MuonReco/interface/Muon.h#L201
+//  }
   double electron_pt(25.);
   double muon_pt(25.);
   double jet1_pt(50.);
