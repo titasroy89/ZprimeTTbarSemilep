@@ -62,6 +62,7 @@ public:
 protected:
 
   bool debug;
+  bool debug1;
   
   // Cleaners (to make sure the pre-selection did everything right)
   std::unique_ptr<MuonCleaner> muon_cleaner;
@@ -173,8 +174,9 @@ void ZprimeAnalysisModule::fill_histograms(uhh2::Event& event, string tag){
 */
 
 ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
-  //debug = true;
-  debug = false;
+  debug1 = true;
+  debug=false;
+  //debug = false;
   for(auto & kv : ctx.get_all()){
     cout << " " << kv.first << " = " << kv.second << endl;
   }
@@ -208,14 +210,15 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   if(ctx.get("channel") == "electron") isElectron = true;
 
   if(isMuon){//semileptonic muon channel
-    trigger1 = "HLT_Mu50_v*";
-    if(is2016v2 || is2016v3)
-      //trigger2 = "HLT_TkMu50_v*";
-      trigger2 = "HLT_Mu50_v*"; //TkMu path does not exist in 2017/2018 and RunB 2016
-    else
-      trigger2 = "HLT_Mu50_v*"; //TkMu path does not exist in 2017/2018
-    nmuon_min1 = 1, nmuon_max1 = -1;
-    nmuon_min2 = 1, nmuon_max2 = 1;
+    trigger1 = "HLT_IsoMu24_v*";
+    trigger2 = "HLT_IsoMu24_v*";
+    if(is2017v2){
+      trigger1 = "HLT_IsoMu27_v*";
+      trigger2 = "HLT_IsoMu27_v*"; //TkMu path does not exist in 2017/2018 and RunB 2016
+    }
+      //trigger2 = "HLT_Mu50_v*"; //TkMu path does not exist in 2017/2018
+    nmuon_min1 = 2, nmuon_max1 = -1;
+    nmuon_min2 = 2, nmuon_max2 = -1;
     nele_min = 0; nele_max = 0;
     MET_cut = 50;
     jet1_pt = 150.;
@@ -379,7 +382,7 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   TopJetBtagSubjet_selection.reset(new ZprimeBTagFatSubJetSelection(ctx));
 
   // Book histograms
-  vector<string> histogram_tags = {"Weights", "Weights_MuonID", "Weights_PU", "Weights_Lumi", "Weights_TopPt", "Weights_MCScale", "Muon1", "TriggerMuon", "Muon2", "Electron1", "TriggerEle", "TwoDCut", "Jet1", "Jet2", "MET", "HTlep", "NNInputsBeforeReweight", "MatchableBeforeChi2Cut", "NotMatchableBeforeChi2Cut", "CorrectMatchBeforeChi2Cut", "NotCorrectMatchBeforeChi2Cut", "Chi2", "Matchable", "NotMatchable", "CorrectMatch", "NotCorrectMatch", "TopTagReconstruction", "NotTopTagReconstruction", "Btags2", "Btags1","TopJetBtagSubjet"};
+  vector<string> histogram_tags = {"Muon1", "TriggerMuon", "Muon2", "LeadMuon","Electron1", "TriggerEle","Weights", "Weights_MuonID", "Weights_PU", "Weights_Lumi", "Weights_TopPt", "Weights_MCScale", "TwoDCut", "Jet1", "Jet2", "MET", "HTlep", "NNInputsBeforeReweight", "MatchableBeforeChi2Cut", "NotMatchableBeforeChi2Cut", "CorrectMatchBeforeChi2Cut", "NotCorrectMatchBeforeChi2Cut", "Chi2", "Matchable", "NotMatchable", "CorrectMatch", "NotCorrectMatch", "TopTagReconstruction", "NotTopTagReconstruction", "Btags2", "Btags1","TopJetBtagSubjet"};
   book_histograms(ctx, histogram_tags);
 }
 
@@ -392,8 +395,8 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
 */
 
 bool ZprimeAnalysisModule::process(uhh2::Event& event){
-  if(debug)   cout << "++++++++++++ NEW EVENT ++++++++++++++" << endl;
-  if(debug)   cout<<" run.event: "<<event.run<<". "<<event.event<<endl;
+  if(debug1)   cout << "++++++++++++ NEW EVENT ++++++++++++++" << endl;
+  if(debug1)   cout<<" run.event: "<<event.run<<". "<<event.event<<endl;
   // Initialize reco flags with false
   event.set(h_is_zprime_reconstructed_chi2, false);
   event.set(h_is_zprime_reconstructed_correctmatch, false);
@@ -444,27 +447,51 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
 
   if(isMuon) muon_cleaner->process(event);
   if(isElectron) electron_cleaner->process(event);
+  
 
+  if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
+  
+  if (event.muons->at(0).charge()*event.muons->at(1).charge() == 1) return false; 
+  
 
   if(isMuon){
     if(!NMuon1_selection->passes(event)) return false;
+    fill_histograms(event, "Muon1");
+    MuonTrigger_module->process_onemuon(event, 0);
+    fill_histograms(event, "TriggerMuon");
     if(!NMuon2_selection->passes(event)) return false;
+    fill_histograms(event, "Muon2");
   }
 
+  if((event.muons->size()+event.electrons->size()) != 2) return false; //veto events without leptons or with too many 
+  if(debug1) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
+
+  if( (event.muons->at(0).v4() + event.muons->at(1).v4()).M()>130) return false;
+  if( (event.muons->at(0).v4() + event.muons->at(1).v4()).M()<60) return false;
+  if (debug1) cout<<"the invariant mass is: "<<(event.muons->at(0).v4() + event.muons->at(1).v4()).M()<< endl;
+
+  if (event.muons->at(0).relIso()<0.1) return true;
+  if (debug1) cout<<"lead muon relIso is: "<<event.muons->at(0).relIso()<<endl;
+
+  fill_histograms(event, "LeadMuon");
+
+  
+
+  
  
   if(isElectron){
     if(!NElectron_selection->passes(event)) return false;
   }
 
   if(isMuon){
-  if(event.muons->at(0).pt() < 55) return false;
+  if(event.muons->at(0).pt() < 50) return false;
   }
 
   if(isElectron){
   if(event.electrons->at(0).pt() < 80) return false;
   }
 
-
+  
 
 //  if(debug)  cout<<"Muon and Electron cleaner ok"<<endl;
 
@@ -522,34 +549,35 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
  
   BTagWeight_module->process(event);
 
-  if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
-  if(isMuon){
-    if(!NMuon1_selection->passes(event)) return false;
-    fill_histograms(event, "Muon1");
-    MuonTrigger_module->process_onemuon(event, 0);
-    fill_histograms(event, "TriggerMuon");
-    if(!NMuon2_selection->passes(event)) return false;
-    fill_histograms(event, "Muon2");
-  }
-  if(isElectron){
-    if(!NElectron_selection->passes(event)) return false;
-    fill_histograms(event, "Electron1");
-    EleTrigger_module->process(event);
-    fill_histograms(event, "TriggerEle");
+//  if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
+//  if(isMuon){
+  //  if(!NMuon1_selection->passes(event)) return false;
+  //  fill_histograms(event, "Muon1");
+  //  MuonTrigger_module->process_onemuon(event, 0);
+  //  fill_histograms(event, "TriggerMuon");
+  //  if(!NMuon2_selection->passes(event)) return false;
+  //  fill_histograms(event, "Muon2");
+ // }
+ // if(isElectron){
+  //  if(!NElectron_selection->passes(event)) return false;
+  //  fill_histograms(event, "Electron1");
+  //  EleTrigger_module->process(event);
+  //  fill_histograms(event, "TriggerEle");
 
-  }
+  //}
 
 
-  if(isMuon){
-  if(event.muons->at(0).pt() < 55) return false;
-  }
+//  if(isMuon){
+ // if(event.muons->at(0).pt() < 50) return false;
+ // if(event.muons->at(1).pt() < 50) return false;
+ // }
 
-  if(isElectron){
-  if(event.electrons->at(0).pt() < 80) return false;
-  }
-
-  if((event.muons->size()+event.electrons->size()) != 1) return false; //veto events without leptons or with too many 
-  if(debug) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
+ // if(isElectron){
+ // if(event.electrons->at(0).pt() < 80) return false;
+ // }
+ // if(debug1) cout <<"muon selection done"<<endl;
+ // if((event.muons->size()+event.electrons->size()) != 2) return false; //veto events without leptons or with too many 
+ // if(debug1) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
 
 
  // if(!TwoDCut_selection->passes(event)) return false;
