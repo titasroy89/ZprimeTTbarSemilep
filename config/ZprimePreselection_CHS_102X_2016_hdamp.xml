@@ -10,6 +10,9 @@
 
 <!ENTITY TTToSemileptonic_hdampdown_2016v3  SYSTEM  "../../common/UHH2-datasets/RunII_102X_v2/2016v3/Systematics/MC_TTToSemiLeptonic_hdampDOWN_TuneCP5_2016.xml">
 <!ENTITY TTToSemileptonic_hdampup_2016v3    SYSTEM  "../../common/UHH2-datasets/RunII_102X_v2/2016v3/Systematics/MC_TTToSemiLeptonic_hdampUP_TuneCP5_2016.xml">
+<!ENTITY TTTo2L2Nu_hdampup_2016v3           SYSTEM  "../../common/UHH2-datasets/RunII_102X_v2/2016v3/Systematics/MC_TTTo2L2Nu_hdampUP_TuneCP5_2016.xml">
+<!ENTITY TTTo2L2Nu_hdampdown_2016v3         SYSTEM  "../../common/UHH2-datasets/RunII_102X_v2/2016v3/Systematics/MC_TTTo2L2Nu_hdampDOWN_TuneCP5_2016.xml">
+
 
 
 ]>
@@ -25,6 +28,7 @@
 
 	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;">
 
+<!--
           <InputData Lumi="289793.1569" NEventsMax="&NEVT;" Type="MC" Version="TTToSemileptonic_hdampdown_2016v3" Cacheable="&b_Cacheable;">
             &TTToSemileptonic_hdampdown_2016v3;
             <InputTree Name="AnalysisTree" />
@@ -36,6 +40,25 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>	
+-->
+
+        <InputData Lumi="289793.1569" NEventsMax="&NEVT;" Type="MC" Version="TTTo2L2Nu_hdampup_2016v3" Cacheable="&b_Cacheable;">
+            &TTTo2L2Nu_hdampup_2016v3;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+         <InputData Lumi="289793.1569" NEventsMax="&NEVT;" Type="MC" Version="TTTo2L2Nu_hdampdown_2016v3" Cacheable="&b_Cacheable;">
+            &TTTo2L2Nu_hdampdown_2016v3;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData> 
+
+
+
+
+
+
 
 		<UserConfig>
 			<Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
