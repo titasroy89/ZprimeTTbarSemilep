@@ -321,11 +321,17 @@ bool uhh2::HTlepCut::passes(const uhh2::Event& event){
 
 
 bool uhh2::InvTriangularCuts::passes(const uhh2::Event& event){ 
-
+  
   float dphi_jet_MET= deltaPhiMET(event.jets->at(0),event.met);
+  //cout <<" deltaPhi jet,met : "<< dphi_jet_MET <<endl;
   float dphi_ele_MET= deltaPhiMET(event.electrons->at(0),event.met);
-
-  return (dphi_ele_MET >a_*event.met->pt()+b_) && (dphi_ele_MET < - a_*event.met->pt()+b_) && (dphi_jet_MET > a_*event.met->pt()+b_) && (dphi_jet_MET < - a_*event.met->pt()+b_);
+  //cout <<" deltaPhi electron,met : "<< dphi_ele_MET <<endl;
+  //cout <<" a : "<<a_ << b_<<endl;
+  //cout <<" b : "<<b_ << endl;
+  //cout << "MET is : "<< event.met->pt() << endl;
+  //cout << "greater than boundary: " << a_*event.met->pt()+b_ <<endl;
+  //cout << "less than boundary: " << -a_*event.met->pt()+b_ << endl;
+  return ((dphi_ele_MET >a_*event.met->pt()+b_) ||( dphi_ele_MET < - a_*event.met->pt()+b_)) && ( (dphi_jet_MET > a_*event.met->pt()+b_) || (dphi_jet_MET < - a_*event.met->pt()+b_));
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -372,7 +378,7 @@ bool uhh2::METCut::passes(const uhh2::Event& event){
 bool uhh2::TwoDCut::passes(const uhh2::Event& event){
 
   assert(event.muons || event.electrons);
-  if((event.muons->size()+event.electrons->size()) != 1) throw runtime_error("In TwoDCut: Event does not have exactly one muon and electron.");
+ // if((event.muons->size()+event.electrons->size()) != 1) throw runtime_error("In TwoDCut: Event does not have exactly one muon and electron.");
 
   bool pass = false;
   if(event.muons->size()){
@@ -391,6 +397,32 @@ bool uhh2::TwoDCut::passes(const uhh2::Event& event){
   return pass;
 }
 ////////////////////////////////////////////////////////
+
+bool uhh2::TwoDCut1::passes(const uhh2::Event& event){
+
+  assert(event.muons || event.electrons);
+//  if((event.muons->size()+event.electrons->size()) != 1) throw runtime_error("In TwoDCut: Event does not have exactly one muon and electron.");
+
+  bool pass = false;
+  if(event.muons->size()){
+    float drmin, ptrel;
+    drmin = event.muons->at(1).get_tag(Muon::twodcut_dRmin);
+    ptrel = event.muons->at(1).get_tag(Muon::twodcut_pTrel);
+    if((drmin > min_deltaR_) || (ptrel > min_pTrel_)) pass = true;
+  }
+  if(event.electrons->size()){
+    float drmin, ptrel;
+    drmin = event.electrons->at(1).get_tag(Electron::twodcut_dRmin);
+    ptrel = event.electrons->at(1).get_tag(Electron::twodcut_pTrel);
+    if((drmin > min_deltaR_) || (ptrel > min_pTrel_)) pass = true;
+  }
+
+  return pass;
+}
+
+
+
+
 
 uhh2::GenFlavorSelection::GenFlavorSelection(const std::string& flav_key){
 

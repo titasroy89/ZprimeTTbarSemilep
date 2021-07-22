@@ -16,6 +16,11 @@ parser.add_option("-c", "--channel", dest="channel", default="mu",type='str',
                      help="Specify which channel mu or ele? default is mu" )
 parser.add_option("--Log","--isLog", dest="isLog", default=True,action="store_true",
                      help="Plot the plots in log ?" )
+parser.add_option("--QCD","--isQCD", dest="isQCD", default=False,action="store_true",
+                     help="Plot as QCD and others" )
+
+parser.add_option("--DNN","--isDNN", dest="isDNN", default=False,action="store_true",
+                     help="Plot to check DNN" )
 
 (options, args) = parser.parse_args()
 
@@ -25,25 +30,27 @@ padOverlap = 0.15
 padGap = 0.01
 
 
+
+DNN = options.isDNN
 channel = options.channel
 Log=options.isLog
+QCD = options.isQCD
 
 if channel=="ele":
 	_channelText = "e+jets"
 	plotDirectory = "data_pre_plots_ele"
-	_fileDir = "/nfs/dust/cms/user/titasroy/Run2_analysis_DNN/electron/2018/workdir_Zprime_Analysis_electron_DNN_Aug26/NOMINAL"
+#        _fileDir = "/nfs/dust/cms/user/titasroy/Run2_analysis_DNN/electron/2018/workdir_eleDec/NOMINAL"
+        _fileDir = "/nfs/dust/cms/group/zprime-uhh/Run2_analysis/electron/2018/workdir_June/NOMINAL"
 else:
 	_channelText = "#mu+jets"
 	plotDirectory = "data_pre_plots_mu"
-        _fileDir = "/nfs/dust/cms/user/titasroy/Run2_analysis_DNN/muon/2018/workdir_Zprime_Analysis_muon_QCDNN_May19/NOMINAL_1"
-
-
+       # _fileDir = "/nfs/dust/cms/user/titasroy/Run2_analysis_DNN/muon/2018/workdir_Zprime_Analysis_muon_QCDNN_May19/NOMINAL_1"
+        #_fileDir = "/nfs/dust/cms/user/titasroy/Run2_analysis_DNN/muon/2018/workdir_muon_DecNNimpl/NOMINAL"
+        _fileDir = "/nfs/dust/cms/group/zprime-uhh/Run2_analysis/muon/2018/workdir_June//NOMINAL"
 
 
 gROOT.SetBatch(True)
 
-YesLog = True
-NoLog=False
 
 
 # Histogram Information:
@@ -81,6 +88,8 @@ if not HasCMSStyle:
 ROOT.gROOT.ForceStyle()
 
 stackList = { "TTbar":[kRed], "DYJets":[kGreen], "QCD":[kYellow],"WJets":[kBlue], "ST":[kOrange], "Diboson":[kTeal]}
+if QCD:
+	stackList = { "TTbar":[kRed], "DYJets":[kRed], "QCD":[kYellow],"WJets":[kRed], "ST":[kRed], "Diboson":[kRed]}
 
 print stackList
 #print stackList[2]
@@ -196,10 +205,13 @@ sum_=0
 tree_MC={}
 hist={}
 if channel=="mu":
-	histograms = {"met_pt"   : ["missing E_{T} [GeV]", "Events", 10, [50,1500]],
+	histograms = {
               "st"    : ["S_{T} [GeV]",  "Events", 50, [0,5000]],
+              "st_lep"    : ["S_{T}^{#mu} [GeV]",  "Events", 50, [0,5000]],
+              "ht" : ["H_{T} [GeV]",  "Events", 500, [0,2000]],
               "phi_Ak8Puppijets": ["#phi^{AK8Puppi jets}", "Events", 35, [-3.5, 3.5]], 
               "phi_jet": ["#phi^{AK4 jets}", "Events", 35, [-3.5, 3.5]],
+              "phi_mu": ["#phi^{#mu}", "Events", 35, [-3.5, 3.5]],
               "dphi_jet1_MET":["#Delta#phi(jet1, MET)","Events", 40, [-0.5, 3.5]],
               "dphi_mu_MET":  ["#Delta#phi(#mu, MET)","Events", 40, [-0.5, 3.5]],   
               "deepjetbscore_jet": ["DeepJet b-tag score all AK4 jets", "Events",20, [0, 1]],
@@ -207,34 +219,116 @@ if channel=="mu":
               "pt_jet1": ["p_{T}^{jet 1} [GeV]", "Events", 50, [100, 900]],
               "pt_jet": ["p_{T}^{jet} [GeV]","Events", 50, [100, 900]],
               "pt_mu":[ "p_{T}^{#mu} [GeV]", "Events",50, [50, 500]],
+              "pt_Ak8Puppijet1":[ "p_{T}^{AK8Puppi jets} [GeV]", "Events",40, [400, 4400]],
               "reliso_mu":[ "#mu rel. Iso", "Events", 20, [0, 0.5]],
-              "dR_mu_jet":[ "#DeltaR_{min}(#mu, jet)","Events", 60,[ 0, 3]],
+              "dR_mu_jet":[ "#DeltaR_{min}(#mu, jet)","Events", 60,[ 0, 6]],
+              "dR_mu_Ak8Puppijet":[ "#DeltaR_{min}(#mu, Ak8jet)","Events", 60,[ 0, 6]],
+              "dR_jet_Ak8Puppijet": [ "#DeltaR_{min}(Ak4jet, Ak8jet)","Events", 60,[ 0, 6]],
               "ptrel_mu_jet":["p_{T}^{rel}(#mu1, jet)", "Events",50, [0, 500]],
+              "eta_Ak8Puppijets":["#eta^{AK8Puppi jets}", "Events", 25, [-2.5, 2.5]], 
+              "eta_jet":["#eta^{AK4jets}", "Events", 25, [-2.5, 2.5]],
+              "eta_mu":["#eta^{#mu}", "Events", 25, [-2.5, 2.5]],
+              "InvdR_mu_Ak8Puppijet":[ "#DeltaR_{min}(#mu, Ak8jet)/H_{T}","Events", 20,[ 0, 0.02]],
+              "InvdR_mu_jet":[ "#DeltaR_{min}(#mu, jet)/H_{T}","Events", 40,[ 0, 0.04]],
+              "InvdR_jet_Ak8Puppijet": [ "#DeltaR_{min}(Ak4jet, Ak8jet)/H_{T}","Events", 40,[ 0, 0.04]],
+              "Invdeepjetbscore_jet": ["DeepJet b-tag score/H_{T} all AK4 jets", "Events",200, [0, 0.01]],
+              "Invdeepjetbscore_jet1": ["DeppJet b-tag score/H_{T} AK4 jet 1}", "Events",200, [0, 0.01]],
+              "Invdeepjetbscore_jet2": ["DeppJet b-tag score/H_{T} AK4 jet 2}", "Events",200, [0, 0.01]],
+              "Invdeepjetbscore_jet3": ["DeppJet b-tag score/H_{T} AK4 jet 3}", "Events",200, [0, 0.01]],
+              "Invdphi_jet1_MET":["#Delta#phi(jet1, MET)/H_{T}","Events", 60, [0, 0.06]],
+              "Invdphi_mu_MET":  ["#Delta#phi(#mu, MET)/H_{T}","Events", 60, [0, 0.06]],
+              "Invdphi_mu_jet1":  ["#Delta#phi(#mu, jet1)/H_{T}","Events", 60, [0, 0.06]],
+              "Invdphi_mu_Ak8Puppijet1":  ["#Delta#phi(#mu, Ak8Puppijet1)/H_{T}","Events", 60, [0, 0.06]],
+              "InvmSD_Ak8Puppijet1":["mSD/H_{T} Ak8Puppijet1","Events", 20,[0,2.]],
+              "Invmass_jet": ["mass_{jet}/H_{T}", "Events", 50,[0,0.5 ]],
+              "Invpt_Ak8Puppijet1":["p_{T}^{Ak8Puppi jet1}/H_{T}","Events",100,[0,10]],
+              "Invpt_mu":["p_{T}^{#mu}/H_{T}", "Events",10, [0, 1]],   
+              "Invpt_jet1": ["p_{T}^{jet 1}/H_{T}", "Events", 100, [0, 10]],  
+              "Invptrel_mu_jet":["p_{T}^{rel}(#mu1, jet)/H_{T}", "Events",100, [0, 10]], 
+              "Invreliso_mu":[ "#mu rel. Iso/H_{T}", "Events", 20, [0, 0.1]],
+
+              
 		}
 
 else:
-	histograms = {"met_pt"   : ["missing E_{T} [GeV]", "Events", 10, [50,1500]],
+	histograms = {"met_pt"   : ["missing E_{T} [GeV]", "Events", 15, [0,1500]],
+              "InvMET" : ["missing E_{T}/H_{T}", "Events", 100, [0,1]],
+              "InvS11": ["S11/H_{T}", "Events", 70, [-0.001,0.008]],
+              "InvS12": ["S12/H_{T}", "Events", 80, [-0.004,0.004]],
+              "InvS13": ["S13/H_{T}", "Events", 80, [-0.004,0.004]],
+              "InvS22": ["S22/H_{T}", "Events", 70, [-0.001,0.008]], 
+              "InvS23": ["S23/H_{T}", "Events", 100, [-0.005,0.005]],
+              "InvS33": ["S33/H_{T}", "Events", 70, [-0.001,0.008]],
+              "InvST":["S_{T}/H_{T}",  "Events", 50, [0,10]],
+              "InvSTlep":["S_{T}^{ele}/H_{T}",  "Events", 50, [0,10]],
+              "InvSTjets":["S_{T}^{jets}/H_{T}",  "Events", 50, [0,10]],
               "st"    : ["S_{T} [GeV]",  "Events", 50, [0,5000]],
+              "st_lep"    : ["S_{T}^{ele} [GeV]",  "Events", 50, [0,5000]],
+              "st_jets"    : ["S_{T}^{jets} [GeV]",  "Events", 50, [0,5000]],
+              "ht" : ["H_{T} [GeV]",  "Events", 500, [0,2000]],
+              "mass_jet": ["mass of all AK4 jets","Events",40,[0,400]],
               "phi_Ak8Puppijets": ["#phi^{AK8Puppi jets}", "Events", 35, [-3.5, 3.5]], 
               "phi_jet": ["#phi^{AK4 jets}", "Events", 35, [-3.5, 3.5]],
+              "phi_ele": ["#phi^{ele}", "Events", 35, [-3.5, 3.5]],
               "dphi_jet1_MET":["#Delta#phi(jet1, MET)","Events", 40, [-0.5, 3.5]],
               "dphi_ele_MET":  ["#Delta#phi(ele, MET)","Events", 40, [-0.5, 3.5]],   
               "deepjetbscore_jet": ["DeepJet b-tag score all AK4 jets", "Events",20, [0, 1]],
               "deepjetbscore_jet1": ["DeppJet b-tag score AK4 jet 1}", "Events",20, [0, 1]],
+              "deepjetbscore_jet2": ["DeppJet b-tag score AK4 jet 2}", "Events",20, [0, 1]],
+              "deepjetbscore_jet3": ["DeppJet b-tag score AK4 jet 3}", "Events",20, [0, 1]],
               "pt_jet1": ["p_{T}^{jet 1} [GeV]", "Events", 50, [100, 900]],
               "pt_jet": ["p_{T}^{jet} [GeV]","Events", 50, [100, 900]],
               "pt_ele":[ "p_{T}^{ele} [GeV]", "Events",50, [50, 500]],
+              "pt_Ak8Puppijet1":[ "p_{T}^{AK8Puppi jets} [GeV]", "Events",40, [400, 4400]],
               "reliso_ele":[ "ele rel. Iso", "Events", 20, [0, 0.5]],
-              "dR_ele_jet":[ "#DeltaR_{min}(ele, jet)","Events", 60,[ 0, 3]],
+              "dR_ele_jet":[ "#DeltaR_{min}(ele, jet)","Events", 60,[ 0, 6]],
+              "dR_ele_Ak8Puppijet":[ "#DeltaR_{min}(ele, Ak8jet)","Events", 60,[ 0, 6]],
+              "dR_jet_Ak8Puppijet": [ "#DeltaR_{min}(Ak4jet, Ak8jet)","Events", 60,[ 0, 6]],
+              "InvdR_ele_Ak8Puppijet":[ "#DeltaR_{min}(ele, Ak8jet)/H_{T}","Events", 20,[ 0, 0.02]],
+              "InvdR_ele_jet":[ "#DeltaR_{min}(ele, jet)/H_{T}","Events", 40,[ 0, 0.04]],
+              "InvdR_jet_Ak8Puppijet": [ "#DeltaR_{min}(Ak4jet, Ak8jet)/H_{T}","Events", 40,[ 0, 0.04]],
+              "Invdeepjetbscore_jet": ["DeepJet b-tag score/H_{T} all AK4 jets", "Events",200, [0, 0.01]],
+              "Invdeepjetbscore_jet1": ["DeppJet b-tag score/H_{T} AK4 jet 1}", "Events",200, [0, 0.01]],
+              "Invdeepjetbscore_jet2": ["DeppJet b-tag score/H_{T} AK4 jet 2}", "Events",200, [0, 0.01]],
+              "Invdeepjetbscore_jet3": ["DeppJet b-tag score/H_{T} AK4 jet 3}", "Events",200, [0, 0.01]],
+              "Invdphi_jet1_MET":["#Delta#phi(jet1, MET)/H_{T}","Events", 60, [0, 0.06]],
+              "Invdphi_ele_MET":  ["#Delta#phi(ele, MET)/H_{T}","Events", 60, [0, 0.06]],
+              "Invdphi_ele_jet1":  ["#Delta#phi(ele, jet1)/H_{T}","Events", 60, [0, 0.06]], 
+              "Invdphi_ele_Ak8Puppijet1":  ["#Delta#phi(ele, Ak8Puppijet1)/H_{T}","Events", 60, [0, 0.06]],
+              "InvmSD_Ak8Puppijet1":["mSD/H_{T} Ak8Puppijet1","Events", 20,[0,2.]],
+              "Invmass_jet": ["mass_{jet}/H_{T}", "Events", 50, [0,0.5 ]],
+              "Invpt_Ak8Puppijet1":["p_{T}^{Ak8Puppi jet1}/H_{T}","Events",100,[0,10]],
+              "Invpt_ele":["p_{T}^{ele}/H_{T}", "Events",10, [0, 1]],
+              "Invpt_jet1": ["p_{T}^{jet 1}/H_{T}", "Events", 100, [0, 10]],
+              "Invptrel_ele_jet":["p_{T}^{rel}(ele1, jet)/H_{T}", "Events",100, [0, 10]],
+              "Invreliso_ele":[ "ele rel. Iso/H_{T}", "Events", 20, [0, 0.1]], 
               "ptrel_ele_jet":["p_{T}^{rel}(ele1, jet)", "Events",50, [0, 500]],
-                } 	
+              "eta_Ak8Puppijets":["#eta^{AK8Puppi jets}", "Events", 25, [-2.5, 2.5]],
+              "eta_jet":["#eta^{AK4jets}", "Events", 25, [-2.5, 2.5]],
+              "eta_ele":["#eta^{ele}", "Events", 25, [-2.5, 2.5]],
+       
+         } 	
 
 
+
+
+histograms = {#"s11":["S11", "Events", 10, [0, 1.0]],
+           #  "ht" : ["H_{T} [GeV]",  "Events", 50, [0,2000]],
+            "mass_jet": ["mass of all AK4 jets","Events",40,[0,400]],
+            "st"    : ["S_{T} [GeV]",  "Events", 50, [0,5000]],
+            "InvST":["S_{T}/H_{T}",  "Events", 50, [0,10]],
+            "InvMET" : ["missing E_{T}/H_{T}", "Events", 100, [0,1]],
+              "Invpt_jet1": ["p_{T}^{jet 1}/H_{T}", "Events", 100, [0, 10]],   }
+if DNN:
+	 print  "I am here"
+	 histograms = {"NNoutput0": ["QCD node", "Norm events/bin", 5, [0,1]],
+			"NNoutput1": ["Others node", "Norm events/bin", 5, [0,1]],
+		}
 
 sample_names = ["QCD", "Diboson","ST", "DYJets", "WJets","TTbar"]
 stack={}
 legendR={}
-
+#histograms = {"met_pt"   : ["missing E_{T} [GeV]", "Events", 15, [0,1500]],}
 for histName in histograms:
 	tree_MC[histName]={}
 	hist[histName]={}
@@ -246,6 +340,45 @@ for histName in histograms:
 	legendR[histName].SetBorderSize(0)
 	legendR[histName].SetFillColor(0)
 
+canvas.cd()
+
+if DNN:
+	for histName in histograms:
+		print histName	
+		for sample in sample_names[:1]:
+			print sample, sample_names[:1]
+			_file[sample] = TFile("%s/uhh2.AnalysisModuleRunner.MC.%s.root"%(_fileDir,sample),"read")
+			tree_MC[histName][sample]=_file[sample].Get("AnalysisTree")
+                	tree_MC[histName][sample].Draw("%s>>h_%s_%s(%i,%f,%f)"%(histName,histName,sample,histograms[histName][2],histograms[histName][3][0],histograms[histName][3][1]),"","goff")
+                	hist[histName][sample] = tree_MC[histName][sample].GetHistogram()
+			hist[histName][sample].SetLineColor(stackList[sample][0])
+		 	print histName, sample
+			print hist[histName][sample].GetEntries()
+			hist[histName][sample].Draw("SAME")
+		for sample in sample_names[1:]:
+			print sample, sample_names[1:]
+			_file[sample] = TFile("%s/uhh2.AnalysisModuleRunner.MC.%s.root"%(_fileDir,sample),"read")
+                        tree_MC[histName][sample]=_file[sample].Get("AnalysisTree")
+                        tree_MC[histName][sample].Draw("%s>>h_%s_%s(%i,%f,%f)"%(histName,histName,sample,histograms[histName][2],histograms[histName][3][0],histograms[histName][3][1]),"","goff")
+                        hist[histName][sample] = tree_MC[histName][sample].GetHistogram()
+			print hist[histName][sample].GetEntries()
+                        hist[histName][sample].SetLineColor(stackList[sample][0])
+		for sample in ['Diboson', 'ST', 'DYJets', 'WJets']:
+			hist[histName]["TTbar"].Add(hist[histName][sample])
+		print hist[histName]["TTbar"].GetEntries()
+		hist[histName]["TTbar"].Draw("SAME")
+		canvas.SetLogy(0)
+		canvas.SaveAs("%s_noweight_nolog.pdf"%(histName))
+
+#sys.exit()
+
+
+
+
+
+
+
+
 for histName in histograms:
 
 	for sample in sample_names:
@@ -254,13 +387,21 @@ for histName in histograms:
 		_file[sample] = TFile("%s/uhh2.AnalysisModuleRunner.MC.%s.root"%(_fileDir,sample),"read")
         	print "%s/uhh2.AnalysisModuleRunner.MC.%s.root"%(_fileDir,sample)
 		tree_MC[histName][sample]=_file[sample].Get("AnalysisTree")
-        	tree_MC[histName][sample].Draw("%s>>h_%s_%s(%i,%i,%f)"%(histName,histName,sample,histograms[histName][2],histograms[histName][3][0],histograms[histName][3][1]),"weight*weight_pu")
+                print histName, sample, histograms[histName][2], histograms[histName][3][0], histograms[histName][3][1]
+        	tree_MC[histName][sample].Draw("%s>>h_%s_%s(%i,%f,%f)"%(histName,histName,sample,histograms[histName][2],histograms[histName][3][0],histograms[histName][3][1]),"weight*weight_pu")
         	hist[histName][sample] = tree_MC[histName][sample].GetHistogram()
 
         	hist[histName][sample].SetFillColor(stackList[sample][0])
         	hist[histName][sample].SetLineColor(stackList[sample][0])
                 
-		legendR[histName].AddEntry(hist[histName][sample],sample,'f')       
+		
+		if QCD:
+			if sample=="QCD":
+				legendR[histName].AddEntry(hist[histName][sample],sample,'f')
+			elif sample=="TTbar":
+				legendR[histName].AddEntry(hist[histName][sample],'Others','f')
+		else:
+			legendR[histName].AddEntry(hist[histName][sample],sample,'f')
         	hist[histName][sample].SetYTitle(histograms[histName][1])      
                 print "add",sample, "to ", histName  
 		stack[histName].Add(hist[histName][sample])     
@@ -269,7 +410,7 @@ for histName in histograms:
 	print "%s/uhh2.AnalysisModuleRunner.DATA.DATA.root"%(_fileDir)
 
 	tree = _file["Data"].Get("AnalysisTree")
-	tree.Draw("%s>>dat_hist(%i,%i,%f)"%(histName,histograms[histName][2],histograms[histName][3][0],histograms[histName][3][1]))
+	tree.Draw("%s>>dat_hist(%i,%f,%f)"%(histName,histograms[histName][2],histograms[histName][3][0],histograms[histName][3][1]))
 	dataHist=tree.GetHistogram()
 	dataHist.SetMarkerColor(kBlack)
 	dataHist.SetYTitle(histograms[histName][1])     
@@ -287,7 +428,9 @@ for histName in histograms:
 	minVal = 1
 	minVal = max(stack[histName].GetStack()[0].GetMinimum(),1)
         if Log:
-		stack[histName].SetMaximum(10**(1.5*log10(maxVal) - 0.5*log10(minVal)))
+		#stack[histName].SetMaximum(10**(1.5*log10(maxVal) - 0.5*log10(minVal)))
+                stack[histName].SetMaximum(15**(1.5*log10(maxVal) - 0.5*log10(minVal)))
+
 	else:
         	stack.SetMaximum(1.7*maxVal)
 	stack[histName].SetMinimum(minVal)
@@ -357,7 +500,7 @@ for histName in histograms:
 	ratio.GetYaxis().SetTitleOffset(gStyle.GetTitleYOffset()*(padRatio+padOverlap-padGap))
 
 
-	ratio.GetYaxis().SetRangeUser(0.4,1.6)
+	ratio.GetYaxis().SetRangeUser(0.35,1.65)
 	ratio.GetYaxis().SetNdivisions(504)
 	ratio.GetXaxis().SetTitle(histograms[histName][0])
 	ratio.GetYaxis().SetTitle("Data/MC")

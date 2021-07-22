@@ -59,6 +59,7 @@ public:
 
 protected:
   bool debug;
+  bool debug1;
   
   // Cleaners (to make sure the pre-selection did everything right)
   std::unique_ptr<MuonCleaner> muon_cleaner;
@@ -75,7 +76,7 @@ protected:
 
 
   // Selections
-  unique_ptr<Selection> Trigger1_selection, Trigger2_selection, NMuon1_selection, NMuon2_selection, NElectron_selection, TwoDCut_selection, Jet1_selection, Jet2_selection, Met_selection;;
+  unique_ptr<Selection> Trigger1_selection, Trigger2_selection, NMuon1_selection, NMuon2_selection, NElectron_selection, LeadMuon_selection,TwoDCut_selection, TwoDCut1_selection, Jet1_selection, Jet2_selection, Met_selection;;
 
   std::unique_ptr<uhh2::Selection> InvTriangular_selection;
   std::unique_ptr<uhh2::Selection> met_sel;
@@ -91,8 +92,9 @@ protected:
   //Handles
   Event::Handle<bool> h_is_zprime_reconstructed_chi2, h_is_zprime_reconstructed_correctmatch;  
   Event::Handle<float> h_weight;
+  /*
   Event::Handle<float> h_MET;  
-  
+  Event::Handle<float> h_HT;  
   Event::Handle<float> h_ST;
   Event::Handle<float> h_STjets;
   Event::Handle<float> h_STlep;
@@ -162,8 +164,56 @@ protected:
   Event::Handle<float> h_dphi_mu_MET;
   Event::Handle<float> h_dphi_jet1_MET;
   Event::Handle<float> h_dphi_ele_MET;
-
-
+  //HT invariant
+  Event::Handle<float> h_InvS11;
+  Event::Handle<float> h_InvS12;
+  Event::Handle<float> h_InvS13;
+  Event::Handle<float> h_InvS22;
+  Event::Handle<float> h_InvS23;
+  Event::Handle<float> h_InvS33;
+  Event::Handle<float> h_Invmass_jet;
+  Event::Handle<float> h_Invmass_jet1;
+  Event::Handle<float> h_Invmass_jet2;
+  Event::Handle<float> h_Invmass_jet3;
+  Event::Handle<float> h_InvMET;
+  Event::Handle<float> h_InvST;
+  Event::Handle<float> h_InvSTlep;
+  Event::Handle<float> h_InvSTjets;
+  Event::Handle<float> h_Invdphi_mu_MET;
+  Event::Handle<float> h_Invdphi_jet1_MET;
+  Event::Handle<float> h_Invdphi_mu_jet1;
+  Event::Handle<float> h_Invdphi_ele_jet1;
+  Event::Handle<float> h_Invdphi_mu_Ak8Puppijet1;
+  Event::Handle<float> h_Invdphi_ele_Ak8Puppijet1;
+  Event::Handle<float> h_Invdphi_ele_MET;  
+  Event::Handle<float> h_Invpt_jet;
+  Event::Handle<float> h_Invpt_jet1;
+  Event::Handle<float> h_Invpt_jet2;
+  Event::Handle<float> h_Invpt_jet3;
+  Event::Handle<float> h_Invdeepjetbscore_jet;
+  Event::Handle<float> h_Invdeepjetbscore_jet1;
+  Event::Handle<float> h_Invdeepjetbscore_jet2;
+  Event::Handle<float> h_Invdeepjetbscore_jet3;
+  Event::Handle<float> h_Invpt_mu;
+  Event::Handle<float> h_Invpt_ele;
+  Event::Handle<float> h_Invreliso_mu;
+  Event::Handle<float> h_Invreliso_ele;
+  Event::Handle<float> h_InvdR_mu_jet;
+  Event::Handle<float> h_InvdR_ele_jet;
+  Event::Handle<float> h_InvdR_mu_Ak8Puppijet;
+  Event::Handle<float> h_InvdR_ele_Ak8Puppijet;
+  Event::Handle<float> h_InvdR_jet_Ak8Puppijet;
+  Event::Handle<float> h_Invptrel_mu_jet;
+  Event::Handle<float> h_Invptrel_ele_jet;
+  Event::Handle<float> h_InvmSD_Ak8Puppijets;
+  Event::Handle<float> h_InvmSD_Ak8Puppijet1;
+  Event::Handle<float> h_InvmSD_Ak8Puppijet2;
+  Event::Handle<float> h_InvmSD_Ak8Puppijet3;
+  Event::Handle<float> h_Invpt_Ak8Puppijets;
+  Event::Handle<float> h_Invpt_Ak8Puppijet1;
+  Event::Handle<float> h_Invpt_Ak8Puppijet2;
+  Event::Handle<float> h_Invpt_Ak8Puppijet3;
+*/
   // Configuration
   bool isMC, ispuppi, islooserselection, isdataQCD;
   string Sys_MuonTrigger, Sys_PU, Sys_btag;
@@ -174,11 +224,12 @@ protected:
   bool is2016v2, is2016v3, is2017, is2017v2, is2018;
   bool isMuon, isElectron;
 };
-/*
+
 void ZprimeAnalysisModule_forQCDDNN::book_histograms(uhh2::Context& ctx, vector<string> tags){
   for(const auto & tag : tags){
     string mytag = tag + "_Skimming";
-    book_HFolder(mytag, new TTbarLJHistsSkimming(ctx,mytag));
+    mytag = tag+"_Generator";
+    book_HFolder(mytag, new ZprimeSemiLeptonicGeneratorHists(ctx,mytag));
     mytag = tag+"_General";
     book_HFolder(mytag, new ZprimeSemiLeptonicHists(ctx,mytag));
   }
@@ -186,11 +237,12 @@ void ZprimeAnalysisModule_forQCDDNN::book_histograms(uhh2::Context& ctx, vector<
 
 void ZprimeAnalysisModule_forQCDDNN::fill_histograms(uhh2::Event& event, string tag){
   string mytag = tag + "_Skimming";
+  mytag = tag+"_Generator";
   HFolder(mytag)->fill(event);
   mytag = tag+"_General";
   HFolder(mytag)->fill(event);
 }
-*/
+
 
 
 /*
@@ -202,7 +254,8 @@ void ZprimeAnalysisModule_forQCDDNN::fill_histograms(uhh2::Event& event, string 
 */
 
 ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ctx){
-  debug = false;
+  debug = true;
+  debug1= true;
   for(auto & kv : ctx.get_all()){
     cout << " " << kv.first << " = " << kv.second << endl;
   }
@@ -234,11 +287,11 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
     	else
             trigger2 = "HLT_Mu50_v*"; //TkMu path does not exist in 2017/2018
   
-    	nmuon_min1 = 1, nmuon_max1 = -1;
-    	nmuon_min2 = 1, nmuon_max2 = 1;
+    	nmuon_min1 = 2, nmuon_max1 = -1;
+    	nmuon_min2 = 2, nmuon_max2 = 2;
     	nele_min = 0; nele_max = 0;
     	MET_cut = 50;
-    	HT_lep_cut = 0;
+    	HT_lep_cut = 150;
 
   }
   
@@ -325,6 +378,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   NMuon2_selection.reset(new NMuonSelection(nmuon_min2, nmuon_max2));
   NElectron_selection.reset(new NElectronSelection(nele_min, nele_max));
   TwoDCut_selection.reset(new TwoDCut(TwoD_dr, TwoD_ptrel));
+  TwoDCut1_selection.reset(new TwoDCut1(TwoD_dr, TwoD_ptrel));
   InvTriangular_selection.reset(new InvTriangularCuts(0.02, 1.5));
    
   if (debug) cout << "after Muon ID file declared" <<endl;
@@ -348,10 +402,11 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   h_is_zprime_reconstructed_chi2 = ctx.get_handle<bool>("is_zprime_reconstructed_chi2");
   h_is_zprime_reconstructed_correctmatch = ctx.get_handle<bool>("is_zprime_reconstructed_correctmatch");
   if (debug) cout << "getting till declare_event"<<endl;
-  h_MET = ctx.declare_event_output<float> ("met_pt");
+ /* h_MET = ctx.declare_event_output<float> ("met_pt");
   if (debug) cout << "after met"<<endl;
   h_weight = ctx.declare_event_output<float> ("weight");
   if (debug) cout << "weight"<<endl;
+  h_HT = ctx.declare_event_output<float> ("ht");
   h_ST = ctx.declare_event_output<float> ("st");
   h_STjets = ctx.declare_event_output<float> ("st_jets");
   h_STlep = ctx.declare_event_output<float> ("st_lep");
@@ -423,6 +478,60 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
   h_dphi_jet1_MET = ctx.declare_event_output<float> ("dphi_jet1_MET");
 
 
+  h_InvS11=ctx.declare_event_output<float> ("InvS11");
+  h_InvS12=ctx.declare_event_output<float> ("InvS12");
+  h_InvS13=ctx.declare_event_output<float> ("InvS13");
+  h_InvS22=ctx.declare_event_output<float> ("InvS22");
+  h_InvS23=ctx.declare_event_output<float> ("InvS23");
+  h_InvS33=ctx.declare_event_output<float> ("InvS33");
+  h_Invmass_jet=ctx.declare_event_output<float> ("Invmass_jet");
+  h_Invmass_jet1=ctx.declare_event_output<float> ("Invmass_jet1");
+  h_Invmass_jet2=ctx.declare_event_output<float> ("Invmass_jet2");
+  h_Invmass_jet3=ctx.declare_event_output<float> ("Invmass_jet3");
+  
+  h_InvMET=ctx.declare_event_output<float> ("InvMET");
+  h_InvST=ctx.declare_event_output<float> ("InvST");
+  h_InvSTjets=ctx.declare_event_output<float> ("InvSTjets");
+  h_InvSTlep=ctx.declare_event_output<float> ("InvSTlep");
+  h_Invdphi_mu_MET=ctx.declare_event_output<float> ("Invdphi_mu_MET");
+  h_Invdphi_ele_MET=ctx.declare_event_output<float> ("Invdphi_ele_MET");
+  h_Invdphi_jet1_MET=ctx.declare_event_output<float> ("Invdphi_jet1_MET");
+  h_Invdphi_mu_jet1= ctx.declare_event_output<float> ("Invdphi_mu_jet1");
+  h_Invdphi_ele_jet1=ctx.declare_event_output<float> ("Invdphi_ele_jet1");
+  h_Invdphi_mu_Ak8Puppijet1=ctx.declare_event_output<float> ("Invdphi_mu_Ak8Puppijet1");
+  h_Invdphi_ele_Ak8Puppijet1=ctx.declare_event_output<float> ("Invdphi_ele_Ak8Puppijet1");
+  h_Invpt_jet=ctx.declare_event_output<float> ("Invpt_jet");
+  h_Invpt_jet1=ctx.declare_event_output<float> ("Invpt_jet1");
+  h_Invpt_jet2=ctx.declare_event_output<float> ("Invpt_jet2");
+  h_Invpt_jet3=ctx.declare_event_output<float> ("Invpt_jet3");
+  h_Invdeepjetbscore_jet=ctx.declare_event_output<float> ("Invdeepjetbscore_jet");
+  h_Invdeepjetbscore_jet1=ctx.declare_event_output<float> ("Invdeepjetbscore_jet1");
+  h_Invdeepjetbscore_jet2=ctx.declare_event_output<float> ("Invdeepjetbscore_jet2");
+  h_Invdeepjetbscore_jet3=ctx.declare_event_output<float> ("Invdeepjetbscore_jet3");
+  h_Invpt_mu=ctx.declare_event_output<float> ("Invpt_mu");
+  h_Invpt_ele=ctx.declare_event_output<float> ("Invpt_ele");
+  h_Invreliso_mu=ctx.declare_event_output<float> ("Invreliso_mu");
+  h_Invreliso_ele=ctx.declare_event_output<float> ("Invreliso_ele");
+  h_InvdR_mu_jet=ctx.declare_event_output<float> ("InvdR_mu_jet");
+  h_InvdR_ele_jet=ctx.declare_event_output<float> ("InvdR_ele_jet");
+  h_InvdR_mu_Ak8Puppijet=ctx.declare_event_output<float> ("InvdR_mu_Ak8Puppijet");
+  h_InvdR_ele_Ak8Puppijet=ctx.declare_event_output<float> ("InvdR_ele_Ak8Puppijet");
+  h_InvdR_jet_Ak8Puppijet=ctx.declare_event_output<float> ("InvdR_jet_Ak8Puppijet");
+  h_Invptrel_mu_jet=ctx.declare_event_output<float> ("Invptrel_mu_jet");
+  h_Invptrel_ele_jet=ctx.declare_event_output<float> ("Invptrel_ele_jet");
+  h_InvmSD_Ak8Puppijets=ctx.declare_event_output<float> ("InvmSD_Ak8Puppijets");
+  h_InvmSD_Ak8Puppijet1=ctx.declare_event_output<float> ("InvmSD_Ak8Puppijet1");
+  h_InvmSD_Ak8Puppijet2=ctx.declare_event_output<float> ("InvmSD_Ak8Puppijet2");
+  h_InvmSD_Ak8Puppijet3=ctx.declare_event_output<float> ("InvmSD_Ak8Puppijet3");
+  h_Invpt_Ak8Puppijets=ctx.declare_event_output<float> ("Invpt_Ak8Puppijets");
+  h_Invpt_Ak8Puppijet1=ctx.declare_event_output<float> ("Invpt_Ak8Puppijet1");
+  h_Invpt_Ak8Puppijet2=ctx.declare_event_output<float> ("Invpt_Ak8Puppijet2");
+  h_Invpt_Ak8Puppijet3=ctx.declare_event_output<float> ("Invpt_Ak8Puppijet3");
+
+
+  */
+
+
   if (debug) cout << "done declaring histograms"<<endl;
 
 //  DeepJetBTag::wp btag_wp = DeepJetBTag::WP_TIGHT; // b-tag workingpoint
@@ -435,7 +544,7 @@ ZprimeAnalysisModule_forQCDDNN::ZprimeAnalysisModule_forQCDDNN(uhh2::Context& ct
 
 
   //TopJetBtagSubjet_selection.reset(new ZprimeBTagFatSubJetSelection(ctx));
-
+vector<string> histogram_tags = {"Weights","Weights_MuonID","Weights_PU","Weights_Lumi","Muon1", "TriggerMuon", "Muon2", "Electron1", "TriggerEle","LeadMu","TwoDCut","TwoDCut1"};
 
 
 }
@@ -449,11 +558,13 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   if (debug) cout << " is this a Muon channel : " << isMuon <<endl;
   if (debug) cout << " is this an Eelctron channel : " << isElectron <<endl;
   
-  
+/*  
   event.set(h_is_zprime_reconstructed_chi2, false);
   event.set(h_is_zprime_reconstructed_correctmatch,false);
-  event.set(h_MET,0);
+ 
+ event.set(h_MET,0);
   event.set(h_weight,0);
+  event.set(h_HT,0);
   event.set(h_ST,0);
   event.set(h_STjets,0);
   event.set(h_STlep,0);
@@ -524,9 +635,54 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   event.set(h_dphi_ele_MET,0);
   event.set(h_dphi_jet1_MET,0);
 
-  if (debug) cout << "event set" <<endl;
 
+  event.set(h_InvMET,0);
+  event.set(h_InvST,0);
+  event.set(h_InvSTjets,0);
+  event.set(h_InvSTlep,0);
+  event.set(h_Invdphi_mu_MET,0);
+  event.set(h_Invdphi_ele_MET,0);
+  event.set(h_Invdphi_jet1_MET,0);
+  event.set(h_Invdphi_mu_jet1,0);
+  event.set(h_Invdphi_ele_jet1,0);
+  event.set(h_Invdphi_mu_Ak8Puppijet1,0);
+  event.set(h_Invdphi_ele_Ak8Puppijet1,0);
+  event.set(h_Invpt_jet,0);
+  event.set(h_Invpt_jet1,0);
+  event.set(h_Invpt_jet2,0);
+  event.set(h_Invpt_jet3,0);
+  event.set(h_Invdeepjetbscore_jet,0);
+  event.set(h_Invdeepjetbscore_jet1,0);
+  event.set(h_Invdeepjetbscore_jet2,0);
+  event.set(h_Invdeepjetbscore_jet3,0);
+  event.set(h_Invpt_mu,0);
+  event.set(h_Invpt_ele,0);
+  event.set(h_Invmass_jet,0); 
+  event.set(h_Invmass_jet1,0);
+  event.set(h_Invmass_jet2,0);
+  event.set(h_Invmass_jet3,0);
+  event.set(h_Invreliso_mu,0);
+  event.set(h_Invreliso_ele,0);
+  event.set(h_InvdR_mu_jet,0);
+  event.set(h_InvdR_ele_jet,0);
+  event.set(h_Invptrel_mu_jet,0);
+  event.set(h_InvdR_mu_Ak8Puppijet,0);
+  event.set(h_InvdR_ele_Ak8Puppijet,0);
+  event.set(h_InvdR_jet_Ak8Puppijet,0);
+  event.set(h_Invptrel_ele_jet,0);
+  event.set(h_InvmSD_Ak8Puppijets,0);
+  event.set(h_InvmSD_Ak8Puppijet1,0);
+  event.set(h_InvmSD_Ak8Puppijet2,0);
+  event.set(h_InvmSD_Ak8Puppijet3,0);
+  event.set(h_Invpt_Ak8Puppijets,0); 
+  event.set(h_Invpt_Ak8Puppijet1,0);
+  event.set(h_Invpt_Ak8Puppijet2,0);
+  event.set(h_Invpt_Ak8Puppijet3,0);
+
+*/
+  if (debug) cout << "event set" <<endl;
   // TODO Apply things that should've been done in the pre-selection already... Fix pre-selection and then remove these steps
+
 
   if(isMuon) muon_cleaner->process(event);
   if(isElectron) electron_cleaner->process(event);
@@ -537,7 +693,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
  
   LumiWeight_module->process(event);
   PUWeight_module->process(event);
-  BTagWeight_module->process(event);
+ // BTagWeight_module->process(event);
 
 
   if (debug)  cout<<" after PU and BTag weights"<<endl;
@@ -562,15 +718,20 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   if(debug)  cout<<"done with electron ID ok"<<endl; 
   
 
-  TopTaggerPuppi->process(event);
+ // TopTaggerPuppi->process(event);
 
   if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
 
-  
   if(isMuon){
     if(!NMuon1_selection->passes(event)) return false;
+    fill_histograms(event, "Muon1");
     MuonTrigger_module->process_onemuon(event,0);
     if(!NMuon2_selection->passes(event)) return false;
+    fill_histograms(event, "TriggerMuon");
+    if(debug) cout <<"done with trigger module"<<endl;
+    if(!NMuon2_selection->passes(event)) return false;
+    fill_histograms(event, "Muon2");
+     if(debug1) cout <<"done with second muon"<<endl;
   
   }
   
@@ -585,21 +746,44 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
 
     
 
+  if(debug1) cout <<"do pt reliso cuts"<<endl;
+  if(isMuon){
+  if(event.muons->at(0).relIso()>0.1) return false;
+  if(event.muons->at(0).pt() < 55) return false;
+  if(event.muons->at(1).pt() < 55) return false;
+  }
+  if(!htlep_sel->passes(event)) return false;
+  if(debug) cout <<"done with ht"<<endl;
 
+  if(!Jet1_selection->passes(event)) return false;
+  if(debug) cout<<"Jet1_selection is ok"<<endl;
  
-   
-  if((event.muons->size()+event.electrons->size()) != 1) return false; //veto events without leptons or with too many 
+  
+  if(!Jet2_selection->passes(event)) return false;
+  if(debug) cout<<"Jet2_selection is ok"<<endl; 
+
+  if((event.muons->size()+event.electrons->size()) != 2) return false; //veto events without leptons or with too many 
   if (debug) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
 
+  if(isMuon){
+      if((event.muons->at(0).charge()!=event.muons->at(1).charge())) return false;
+      if(((event.muons->at(0).v4()+event.muons->at(1).v4()).M())<60 || ((event.muons->at(0).v4()+event.muons->at(1).v4()).M())>130) return false;
+   }
+  if(debug1) cout <<"invariant dimuon mass: "<<(event.muons->at(0).v4()+event.muons->at(1).v4()).M()<<endl;
+  if(debug1) cout <<"relative isolation of leading muon"<<event.muons->at(0).relIso()<<endl;
+ 
+  if(debug1) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
+  fill_histograms(event,"LeadMu");
 
+  if(!TwoDCut_selection->passes(event)) return false;
+  fill_histograms(event, "TwoDCut");
+
+  if(!TwoDCut1_selection->passes(event)) return false;
+  fill_histograms(event, "TwoDCut1");
   
   if (debug) cout<<"done with leptons, about to start with jets"<<endl;
-
-	
-			
- //AK4 jet selection 
-  
-  if(!Jet1_selection->passes(event)) return false;
+  //AK4 jet selection 
+  /*if(!Jet1_selection->passes(event)) return false;
 
 
   if(!Jet2_selection->passes(event)) return false;
@@ -630,39 +814,22 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
               event.weight=event.weight*0.35;
     }
   }
- 
- 
+  
+
   if(isMuon && is2018 && isMC){
        if (debug)  cout<<"check muons MC"<<endl;
        if (HEMjetSelection->passes(event) || HEMtopjetSelection->passes(event)){
               event.weight=event.weight*0.35;
    }
   }
-
+*/
   // MET selection
-  if(!met_sel->passes(event)) return false;
- 
+  //if(!met_sel->passes(event)) return false;
+ /*     
   if(isMuon){
-    if(!htlep_sel->passes(event)) return false;
-    if (debug) cout<<"passes HTlep"<<endl;
-  }
-
-  
-
-
-
-
-  //Inverted Triangle Cuts
-
- // if(isElectron && isdataQCD){
-        
-   //    if (debug) cout << "doing data driven QCD inverted cut" << endl;
-     //  if (!InvTriangular_selection->passes(event)) return false;
-      // if (debug) cout << "done with driven QCD inverted cut" << endl;   
-
-   // }
-
-
+     if(!htlep_sel->passes(event)) return false;
+        if (debug) cout<<"passes HTlep"<<endl;
+                  }
   if (debug) cout << " Now will fill histograms defined for AnalysisTree" <<endl;  
 
   event.set(h_weight,event.weight);
@@ -690,30 +857,36 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   }
   st = st_jets + st_lep + event.met->pt();
   ht = ht_lep + event.met->pt();
+  event.set(h_HT,ht);
   event.set(h_ST,st);
   event.set(h_STjets,st_jets);
   event.set(h_STlep,st_lep);
   event.set(h_HTlep,ht);
-  
+  event.set(h_InvST,(st/ht));
+  event.set(h_InvSTlep,(st_lep/ht));
+  event.set(h_InvSTjets,(st_jets/ht));
+  event.set(h_InvMET,(event.met->pt()/ht)); 
   
   if(debug) cout<<" done with ST"<<endl;
-  
-  // Ak4 jets
-   
+  //Ak4 jets
   //event.set(h_N_jets,jets->size());
 
   for(unsigned int i=0; i<jets->size(); i++){
     event.set(h_pt_jet,jets->at(i).pt());
     event.set(h_eta_jet,jets->at(i).eta());
     event.set(h_phi_jet,jets->at(i).phi());
-    event.set(h_mass_jet,jets->at(i).v4().M());
+    event.set(h_mass_jet,jets->at(i).v4().M());    
     event.set(h_deepjetbscore_jet,jets->at(i).btag_DeepJet());
+    event.set(h_Invpt_jet,(jets->at(i).pt()/ht));
+    event.set(h_Invmass_jet,(jets->at(i).v4().M()/ht));
+    event.set(h_Invdeepjetbscore_jet,(jets->at(i).btag_DeepJet()/ht));
 
     double dRmin_muon_jet = 99999;
     for(unsigned int j=0; j<event.muons->size(); j++){
       double dR_mu_jet = deltaR(jets->at(i), event.muons->at(j));
       if(dR_mu_jet < dRmin_muon_jet) dRmin_muon_jet = dR_mu_jet;
       event.set(h_dR_mu_jet,dR_mu_jet);
+      event.set(h_InvdR_mu_jet,(dR_mu_jet/ht));
     }
 
     double dRmin_ele_jet = 99999;
@@ -721,6 +894,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       double dR_ele_jet = deltaR(jets->at(i), event.electrons->at(j));
       if(dR_ele_jet < dRmin_ele_jet) dRmin_ele_jet = dR_ele_jet;
       event.set(h_dR_ele_jet,dR_ele_jet);
+      event.set(h_InvdR_ele_jet,(dR_ele_jet/ht));
     }
 
     if(i==0){
@@ -730,6 +904,10 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       event.set(h_mass_jet1,jets->at(i).v4().M());
       event.set(h_deepjetbscore_jet1,jets->at(i).btag_DeepJet());
       event.set(h_dphi_jet1_MET, deltaPhiMET(jets->at(i),event.met));
+      event.set(h_Invpt_jet1,(jets->at(i).pt()/ht));
+      event.set(h_Invmass_jet1,(jets->at(i).v4().M()/ht));
+      event.set(h_Invdeepjetbscore_jet1,(jets->at(i).btag_DeepJet()/ht));
+      event.set(h_Invdphi_jet1_MET, (deltaPhiMET(jets->at(i),event.met)/ht));
     }
     else if(i==1){
       event.set(h_pt_jet2,jets->at(i).pt());
@@ -737,14 +915,21 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       event.set(h_phi_jet2,jets->at(i).phi());
       event.set(h_mass_jet2,jets->at(i).v4().M());
       event.set(h_deepjetbscore_jet2,jets->at(i).btag_DeepJet());
+      event.set(h_Invpt_jet2,(jets->at(i).pt()/ht));
+      event.set(h_Invmass_jet2,(jets->at(i).v4().M()/ht));
+      event.set(h_Invdeepjetbscore_jet2,(jets->at(i).btag_DeepJet()/ht));
     }
     else if(i==2){
       event.set(h_pt_jet3,jets->at(i).pt());
       event.set(h_eta_jet3,jets->at(i).eta());
       event.set(h_phi_jet3,jets->at(i).phi());
       event.set(h_mass_jet3,jets->at(i).v4().M());
-      //event.set(h_csv_jet3,jets->at(i).btag_combinedSecondaryVertex());
       event.set(h_deepjetbscore_jet3,jets->at(i).btag_DeepJet());
+      event.set(h_Invpt_jet3,(jets->at(i).pt()/ht));
+      event.set(h_Invmass_jet3,(jets->at(i).v4().M()/ht));
+      event.set(h_Invdeepjetbscore_jet3,(jets->at(i).btag_DeepJet()/ht));
+
+
     }
   }
   if(debug) cout<<" doing Sphericity tensors"<<endl;
@@ -767,12 +952,24 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
   s23 = s23 / mag;
   s33 = s33 / mag;
 
+
+
+
+   
   event.set(h_S11,s11);
   event.set(h_S12,s12);
   event.set(h_S13,s13);
   event.set(h_S22,s22);
   event.set(h_S23,s23);
   event.set(h_S33,s33);
+  
+
+  event.set(h_InvS11,s11/ht);
+  event.set(h_InvS12,s12/ht);
+  event.set(h_InvS13,s13/ht);
+  event.set(h_InvS22,s22/ht);
+  event.set(h_InvS23,s23/ht);
+  event.set(h_InvS33,s33/ht);
  
   if(debug) cout<<" done with Sphericity tensors"<<endl;
   
@@ -788,19 +985,25 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
     event.set(h_eta_mu,muons->at(i).eta());
     event.set(h_phi_mu,muons->at(i).phi());
     event.set(h_reliso_mu,muons->at(i).relIso());
+    event.set(h_Invpt_mu,(muons->at(i).pt()/ht));
+    event.set(h_Invreliso_mu,(muons->at(i).relIso()/ht));
     if(muons->at(i).has_tag(Muon::twodcut_dRmin) && muons->at(i).has_tag(Muon::twodcut_pTrel)){
       //event.set(h_dRmin_mu_jet,muons->at(i).get_tag(Muon::twodcut_dRmin));
         event.set(h_ptrel_mu_jet,muons->at(i).get_tag(Muon::twodcut_pTrel));
+        event.set(h_Invptrel_mu_jet,(muons->at(i).get_tag(Muon::twodcut_pTrel)/ht));
       }
     for(unsigned int j=0; j<jets->size(); j++){
        if(j==0){
          event.set(h_dphi_mu_jet1,deltaPhi(muons->at(i),jets->at(j)));
          event.set(h_dphi_mu_MET,deltaPhiMET(muons->at(i),event.met));
+         event.set(h_Invdphi_mu_jet1,(deltaPhi(muons->at(i),jets->at(j))/ht));
+         event.set(h_Invdphi_mu_MET,(deltaPhiMET(muons->at(i),event.met)/ht));
         }
     }
     for(unsigned int k=0; k<event.toppuppijets->size(); k++){
        if(k==0){
            event.set(h_dphi_mu_Ak8Puppijet1,deltaPhi(muons->at(i),event.toppuppijets->at(k)));
+           event.set(h_Invdphi_mu_Ak8Puppijet1,(deltaPhi(muons->at(i),event.toppuppijets->at(k))/ht));
        }
     }
 
@@ -818,19 +1021,25 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
     event.set(h_eta_ele,electrons->at(i).eta());
     event.set(h_phi_ele,electrons->at(i).phi());
     event.set(h_reliso_ele,electrons->at(i).relIso());
+    event.set(h_Invpt_ele,(electrons->at(i).pt()/ht));
+    event.set(h_Invreliso_ele,(electrons->at(i).relIso()/ht));
     if(electrons->at(i).has_tag(Electron::twodcut_dRmin) && electrons->at(i).has_tag(Electron::twodcut_pTrel)){
      // event.set(h_dRmin_ele_jet,electrons->at(i).get_tag(Electron::twodcut_dRmin));
         event.set(h_ptrel_ele_jet,electrons->at(i).get_tag(Electron::twodcut_pTrel));
+        event.set(h_Invptrel_ele_jet,(electrons->at(i).get_tag(Electron::twodcut_pTrel)/ht));
     }
     for(unsigned int j=0; j<jets->size(); j++){
        if(j==0){
           event.set(h_dphi_ele_jet1,deltaPhi(electrons->at(i),jets->at(j)));
           event.set(h_dphi_ele_MET,deltaPhiMET(electrons->at(i),event.met));
+          event.set(h_Invdphi_ele_jet1,(deltaPhi(electrons->at(i),jets->at(j))/ht));
+          event.set(h_Invdphi_ele_MET,(deltaPhiMET(electrons->at(i),event.met)/ht));
        }
     }
     for(unsigned int k=0; k<event.toppuppijets->size(); k++){
        if(k==0){
            event.set(h_dphi_ele_Ak8Puppijet1,deltaPhi(electrons->at(i),event.toppuppijets->at(k)));
+           event.set(h_Invdphi_ele_Ak8Puppijet1,(deltaPhi(electrons->at(i),event.toppuppijets->at(k))/ht));
        }
     }
   }
@@ -852,6 +1061,8 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
     event.set(h_eta_Ak8Puppijets,AK8Puppijets->at(i).eta());
     event.set(h_phi_Ak8Puppijets,AK8Puppijets->at(i).phi());
     event.set(h_mSD_Ak8Puppijets,AK8Puppijets->at(i).softdropmass());
+    event.set(h_Invpt_Ak8Puppijets,(AK8Puppijets->at(i).pt()/ht));
+    event.set(h_InvmSD_Ak8Puppijets,(AK8Puppijets->at(i).softdropmass()/ht));
     if(debug) cout<<" about to do dR"<<endl;
     if(debug) cout<<"number of muons: "<< event.muons->size()<<endl;
     double dRmin_muon = 99999;
@@ -860,6 +1071,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       double dR_mu = deltaR(AK8Puppijets->at(i), event.muons->at(j));
       if(dR_mu < dRmin_muon) dRmin_muon = dR_mu;
       event.set(h_dR_mu_Ak8Puppijet,dR_mu);
+      event.set(h_InvdR_mu_Ak8Puppijet,(dR_mu/ht));
     }
     if(debug) cout<<"number of electrons: "<< event.electrons->size()<<endl;
     double dRmin_ele = 99999;
@@ -868,6 +1080,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       double dR_ele = deltaR(AK8Puppijets->at(i), event.electrons->at(j));
       if(dR_ele < dRmin_ele) dRmin_ele = dR_ele;
       event.set(h_dR_ele_Ak8Puppijet,dR_ele);
+      event.set(h_InvdR_ele_Ak8Puppijet,(dR_ele/ht));
     }
     if(debug) cout<<"number of AK4jets"<< event.jets->size()<<endl;
     double dRmin_jet = 99999;
@@ -876,6 +1089,7 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       double dR_jet = deltaR(AK8Puppijets->at(i), event.jets->at(j));
       if(dR_jet < dRmin_jet) dRmin_jet = dR_jet;
       event.set(h_dR_jet_Ak8Puppijet,dR_jet);
+      event.set(h_InvdR_jet_Ak8Puppijet,(dR_jet/ht));
     }
 
     if(debug) cout<<" done with dR"<<endl;
@@ -884,6 +1098,9 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       event.set(h_eta_Ak8Puppijet1,AK8Puppijets->at(i).eta());
       event.set(h_phi_Ak8Puppijet1,AK8Puppijets->at(i).phi());
       event.set(h_mSD_Ak8Puppijet1,AK8Puppijets->at(i).softdropmass());
+      event.set(h_Invpt_Ak8Puppijet1,(AK8Puppijets->at(i).pt()/ht));
+      event.set(h_InvmSD_Ak8Puppijet1,(AK8Puppijets->at(i).softdropmass()/ht));
+ 
     }
 
 
@@ -892,6 +1109,8 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       event.set(h_eta_Ak8Puppijet2,AK8Puppijets->at(i).eta());
       event.set(h_phi_Ak8Puppijet2,AK8Puppijets->at(i).phi());
       event.set(h_mSD_Ak8Puppijet2,AK8Puppijets->at(i).softdropmass());
+      event.set(h_Invpt_Ak8Puppijet2,(AK8Puppijets->at(i).pt()/ht));
+      event.set(h_InvmSD_Ak8Puppijet2,(AK8Puppijets->at(i).softdropmass()/ht));
     }
 
     if(i==2){
@@ -899,10 +1118,13 @@ bool ZprimeAnalysisModule_forQCDDNN::process(uhh2::Event& event){
       event.set(h_eta_Ak8Puppijet3,AK8Puppijets->at(i).eta());
       event.set(h_phi_Ak8Puppijet3,AK8Puppijets->at(i).phi());
       event.set(h_mSD_Ak8Puppijet3,AK8Puppijets->at(i).softdropmass());
+      event.set(h_Invpt_Ak8Puppijet3,(AK8Puppijets->at(i).pt()/ht));
+      event.set(h_InvmSD_Ak8Puppijet3,(AK8Puppijets->at(i).softdropmass()/ht));
     }
 
     //event.set(h_N_Ak8Puppijets,NAK8Puppijets);
   }
+*/
   if (debug) cout << "DONE"<< endl;
 
   return true;

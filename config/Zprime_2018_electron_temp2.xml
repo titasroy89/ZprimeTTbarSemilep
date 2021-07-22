@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd" [
+
+<!-- 58.827000 in 2018, 41.790000 in 2017,36.773 in 2016 
+<!ENTITY TargetLumi          "137390"> RunII total
+<!ENTITY TargetLumi          "13480"> RunII 2018A 
+-->
+<!ENTITY TargetLumi          "58827">  <!-- RunII 2018 ABCD -->
+<!ENTITY PREFIX              "uhh2.AnalysisModuleRunner.">
+<!ENTITY b_Cacheable         "False">
+<!ENTITY NEVT                "-1">
+<!--<!ENTITY PRESELdir           "/nfs/dust/cms/user/titasroy/Run2_skims/2018/workdir_Zprime_ABCPreSelec_2019/">-->
+
+<!--<!ENTITY PRESELdir  "/nfs/dust/cms/user/titasroy/Run2_skims/2018/workdir_Zprime_RunDPreSelec_2019/">-->
+
+<!ENTITY PRESELdir  "/nfs/dust/cms/user/titasroy/Run2_skims_DNN/2018/workdir_Zprime_PreSelec_2020_NovCM">
+
+<!ENTITY IS_PUPPI            "true">
+<!ENTITY IS_LOOSER_SELECTION "false">
+<!ENTITY IS_DATA_QCD "false">
+
+<!ENTITY CHANNEL "electron">
+<!ENTITY OUTPUTdir       "/nfs/dust/cms/user/titasroy/Run2_analysis_DNN/&CHANNEL;/2018/">       
+
+
+<!ENTITY DATA_EGamma2018_RunA   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/DATA_DATA_EGamma2018_RunA.xml">
+<!ENTITY DATA_EGamma2018_RunB   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/DATA_DATA_EGamma2018_RunB.xml">
+<!ENTITY DATA_EGamma2018_RunC   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/DATA_DATA_EGamma2018_RunC.xml">
+<!ENTITY DATA_EGamma2018_RunD   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/DATA_DATA_EGamma2018_RunD.xml">
+
+<!ENTITY TTToSemiLeptonic_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_TTToSemiLeptonic_2018.xml">
+<!ENTITY TTTo2L2Nu_2018         SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_TTTo2L2Nu_2018.xml">
+<!ENTITY TTToHadronic_2018      SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_TTToHadronic_2018.xml">
+
+<!ENTITY WJetsToLNu_HT-70To100_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-70To100_2018.xml">
+<!ENTITY WJetsToLNu_HT-100To200_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-100To200_2018.xml">
+<!ENTITY WJetsToLNu_HT-200To400_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-200To400_2018.xml">
+<!ENTITY WJetsToLNu_HT-400To600_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-400To600_2018.xml">
+<!ENTITY WJetsToLNu_HT-600To800_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-600To800_2018.xml">
+<!ENTITY WJetsToLNu_HT-800To1200_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-800To1200_2018.xml">
+<!ENTITY WJetsToLNu_HT-1200To2500_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-1200To2500_2018.xml">
+<!ENTITY WJetsToLNu_HT-2500ToInf_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WJetsToLNu_HT-2500ToInf_2018.xml">
+
+
+<!ENTITY DYJetsToLL_M-50_HT-100To200_2018   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_DYJetsToLL_M-50_HT-100To200_2018.xml">
+<!ENTITY DYJetsToLL_M-50_HT-200To400_2018   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_DYJetsToLL_M-50_HT-200To400_2018.xml">
+<!ENTITY DYJetsToLL_M-50_HT-400To600_2018   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_DYJetsToLL_M-50_HT-400To600_v7_2018.xml">
+<!ENTITY DYJetsToLL_M-50_HT-600To800_2018   SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_DYJetsToLL_M-50_HT-600To800_2018.xml">
+<!ENTITY DYJetsToLL_M-50_HT-800To1200_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_DYJetsToLL_M-50_HT-800To1200_2018.xml">
+<!ENTITY DYJetsToLL_M-50_HT-1200To2500_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_DYJetsToLL_M-50_HT-1200To2500_2018.xml">
+<!ENTITY DYJetsToLL_M-50_HT-2500ToInf_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_DYJetsToLL_M-50_HT-2500ToInf_2018.xml">
+
+
+<!ENTITY ZprimeToTT_M500_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M500_2018.xml">
+<!ENTITY ZprimeToTT_M750_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M750_2018.xml">
+<!ENTITY ZprimeToTT_M1000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M1000_2018.xml">
+<!ENTITY ZprimeToTT_M1250_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M1250_2018.xml">
+<!ENTITY ZprimeToTT_M1500_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M1500_2018.xml">
+<!ENTITY ZprimeToTT_M2000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M2000_2018.xml">
+<!ENTITY ZprimeToTT_M2500_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M2500_2018.xml">
+<!ENTITY ZprimeToTT_M3000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M3000_2018.xml">
+<!ENTITY ZprimeToTT_M3500_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M3500_2018.xml">
+<!ENTITY ZprimeToTT_M4000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M4000_2018.xml">
+<!ENTITY ZprimeToTT_M5000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M5000_2018.xml">
+<!ENTITY ZprimeToTT_M6000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M6000_2018.xml">
+<!ENTITY ZprimeToTT_M7000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M7000_2018.xml">
+<!ENTITY ZprimeToTT_M8000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M8000_2018.xml">
+<!ENTITY ZprimeToTT_M9000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZprimeToTT_M9000_2018.xml">
+
+
+
+<!ENTITY WW_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WW_2018.xml">
+<!ENTITY WZ_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_WZ_2018.xml">
+<!ENTITY ZZ_2018  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ZZ_2018.xml">
+
+<!ENTITY ST_tW_antitop_5f_inclusiveDecays_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ST_tW_antitop_5f_inclusiveDecays_2018.xml">
+<!ENTITY ST_tW_top_5f_inclusiveDecays_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ST_tW_top_5f_inclusiveDecays_2018.xml">
+<!ENTITY ST_t-channel_antitop_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ST_t-channel_antitop_2018.xml">
+<!ENTITY ST_t-channel_top_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ST_t-channel_top_2018.xml">
+<!ENTITY ST_s-channel_lept_2018                 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ST_s-channel_lept_2018.xml">
+<!ENTITY ST_s-channel_had_2018                  SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_ST_s-channel_had_2018.xml">
+
+<!ENTITY QCD_HT50to100_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT50to100_2018.xml">
+<!ENTITY QCD_HT100to200_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT100to200_2018.xml">
+<!ENTITY QCD_HT200to300_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT200to300_2018.xml">
+<!ENTITY QCD_HT300to500_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT300to500_2018.xml">
+<!ENTITY QCD_HT500to700_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT500to700_2018.xml">
+<!ENTITY QCD_HT700to1000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT700to1000_2018.xml">
+<!ENTITY QCD_HT1000to1500_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT1000to1500_2018.xml">
+<!ENTITY QCD_HT1500to2000_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT1500to2000_2018.xml">
+<!ENTITY QCD_HT2000toInf_2018 SYSTEM  "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/ZprimeSemiLeptonic/data/Skimming_datasets_Nov2020/MC_QCD_HT2000toInf_2018.xml">
+
+]>
+
+<!--
+<ConfigParse NEventsBreak="200000" LastBreak="0" FileSplit="20" AutoResubmit="100"/>
+<ConfigSGE RAM="2" DISK="2" Mail="titasroy@uic.edu" Notification="as" Workdir="workdir_Zprime_Analysis_electron_DNN_Nov"/>
+-->
+
+ <JobConfiguration JobName="ZprimePreselectionJob" OutputLevel="INFO">
+  <Library Name="libSUHH2ZprimeSemiLeptonic"/>
+  <Package Name="SUHH2ZprimeSemiLeptonic.par"/>
+
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTPUTdir;/" PostFix="" TargetLumi="&TargetLumi;">
+
+
+<!--
+
+       <InputData Lumi="7432926.584" NEventsMax="&NEVT;" Type="MC" Version="ST_tW_antitop_5f_inclusiveDecays_2018" Cacheable="&b_Cacheable;">                              
+            &ST_tW_antitop_5f_inclusiveDecays_2018;                                                                                                                          
+            <InputTree Name="AnalysisTree" /> 
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+          <InputData Lumi="9340996.709" NEventsMax="&NEVT;" Type="MC" Version="ST_tW_top_5f_inclusiveDecays_2018" Cacheable="&b_Cacheable;">
+            &ST_tW_top_5f_inclusiveDecays_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData> 
+
+      <InputData Lumi="4029309.273" NEventsMax="&NEVT;" Type="MC" Version="ST_t-channel_antitop_2018" Cacheable="&b_Cacheable;">                                          
+            &ST_t-channel_antitop_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+          <InputData Lumi="5992141.808" NEventsMax="&NEVT;" Type="MC" Version="ST_t-channel_top_2018" Cacheable="&b_Cacheable;">
+            &ST_t-channel_top_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>                                                                                                                                                       
+
+
+
+	<InputData Lumi="5891712.126" NEventsMax="&NEVT;" Type="MC" Version="ST_s-channel_lept_2018" Cacheable="&b_Cacheable;">
+            &ST_s-channel_lept_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+      
+
+       <InputData Lumi="1383537.452" NEventsMax="&NEVT;" Type="MC" Version="ST_s-channel_had_2018" Cacheable="&b_Cacheable;">
+            &ST_s-channel_had_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData> 
+
+
+
+
+
+	  <InputData Lumi="174.7762231" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT300to500_2018" Cacheable="&b_Cacheable;">
+            &QCD_HT300to500_2018;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+	  </InputData>
+
+	  <InputData Lumi="1854.82666" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT500to700_2018" Cacheable="&b_Cacheable;">
+            &QCD_HT500to700_2018;
+          <InputTree Name="AnalysisTree"/>
+	  <OutputTree Name="AnalysisTree"/>
+	  </InputData> 
+	  <InputData Lumi="8077.614559" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT700to1000_2018" Cacheable="&b_Cacheable;"> 
+            &QCD_HT700to1000_2018;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+	  </InputData>
+	  <InputData Lumi="14871.46169" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT1000to1500_2018" Cacheable="&b_Cacheable;">
+            &QCD_HT1000to1500_2018;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+	  </InputData>
+	  <InputData Lumi="105185.1375" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT1500to2000_2018" Cacheable="&b_Cacheable;">
+            &QCD_HT1500to2000_2018;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+	  </InputData>
+
+
+	  <InputData Lumi="259451.9961" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT2000toInf_2018" Cacheable="&b_Cacheable;"> 
+            &QCD_HT2000toInf_2018;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+	  </InputData> 
+
+
+
+
+         <InputData Lumi="124189.2106" NEventsMax="&NEVT;" Type="MC" Version="WW_2018" Cacheable="&b_Cacheable;">
+	    &WW_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="170245.3988" NEventsMax="&NEVT;" Type="MC" Version="WZ_2018" Cacheable="&b_Cacheable;">
+	    &WZ_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="191763.5659" NEventsMax="&NEVT;" Type="MC" Version="ZZ_2018" Cacheable="&b_Cacheable;">
+	    &ZZ_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="190602" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M500_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M500_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="235279" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M750_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M750_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="182928" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M1000_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M1000_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+	  
+          <InputData Lumi="194119" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M1500_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M1500_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="202323" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M2000_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M2000_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="188873" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M2500_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M2500_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+	  <InputData Lumi="192339" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M3000_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M3000_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+	  <InputData Lumi="192605" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M3500_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M3500_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+	  <InputData Lumi="191160" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M4000_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M4000_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+	  <InputData Lumi="196958" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M5000_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M5000_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+	  <InputData Lumi="163079" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M6000_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M6000_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+	  <InputData Lumi="168505" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M7000_2018" Cacheable="&b_Cacheable;">
+	    &ZprimeToTT_M7000_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+          <InputData Lumi="166452" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M8000_2018" Cacheable="&b_Cacheable;">
+            &ZprimeToTT_M8000_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+         
+          <InputData Lumi="172368" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M9000_2018" Cacheable="&b_Cacheable;">
+            &ZprimeToTT_M9000_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+	  <InputData Lumi="21906.58658" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-70To100_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-70To100_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+
+	  <InputData Lumi="21641.31034" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-100To200_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-100To200_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+
+	  <InputData Lumi="61166.28365" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-200To400_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-200To400_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+
+	  <InputData Lumi="100759.1882" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-400To600_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-400To600_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="1522039.569" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-600To800_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-600To800_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="1506237.607" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-800To1200_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-800To1200_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+
+	  <InputData Lumi="6874435.411" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-1200To2500_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-1200To2500_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+
+	  <InputData Lumi="411111168.2" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-2500ToInf_2018" Cacheable="&b_Cacheable;">
+	    &WJetsToLNu_HT-2500ToInf_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+
+
+          <InputData Lumi="71396.34675" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-100To200_2018" Cacheable="&b_Cacheable;">
+            &DYJetsToLL_M-50_HT-100To200_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+
+       <InputData Lumi="230937.8111" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-200To400_2018" Cacheable="&b_Cacheable;">
+            &DYJetsToLL_M-50_HT-200To400_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+       
+         <InputData Lumi="1407620.555" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-400To600_2018" Cacheable="&b_Cacheable;">
+            &DYJetsToLL_M-50_HT-400To600_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+
+
+        <InputData Lumi="5004011.293" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-600To800_2018" Cacheable="&b_Cacheable;">
+            &DYJetsToLL_M-50_HT-600To800_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+        <InputData Lumi="3834606.576" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-800To1200_2018" Cacheable="&b_Cacheable;">
+            &DYJetsToLL_M-50_HT-800To1200_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+         <InputData Lumi="2798205.529" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-1200To2500_2018" Cacheable="&b_Cacheable;">
+            &DYJetsToLL_M-50_HT-1200To2500_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+        <InputData Lumi="121910077.1" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLL_M-50_HT-2500ToInf_2018" Cacheable="&b_Cacheable;">
+            &DYJetsToLL_M-50_HT-2500ToInf_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+-->
+
+        <InputData Lumi="110354799.3" NEventsMax="&NEVT;" Type="MC" Version="TTToHadronic_2018" Cacheable="&b_Cacheable;">
+            &TTToHadronic_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+          <InputData Lumi="53077886.47" NEventsMax="&NEVT;" Type="MC" Version="TTTo2L2Nu_2018" Cacheable="&b_Cacheable;">
+            &TTTo2L2Nu_2018;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+	  <InputData Lumi="83703610.93" NEventsMax="&NEVT;" Type="MC" Version="TTbarToSemiLeptonicCorrectedCS_2018" Cacheable="&b_Cacheable;">
+	    &TTToSemiLeptonic_2018;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+<!--
+
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_EGamma2018_RunA_blinded" Cacheable="&b_Cacheable;">
+	    &DATA_EGamma2018_RunA;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_EGamma2018_RunB_blinded" Cacheable="&b_Cacheable;">
+	    &DATA_EGamma2018_RunB;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_EGamma2018_RunC_blinded" Cacheable="&b_Cacheable;">
+            &DATA_EGamma2018_RunC;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+	 <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_EGamma2018_RunD_blinded" Cacheable="&b_Cacheable;">
+            &DATA_EGamma2018_RunD;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+          </InputData>
+
+
+
+
+	  <InputData Lumi="0.2291325801" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT50to100_2018" Cacheable="&b_Cacheable;">    
+            &QCD_HT50to100_2018;
+	    <InputTree Name="AnalysisTree"/>
+	    <OutputTree Name="AnalysisTree"/>
+	  </InputData>      
+                                                                                                                        
+	  <InputData Lumi="3.663204922" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT100to200_2018" Cacheable="&b_Cacheable;">
+            &QCD_HT100to200_2018;
+            <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+	  </InputData>
+	  <InputData Lumi="37.15909788" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT200to300_2018" Cacheable="&b_Cacheable;">
+            &QCD_HT200to300_2018;
+          <InputTree Name="AnalysisTree"/>
+          <OutputTree Name="AnalysisTree"/>
+	  </InputData>
+
+-->
+
+    <UserConfig>
+      <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
+      <Item Name="GenParticleCollection"   Value="GenParticles"/>
+      <Item Name="ElectronCollection"      Value="slimmedElectronsUSER"/>
+      <Item Name="MuonCollection"          Value="slimmedMuonsUSER"/>
+      <Item Name="JetCollection"           Value="jetsAk4Puppi"/>
+      <Item Name="GenJetCollection"        Value="slimmedGenJets"/>
+      <Item Name="TopJetCollection"        Value="jetsAk8CHSSubstructure_SoftDropCHS"/>
+<!--  <Item Name="TopJetCollectionGEN"     Value="slimmedGenJetsAK8"/> -->
+      <Item Name="GenTopJetCollection"     Value="genjetsAk8SubstructureSoftDrop"/> <!-- Check odinary ak8GenJetsFat !-->
+      <Item Name="TopPuppiJetCollection"   Value="jetsAk8PuppiSubstructure_SoftDropPuppi"/>
+      <Item Name="METName"                 Value="slimmedMETsPuppi"/>
+      <Item Name="genMETName"              Value="slimmedMETs_GenMET"/>
+
+      <Item Name="lumi_file" Value="/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/Cert_320394-325273_13TeV_PromptReco_Collisions18_JSON_eraD.txt" />
+      <Item Name="lumihists_lumi_per_bin" Value="500.0"/>
+
+  
+
+      <Item Name="pileup_directory" Value="/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/MyMCPileupHistogram.root" />
+      <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/MyDataPileupHistogram2018ABCD.root" />  
+      <Item Name="pileup_directory_data_up" Value="/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/MyDataPileupHistogram_ABCD_up.root" />  
+      <Item Name="pileup_directory_data_down" Value="/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/MyDataPileupHistogram_ABCD_down.root" />  
+
+
+
+
+ 	
+      <Item Name="BTagCalibration" Value = "/nfs/dust/cms/user/titasroy/UHH2_2020/CMSSW_10_2_10/src/UHH2/common/data/2018/DeepJet_102XSF_V2.csv" />
+      
+      <Item Name="is_puppi" Value="&IS_PUPPI;"/>
+      <Item Name="is_looser_selection" Value="&IS_LOOSER_SELECTION;"/>
+      <Item Name="is_data_QCD" Value="&IS_DATA_QCD;"/>
+
+
+      <Item Name="use_sframe_weight"  Value="false"/>
+      <Item Name="jersmear_direction" Value="nominal"/>
+      <Item Name="jecsmear_direction" Value="nominal"/>
+      <Item Name="Sys_ElectronID"         Value="nominal"/>
+      <Item Name="Sys_ElectronTrigger"    Value="nominal"/>
+      <Item Name="Sys_PU"             Value="central"/>
+      <Item Name="Sys_BTagSF"         Value="nominal"/>
+      <Item Name="channel"            Value="&CHANNEL;"/>
+
+
+      <Item Name="AnalysisModule" Value="ZprimeAnalysisModule_forQCDDNN"/>
+    </UserConfig>
+
+  </Cycle>
+</JobConfiguration>
